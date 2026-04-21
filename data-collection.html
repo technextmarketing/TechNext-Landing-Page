@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Collection Statement — TechNext</title>
+  <meta name="description" content="TechNext's Data Collection Statement — a transparent, granular statement of exactly what personal data we collect, how, why, and your rights under Singapore's PDPA."/>
+  <meta name="keywords" content="TechNext data collection, PDPA Singapore, personal data protection, data collection statement, DNC registry"/>
+  <meta name="author" content="TechNext"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://technext.asia/data-collection"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Data Collection Statement — TechNext"/>
+  <meta property="og:description" content="TechNext Data Collection Statement — transparent disclosure of what personal data we collect, how we collect it, and your rights under Singapore's PDPA 2012 (as amended 2020)."/>
+  <meta property="og:url" content="https://technext.asia/data-collection"/>
+  <meta property="og:site_name" content="TechNext"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #4a6cf7;
+      --blue-dark:  #3253DC;
+      --blue-light: #7c8fff;
+      --blue-pale:  #eef1fe;
+      --dark:       #0a0e2a;
+      --dark-card:  #0f1535;
+      --gray-50:    #F9FAFB;
+      --gray-100:   #F3F4F6;
+      --gray-200:   #E5E7EB;
+      --gray-300:   #D1D5DB;
+      --gray-400:   #9CA3AF;
+      --gray-500:   #6B7280;
+      --gray-700:   #374151;
+      --gray-900:   #111827;
+      --white:      #FFFFFF;
+      --green:      #4ade80;
+      --radius:     12px;
+      --radius-lg:  20px;
+      --shadow:     0 4px 24px rgba(74,108,247,.10);
+      --gradient:   linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      --gradient-dark: linear-gradient(135deg, #0a0e2a 0%, #0e1640 60%, #0a1a3a 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-900); background: var(--white); overflow-x: hidden; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 15px;
+      border-radius: 10px; padding: 14px 28px; cursor: pointer;
+      text-decoration: none; transition: all .22s; border: 2px solid transparent; white-space: nowrap; line-height: 1;
+    }
+    .btn-primary { background: var(--gradient); color: var(--white); box-shadow: 0 4px 20px rgba(74,108,247,.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(74,108,247,.45); }
+
+    /* ANN BAR */
+    .ann-bar { background: var(--gradient); color: #fff; padding: 10px 24px; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: .01em; line-height: 1.5; }
+    .ann-bar a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--gray-200); transition: box-shadow .2s; }
+    .nav.scrolled { box-shadow: 0 4px 20px rgba(74,108,247,.08); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .logo img { height: 48px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links li a { font-size: 14px; font-weight: 600; color: var(--gray-600, #4B5563); text-decoration: none; padding: 8px 13px; border-radius: 8px; transition: all .15s; }
+    .nav-links li a:hover { color: var(--blue); background: var(--blue-pale); }
+    .nav-links .nav-erp a { color: var(--blue); font-weight: 700; }
+    .nav-links .nav-erp a:hover { background: var(--blue-pale); }
+    .nav-links .nav-active a { color: var(--blue); background: var(--blue-pale); }
+    .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
+    .dark-toggle { width: 38px; height: 38px; border-radius: 9px; border: 1.5px solid var(--gray-200); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--gray-500); transition: all .2s; margin-right: 10px; flex-shrink: 0; }
+    .dark-toggle:hover { background: var(--blue-pale); color: var(--blue); border-color: var(--blue); }
+    .back-link:hover { color: var(--blue) !important; background: var(--blue-pale); }
+    body.dark .back-link { color: rgba(255,255,255,.5) !important; }
+    body.dark .back-link:hover { color: var(--blue-light) !important; background: rgba(74,108,247,.12); }
+    .dark-toggle .icon-sun { display: none; }
+    .dark-toggle .icon-moon { display: block; }
+    body.dark .dark-toggle .icon-sun { display: block; }
+    body.dark .dark-toggle .icon-moon { display: none; }
+
+    /* PAGE HERO */
+    .page-hero { background: var(--gradient-dark); padding: 64px 0 56px; position: relative; overflow: hidden; }
+    .page-hero-inner { position: relative; z-index: 1; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.4); margin-bottom: 20px; }
+    .breadcrumb a { color: rgba(255,255,255,.4); text-decoration: none; transition: color .15s; }
+    .breadcrumb a:hover { color: rgba(255,255,255,.8); }
+    .breadcrumb span { color: rgba(255,255,255,.25); }
+    .page-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(28px, 4vw, 44px); font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -.03em; margin-bottom: 14px; }
+    .page-hero-meta { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .page-hero-meta span { font-size: 13px; color: rgba(255,255,255,.45); display: flex; align-items: center; gap: 6px; }
+    .page-hero-meta svg { opacity: .6; }
+
+    /* CONTENT LAYOUT */
+    .policy-layout { display: grid; grid-template-columns: 240px 1fr; gap: 56px; align-items: start; padding: 72px 0 96px; }
+    body.dark .policy-layout { color: rgba(255,255,255,.8); }
+
+    /* STICKY TOC */
+    .policy-toc { position: sticky; top: 88px; }
+    .toc-title { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--gray-400); margin-bottom: 14px; }
+    body.dark .toc-title { color: rgba(255,255,255,.3); }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list li a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--gray-500); text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: all .15s; border-left: 2px solid transparent; }
+    body.dark .toc-list li a { color: rgba(255,255,255,.4); }
+    .toc-list li a:hover { color: var(--blue); background: var(--blue-pale); border-left-color: var(--blue); }
+    body.dark .toc-list li a:hover { background: rgba(74,108,247,.12); color: var(--blue-light); }
+    .toc-list li a.active { color: var(--blue); background: var(--blue-pale); border-left-color: var(--blue); font-weight: 700; }
+    body.dark .toc-list li a.active { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    .toc-num { font-size: 11px; color: var(--gray-300); font-weight: 700; min-width: 16px; }
+    body.dark .toc-num { color: rgba(255,255,255,.2); }
+
+    /* POLICY CONTENT */
+    .policy-content { min-width: 0; }
+    .policy-section { margin-bottom: 56px; scroll-margin-top: 100px; }
+    .policy-section:last-child { margin-bottom: 0; }
+
+    .policy-section h2 {
+      font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800;
+      color: var(--gray-900); letter-spacing: -.02em; margin-bottom: 16px;
+      padding-bottom: 12px; border-bottom: 2px solid var(--gray-100);
+      display: flex; align-items: center; gap: 10px;
+    }
+    body.dark .policy-section h2 { color: #fff; border-bottom-color: rgba(255,255,255,.08); }
+    .policy-section h2 .sec-num { font-size: 13px; font-weight: 800; color: var(--blue); background: var(--blue-pale); width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    body.dark .policy-section h2 .sec-num { background: rgba(74,108,247,.2); color: var(--blue-light); }
+
+    .policy-section h3 { font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 800; color: var(--gray-800, #1f2937); margin: 22px 0 8px; }
+    body.dark .policy-section h3 { color: rgba(255,255,255,.85); }
+
+    .policy-section p { font-size: 15px; color: var(--gray-600, #4B5563); line-height: 1.8; margin-bottom: 14px; }
+    body.dark .policy-section p { color: rgba(255,255,255,.55); }
+    .policy-section p:last-child { margin-bottom: 0; }
+
+    .policy-section ul, .policy-section ol { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .policy-section ul li, .policy-section ol li { font-size: 15px; color: var(--gray-600, #4B5563); line-height: 1.75; display: flex; gap: 10px; align-items: flex-start; }
+    body.dark .policy-section ul li, body.dark .policy-section ol li { color: rgba(255,255,255,.55); }
+    .policy-section ul li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 9px; }
+    .policy-section ol { counter-reset: ol-counter; }
+    .policy-section ol li { counter-increment: ol-counter; }
+    .policy-section ol li::before { content: counter(ol-counter) '.'; font-size: 13px; font-weight: 700; color: var(--blue); flex-shrink: 0; min-width: 20px; margin-top: 1px; }
+
+    .policy-highlight {
+      background: var(--blue-pale); border: 1.5px solid rgba(74,108,247,.2);
+      border-radius: var(--radius); padding: 18px 22px; margin: 18px 0;
+      font-size: 14px; color: var(--blue-dark); line-height: 1.7;
+    }
+    body.dark .policy-highlight { background: rgba(74,108,247,.1); border-color: rgba(74,108,247,.25); color: var(--blue-light); }
+
+    .policy-table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 14px; }
+    .policy-table th { background: var(--gray-50); font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-500); padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--gray-200); }
+    body.dark .policy-table th { background: rgba(255,255,255,.04); color: rgba(255,255,255,.4); border-bottom-color: rgba(255,255,255,.1); }
+    .policy-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); vertical-align: top; line-height: 1.6; }
+    body.dark .policy-table td { border-bottom-color: rgba(255,255,255,.06); color: rgba(255,255,255,.6); }
+    .policy-table tr:last-child td { border-bottom: none; }
+    .policy-table tr:hover td { background: var(--gray-50); }
+    body.dark .policy-table tr:hover td { background: rgba(255,255,255,.03); }
+
+    .contact-box {
+      background: var(--gradient-dark); border-radius: var(--radius-lg);
+      padding: 32px; margin-top: 40px; display: flex; align-items: flex-start; gap: 20px;
+    }
+    .contact-box-icon { width: 48px; height: 48px; border-radius: 13px; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; }
+    .contact-box h3 { font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .contact-box p { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 14px; }
+    .contact-box a { font-size: 14px; font-weight: 700; color: var(--blue-light); text-decoration: none; }
+    .contact-box a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer { background: var(--dark-card, #0f1535); color: rgba(255,255,255,.5); padding: 72px 0 36px; }
+    .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+    .footer-logos { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .footer-logo { display: block; }
+    .footer-logo img { height: 32px; width: auto; display: block; filter: brightness(0) invert(1); }
+    .footer-logo-sep { width: 1px; height: 36px; background: rgba(255,255,255,.12); flex-shrink: 0; }
+    .odoo-partner-logo img { height: 44px; width: auto; display: block; }
+    .footer-desc { font-size: 14px; line-height: 1.75; margin-bottom: 22px; max-width: 280px; }
+    .footer-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(74,108,247,.15); border: 1px solid rgba(74,108,247,.25); border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); }
+    .footer-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .footer-col h5 { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.85); margin-bottom: 18px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul li a { font-size: 14px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .15s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-col ul li a.hl { color: var(--blue-light); font-weight: 600; }
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,.07); margin-bottom: 28px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 13px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn { width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background .15s; color: rgba(255,255,255,.6); }
+    .social-btn:hover { background: var(--blue); color: #fff; }
+    .footer-offices { margin-top: 28px; }
+    .footer-offices p { font-size: 12px; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 8px; }
+    .footer-offices .office { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
+    .office-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-light); flex-shrink: 0; }
+
+    /* DARK MODE */
+    body.dark { background: var(--dark); }
+    body.dark .nav { background: rgba(10,14,42,.96); border-bottom-color: rgba(255,255,255,.08); }
+    body.dark .logo img { filter: brightness(0) invert(1); }
+    body.dark .nav-links li a { color: rgba(255,255,255,.7); }
+    body.dark .nav-links li a:hover { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    body.dark .nav-links .nav-erp a { color: var(--blue-light); }
+    body.dark .nav-links .nav-active a { color: var(--blue-light); background: rgba(74,108,247,.15); }
+    body.dark footer { background: #060919; }
+
+    /* PAGE TRANSITION */
+    @keyframes pageFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    body { animation: pageFadeIn .32s ease both; }
+
+    @media (max-width: 900px) {
+      .policy-layout { grid-template-columns: 1fr; }
+      .policy-toc { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .nav-links { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    .policy-table { overflow-x: auto; display: block; -webkit-overflow-scrolling: touch; }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+    }
+
+    /* MOBILE NAV */
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 38px; height: 38px; background: transparent; border: 1.5px solid var(--gray-200); border-radius: 9px; cursor: pointer; padding: 8px; margin-left: 8px; flex-shrink: 0; transition: all .2s; }
+    .nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gray-500); border-radius: 2px; transition: all .25s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    body.dark .nav-hamburger { border-color: rgba(255,255,255,.15); }
+    body.dark .nav-hamburger span { background: rgba(255,255,255,.7); }
+    .mobile-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 99; background: var(--white); border-bottom: 1px solid var(--gray-200); box-shadow: 0 8px 32px rgba(0,0,0,.1); padding: 16px 20px 24px; }
+    body.dark .mobile-menu { background: #0a0e2a; border-color: rgba(255,255,255,.08); }
+    .mobile-menu.open { display: block; animation: menuSlide .2s ease; }
+    @keyframes menuSlide { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+    .mobile-links { list-style: none; display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; }
+    .mobile-links li a { display: block; font-size: 15px; font-weight: 600; color: var(--gray-700); padding: 10px 12px; border-radius: 8px; text-decoration: none; transition: all .15s; }
+    .mobile-links li a:hover, .mobile-links li a:active { background: var(--blue-pale); color: var(--blue); }
+    .mobile-links .nav-erp a { color: var(--blue); }
+    .mobile-links .nav-active a { color: var(--blue); background: var(--blue-pale); }
+    body.dark .mobile-links li a { color: rgba(255,255,255,.75); }
+    body.dark .mobile-links li a:hover { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    body.dark .mobile-links .nav-erp a { color: var(--blue-light); }
+    body.dark .mobile-links .nav-active a { color: var(--blue-light); background: rgba(74,108,247,.15); }
+    .mobile-cta { width: 100%; text-align: center; justify-content: center; }
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none !important; }
+      .nav-cta { display: none; }
+      .logo { flex: 1; }
+      .logo img { height: 36px; max-width: 150px; object-fit: contain; }
+    }
+  </style>
+</head>
+<body>
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <div class="container nav-inner">
+    <a href="landing.html" class="logo"><img src="../TechNext Branding/Logo/TechNext Logo.png" alt="TechNext"/></a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="landing.html" class="back-link" style="font-size:14px;font-weight:600;color:var(--gray-500);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .15s;padding:8px 14px;border-radius:8px;">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Landing Page
+      </a>
+      <button class="dark-toggle" id="darkToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container page-hero-inner">
+    <div class="breadcrumb">
+      <a href="landing.html">Landing Page</a>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,.7);">Data Collection Statement</span>
+    </div>
+    <h1>Data Collection Statement</h1>
+    <div class="page-hero-meta">
+      <span>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Effective: 1 January 2025
+      </span>
+      <span>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Last updated: 1 April 2026
+      </span>
+      <span>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Jurisdiction: Singapore (PDPA 2012 as amended 2020)
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<div class="container">
+  <div class="policy-layout">
+
+    <!-- TABLE OF CONTENTS -->
+    <aside class="policy-toc">
+      <p class="toc-title">Contents</p>
+      <ul class="toc-list" id="tocList">
+        <li><a href="#s1"><span class="toc-num">1</span> Purpose of Statement</a></li>
+        <li><a href="#s2"><span class="toc-num">2</span> Who This Applies To</a></li>
+        <li><a href="#s3"><span class="toc-num">3</span> Categories of Data</a></li>
+        <li><a href="#s4"><span class="toc-num">4</span> How We Collect</a></li>
+        <li><a href="#s5"><span class="toc-num">5</span> Purpose &amp; Legal Basis</a></li>
+        <li><a href="#s6"><span class="toc-num">6</span> DNC Registry</a></li>
+        <li><a href="#s7"><span class="toc-num">7</span> Cookies &amp; Tracking</a></li>
+        <li><a href="#s8"><span class="toc-num">8</span> Cross-Border Transfers</a></li>
+        <li><a href="#s9"><span class="toc-num">9</span> Data Breach Notification</a></li>
+        <li><a href="#s10"><span class="toc-num">10</span> Your Rights</a></li>
+        <li><a href="#s11"><span class="toc-num">11</span> Data Protection Officer</a></li>
+        <li><a href="#s12"><span class="toc-num">12</span> Contact &amp; Complaints</a></li>
+      </ul>
+    </aside>
+
+    <!-- STATEMENT BODY -->
+    <article class="policy-content">
+
+      <div class="policy-highlight">
+        This Data Collection Statement provides a granular, transparent account of exactly what personal data TechNext Pte. Ltd. collects, how and why we collect it, the legal basis for each category, and the rights you hold under Singapore's <strong>Personal Data Protection Act 2012 (No. 26 of 2012), as amended by the PDPA (Amendment) Act 2020</strong>. It should be read alongside our <a href="privacy-policy.html" style="color:var(--blue-dark); font-weight:600;">Privacy Policy</a>.
+      </div>
+
+      <!-- 1 -->
+      <section class="policy-section" id="s1">
+        <h2><span class="sec-num">1</span> Purpose of This Statement</h2>
+        <p>TechNext Pte. Ltd. ("TechNext", "we", "us", "our") is committed to full transparency in how we handle personal data. While our Privacy Policy provides a broad overview, this Data Collection Statement is designed to give you a more detailed, practical picture of every category of personal data we collect — what it is, how it is gathered, why it is needed, and how long we keep it.</p>
+        <p>This Statement is issued in accordance with the following instruments of Singapore law:</p>
+        <ul>
+          <li>Personal Data Protection Act 2012 (No. 26 of 2012), as amended by the PDPA (Amendment) Act 2020</li>
+          <li>PDPC Advisory Guidelines on the Collection, Use and Disclosure of Personal Data</li>
+          <li>PDPC Advisory Guidelines on Notification (Data Breach Notification)</li>
+          <li>Do Not Call Provisions (Part IX, PDPA)</li>
+          <li>PDPC's Guide to Data Protection Practices for ICT Systems</li>
+        </ul>
+        <p>If you have questions at any time, please contact our Data Protection Officer at <strong>dpo@technext.asia</strong>.</p>
+      </section>
+
+      <!-- 2 -->
+      <section class="policy-section" id="s2">
+        <h2><span class="sec-num">2</span> Who This Applies To</h2>
+        <p>This Statement applies to all individuals whose personal data is collected or processed by TechNext Pte. Ltd., including:</p>
+        <ul>
+          <li><strong>Website visitors</strong> — anyone who accesses <strong>technext.asia</strong> or any associated subdomains</li>
+          <li><strong>Prospective clients</strong> — individuals who submit enquiry forms, book a free ERP consultation, or download resources from our website</li>
+          <li><strong>Existing clients and their employees</strong> — individuals whose data is processed as part of an active service contract</li>
+          <li><strong>Business contacts</strong> — individuals whose contact details we receive through referrals, trade events, or professional networks</li>
+          <li><strong>Job applicants</strong> — candidates who apply for positions at TechNext through any channel</li>
+          <li><strong>Suppliers and partners</strong> — individuals acting on behalf of organisations with which TechNext has a business relationship</li>
+        </ul>
+        <p>This Statement does not apply to the personal data of our employees, which is governed by our internal Human Resources Data Protection Policy.</p>
+      </section>
+
+      <!-- 3 -->
+      <section class="policy-section" id="s3">
+        <h2><span class="sec-num">3</span> Categories of Personal Data Collected</h2>
+        <p>We collect only personal data that is adequate, relevant, and limited to what is necessary for the stated purposes. The categories we may collect include:</p>
+
+        <h3>3.1 Identity &amp; Contact Data</h3>
+        <ul>
+          <li>Full name and preferred name</li>
+          <li>Business email address and personal email address (where voluntarily provided)</li>
+          <li>Phone number or mobile number</li>
+          <li>Job title and department</li>
+          <li>LinkedIn profile URL (where shared)</li>
+        </ul>
+
+        <h3>3.2 Organisation Data</h3>
+        <ul>
+          <li>Company name and UEN (where applicable)</li>
+          <li>Industry sector and company size</li>
+          <li>Country and city of operation</li>
+          <li>ERP readiness information and current software stack</li>
+        </ul>
+
+        <h3>3.3 Technical &amp; Usage Data</h3>
+        <ul>
+          <li>IP address (partial or full)</li>
+          <li>Browser type, version, and language settings</li>
+          <li>Operating system and device type</li>
+          <li>Pages visited, time on page, scroll depth, and click patterns</li>
+          <li>Referring URL and UTM parameters</li>
+          <li>Session duration and bounce indicators</li>
+        </ul>
+
+        <h3>3.4 Cookie &amp; Preference Data</h3>
+        <ul>
+          <li>Cookie identifiers (session and persistent)</li>
+          <li>Display preferences (e.g. dark/light mode setting)</li>
+          <li>Analytics identifiers assigned by Google Analytics or similar tools</li>
+          <li>Advertising identifiers for retargeting (where consent is given)</li>
+        </ul>
+
+        <h3>3.5 Contract &amp; Transaction Data</h3>
+        <ul>
+          <li>Invoicing name and billing address</li>
+          <li>Project scope and service agreement terms</li>
+          <li>Payment status records (we do not store payment card numbers)</li>
+          <li>IRAS-relevant transaction data for accounting and tax compliance</li>
+        </ul>
+
+        <h3>3.6 Communication Records</h3>
+        <ul>
+          <li>Email correspondence (sent and received)</li>
+          <li>Live chat and support ticket transcripts</li>
+          <li>Video call notes and meeting minutes (with consent where applicable)</li>
+          <li>Feedback, complaints, and dispute-related communications</li>
+        </ul>
+
+        <h3>3.7 Marketing Preference Data</h3>
+        <ul>
+          <li>Newsletter opt-in status and date of consent</li>
+          <li>Communication channel preferences (email, WhatsApp, phone)</li>
+          <li>Content interest tags (e.g. Odoo modules, ERP best practices)</li>
+          <li>Unsubscribe records and consent withdrawal timestamps</li>
+        </ul>
+
+        <h3>3.8 Recruitment Data</h3>
+        <ul>
+          <li>CV or résumé (including work history, education, and skills)</li>
+          <li>Cover letter content</li>
+          <li>Interview notes and assessment scores</li>
+          <li>Right-to-work documentation (where legally required)</li>
+        </ul>
+
+        <div class="policy-highlight">
+          We do <strong>not</strong> collect sensitive personal data such as NRIC/FIN numbers, passport numbers, health or medical information, racial or ethnic origin, religious beliefs, or financial account credentials unless there is a specific, disclosed legal or contractual requirement and we have obtained explicit consent.
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section class="policy-section" id="s4">
+        <h2><span class="sec-num">4</span> How We Collect Your Data</h2>
+        <p>We collect personal data through the following methods:</p>
+
+        <h3>4.1 Web Forms (Direct Submission)</h3>
+        <p>When you complete any form on our website — including the free ERP consultation booking form, contact form, newsletter subscription form, or resource download form — we collect the data you voluntarily submit. Mandatory fields are marked; optional fields help us personalise your experience but are not required.</p>
+
+        <h3>4.2 Cookies &amp; Automated Tracking Technologies</h3>
+        <p>When you visit technext.asia, cookies and similar technologies automatically collect technical and behavioural data. This includes analytics cookies (Google Analytics), functionality cookies (dark mode preference), and, where you consent, advertising cookies. See Section 7 for a full breakdown.</p>
+
+        <h3>4.3 Analytics Platforms</h3>
+        <p>We use Google Analytics 4 (GA4) to understand how visitors interact with our website. GA4 collects anonymised, aggregated data including page views, session duration, geographic region (country/city level), and device type. IP addresses are anonymised before storage. We do not use GA4 for individual profiling.</p>
+
+        <h3>4.4 Direct Communication</h3>
+        <p>When you contact us by email, phone, live chat, or social media messaging, we retain a record of that communication including your contact details and the content of your message. This is used to respond to your enquiry and maintain service continuity.</p>
+
+        <h3>4.5 Third-Party Referrals &amp; Professional Networks</h3>
+        <p>We may receive your contact details from Odoo's partner referral programme, business directories, LinkedIn, or professional contacts who believe our services may be relevant to you. In all cases, we verify that the referral is legitimate and ensure you are informed of how your data reached us at the earliest practical opportunity.</p>
+
+        <h3>4.6 Business Cards &amp; Events</h3>
+        <p>When you share your business card with us at trade exhibitions, networking events, or in-person meetings, we may digitise and store your contact details for the purpose of following up on our conversation. You will be given a clear opportunity to opt out of further communications at any time.</p>
+      </section>
+
+      <!-- 5 -->
+      <section class="policy-section" id="s5">
+        <h2><span class="sec-num">5</span> Purpose &amp; Legal Basis for Each Category</h2>
+        <p>The table below sets out each category of personal data we collect, the specific purpose for which it is used, the legal basis under the PDPA, and the standard retention period. Where multiple legal bases apply, the most relevant is listed first.</p>
+
+        <table class="policy-table">
+          <thead>
+            <tr>
+              <th>Data Category</th>
+              <th>Purpose</th>
+              <th>Legal Basis (PDPA)</th>
+              <th>Retention Period</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Name &amp; Email (demo booking)</strong></td>
+              <td>Schedule and confirm ERP consultation session; send pre-meeting information and follow-up resources</td>
+              <td>Consent</td>
+              <td>2 years from last contact</td>
+            </tr>
+            <tr>
+              <td><strong>Company &amp; Country</strong></td>
+              <td>Tailor ERP demo content to your industry, company size, and regulatory environment; prioritise demo scheduling by region</td>
+              <td>Consent / Legitimate Interest</td>
+              <td>2 years from last contact</td>
+            </tr>
+            <tr>
+              <td><strong>IP Address &amp; Browser</strong></td>
+              <td>Website security monitoring, fraud and bot detection, geographic analytics for content optimisation</td>
+              <td>Legitimate Interest</td>
+              <td>26 months (anonymised after 26 months)</td>
+            </tr>
+            <tr>
+              <td><strong>Cookie data</strong></td>
+              <td>Remember UX preferences (e.g. dark mode); maintain session state; analytics and (with consent) retargeting</td>
+              <td>Consent</td>
+              <td>1 year (analytics cookies); session (functional)</td>
+            </tr>
+            <tr>
+              <td><strong>Contract &amp; billing details</strong></td>
+              <td>Service delivery and project management; invoicing and payment tracking; IRAS tax records and ACRA compliance</td>
+              <td>Contract / Legal Obligation</td>
+              <td>7 years from end of contract</td>
+            </tr>
+            <tr>
+              <td><strong>Communication records (email/chat)</strong></td>
+              <td>Fulfil service commitments; provide continuity to support staff; evidence in the event of a dispute</td>
+              <td>Contract / Legitimate Interest</td>
+              <td>5 years from last communication</td>
+            </tr>
+            <tr>
+              <td><strong>Marketing preferences</strong></td>
+              <td>Send newsletters, product updates, and ERP insights tailored to stated interests; suppress communications after opt-out</td>
+              <td>Consent</td>
+              <td>Until withdrawal of consent; opt-out records retained indefinitely</td>
+            </tr>
+            <tr>
+              <td><strong>Job applicant data</strong></td>
+              <td>Evaluate candidate suitability; conduct interviews and reference checks; comply with MOM requirements</td>
+              <td>Consent</td>
+              <td>1 year if not hired; duration of employment if hired</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>All retention periods are subject to earlier deletion upon a valid erasure request (where no overriding legal obligation to retain the data exists) or upon our own review determining that the data is no longer needed.</p>
+      </section>
+
+      <!-- 6 -->
+      <section class="policy-section" id="s6">
+        <h2><span class="sec-num">6</span> Do Not Call (DNC) Registry Compliance</h2>
+        <p>TechNext Pte. Ltd. fully complies with the <strong>Do Not Call Provisions (Part IX, Personal Data Protection Act 2012)</strong>. Before making any telemarketing call or sending any telemarketing text message to a Singapore telephone number, we check that number against the DNC Registry maintained by the Personal Data Protection Commission (PDPC).</p>
+
+        <h3>6.1 What Counts as a Telemarketing Message</h3>
+        <p>Under the PDPA, a "specified message" is any voice call, text message (SMS/MMS), or fax that advertises or promotes the supply of goods or services, the sale or lease of land, or a business opportunity. TechNext does not send specified messages to any Singapore telephone number that appears on the DNC Registry without the clear prior consent of the recipient.</p>
+
+        <h3>6.2 Consent-Based Outreach</h3>
+        <p>Where you have provided your telephone number and expressly indicated that you consent to receiving calls or messages from TechNext (for example, by selecting the relevant option on our consultation booking form), we rely on that consent. Your consent is logged with a timestamp and may be withdrawn at any time by contacting us at <strong>dpo@technext.asia</strong> or by replying STOP to any message.</p>
+
+        <h3>6.3 Existing Business Relationship</h3>
+        <p>Where we have an ongoing or recent business relationship with you, we may contact you by telephone or text for the purpose of facilitating or completing that transaction, even if your number is registered on the DNC. Such contact will be limited strictly to the relevant service engagement.</p>
+
+        <div class="policy-highlight">
+          If you believe you have received an unsolicited telemarketing communication from TechNext, please report it immediately to <strong>dpo@technext.asia</strong> or call us at <strong>+65 8427 2549</strong>. We take DNC compliance seriously and will investigate all complaints promptly.
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section class="policy-section" id="s7">
+        <h2><span class="sec-num">7</span> Cookies &amp; Tracking Technologies</h2>
+        <p>We use first-party and third-party cookies and similar tracking technologies (web beacons, pixel tags) on technext.asia. The table below lists each type, the specific tool used, its purpose, and how you can opt out.</p>
+
+        <table class="policy-table">
+          <thead>
+            <tr>
+              <th>Cookie Type</th>
+              <th>Tool / Provider</th>
+              <th>Purpose</th>
+              <th>Opt-Out</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Strictly Necessary</strong></td>
+              <td>TechNext (first-party)</td>
+              <td>Session management, dark/light mode preference, CSRF protection. Cannot be disabled without breaking core functionality.</td>
+              <td>Not applicable — required for website to function</td>
+            </tr>
+            <tr>
+              <td><strong>Analytics</strong></td>
+              <td>Google Analytics 4</td>
+              <td>Tracks page views, session duration, user flow, and geographic region (anonymised). IP anonymisation is enabled. No cross-site tracking.</td>
+              <td>Google Analytics Opt-out Browser Add-on; or withdraw consent via our cookie banner</td>
+            </tr>
+            <tr>
+              <td><strong>Marketing / Retargeting</strong></td>
+              <td>Google Ads, Meta Pixel (Facebook)</td>
+              <td>Measures ad conversion rates and enables retargeting audiences for relevant advertising. Only activated with explicit consent.</td>
+              <td>Withdraw consent via cookie banner; or visit <em>youronlinechoices.com</em></td>
+            </tr>
+            <tr>
+              <td><strong>Functional / Preference</strong></td>
+              <td>TechNext (first-party)</td>
+              <td>Remembers user interface preferences such as display mode. Enhances experience on return visits.</td>
+              <td>Clear browser cookies or withdraw consent via cookie banner</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>You can manage your cookie preferences at any time using the cookie consent banner displayed on your first visit, or by clearing cookies in your browser settings. Disabling analytics or marketing cookies will not prevent you from accessing any content or functionality on our website.</p>
+        <p>We do not use cookies to build individual profiles for sale to third parties, and we do not engage in cross-site behavioural advertising without your explicit prior consent.</p>
+      </section>
+
+      <!-- 8 -->
+      <section class="policy-section" id="s8">
+        <h2><span class="sec-num">8</span> Cross-Border Data Transfers</h2>
+        <p>TechNext Pte. Ltd. is headquartered in Singapore and operates delivery teams in Vietnam and the Philippines. Personal data collected in Singapore may be transferred to and processed in these countries as part of our service delivery operations.</p>
+
+        <h3>8.1 Countries Involved</h3>
+        <ul>
+          <li><strong>Singapore</strong> — primary data controller; all data governance decisions are made here</li>
+          <li><strong>Vietnam (Ho Chi Minh City)</strong> — technical implementation and support delivery team</li>
+          <li><strong>Philippines (BGC, Taguig)</strong> — customer success and project coordination team</li>
+        </ul>
+
+        <h3>8.2 Safeguards in Place</h3>
+        <p>In accordance with <strong>Section 26 of the PDPA</strong>, before transferring personal data to a country outside Singapore, TechNext ensures that the recipient provides a standard of protection at least comparable to that under the PDPA. The safeguards we rely on include:</p>
+        <ul>
+          <li>Intra-group data transfer agreements incorporating PDPC-aligned contractual clauses</li>
+          <li>Data processing agreements with all sub-processors that impose equivalent obligations</li>
+          <li>Access controls that restrict overseas team members to the minimum data necessary for their function</li>
+          <li>Regular audits of our overseas offices' data handling practices</li>
+        </ul>
+
+        <h3>8.3 Third-Party Cloud Infrastructure</h3>
+        <p>We use cloud services from providers including Amazon Web Services (AWS) and Google Cloud. Data may be stored in servers located in the Asia-Pacific region. All such providers are bound by contractual data protection obligations and are certified under internationally recognised security standards (e.g. ISO 27001, SOC 2). We select server regions in Asia-Pacific (Singapore, Tokyo, or Sydney) wherever possible to minimise data transfer distance.</p>
+
+        <div class="policy-highlight">
+          If you would like details of the specific safeguards in place for any cross-border transfer affecting your personal data, please contact our DPO at <strong>dpo@technext.asia</strong>.
+        </div>
+      </section>
+
+      <!-- 9 -->
+      <section class="policy-section" id="s9">
+        <h2><span class="sec-num">9</span> Data Breach Notification</h2>
+        <p>Singapore's <strong>Mandatory Data Breach Notification obligation</strong> (effective 1 February 2021, introduced by the PDPA (Amendment) Act 2020, Sections 26C–26D) requires organisations to notify both the PDPC and affected individuals when a data breach occurs that meets specified thresholds. TechNext has implemented procedures to detect, assess, and respond to data breaches promptly.</p>
+
+        <h3>9.1 Notification to the PDPC</h3>
+        <p>Where a data breach is assessed as being likely to result in significant harm to any affected individual, or where it affects 500 or more individuals, we are required to notify the PDPC as soon as practicable and in any event <strong>within 3 calendar days</strong> of assessing that the breach meets the notification threshold.</p>
+
+        <h3>9.2 Notification to Affected Individuals</h3>
+        <p>Where a breach is assessed as being likely to result in <strong>significant harm</strong> to a specific individual (for example, identity fraud, financial loss, physical harm, or significant reputational damage), we will notify that individual as soon as practicable. Notification will be provided:</p>
+        <ul>
+          <li>By email to the address we hold on record, and/or</li>
+          <li>By telephone or written notice if email is unavailable or inadequate</li>
+          <li>By means of a prominent notice on our website in cases where direct notification is not possible</li>
+        </ul>
+        <p>The notification will include a description of the nature of the breach, the types of data involved, the likely consequences, the measures we have taken or propose to take, and the contact details of our DPO.</p>
+
+        <h3>9.3 Our Internal Response Process</h3>
+        <p>TechNext maintains a Data Breach Response Plan that sets out the steps our team must take upon discovering a potential breach. This includes immediate containment, a formal impact assessment within 24 hours, escalation to our DPO, and coordination with our legal advisors where required. We conduct post-incident reviews to prevent recurrence.</p>
+
+        <div class="policy-highlight">
+          If you become aware of or suspect a data breach involving your personal data held by TechNext, please contact our DPO immediately at <strong>dpo@technext.asia</strong> or call <strong>+65 8427 2549</strong>. Early notification helps us act faster to contain any harm.
+        </div>
+      </section>
+
+      <!-- 10 -->
+      <section class="policy-section" id="s10">
+        <h2><span class="sec-num">10</span> Your Rights Under the PDPA</h2>
+        <p>Under Singapore's Personal Data Protection Act 2012 (as amended), you have the following rights in relation to your personal data held by TechNext. To exercise any of these rights, please submit a written request to our DPO at <strong>dpo@technext.asia</strong>. We will acknowledge your request within 5 business days and provide a full response within <strong>30 calendar days</strong> (or notify you if more time is needed, up to a maximum of 60 days under the PDPA).</p>
+        <ol>
+          <li><strong>Right of Access</strong> — You may request confirmation of whether we hold personal data about you, and if so, a copy of that data and information about how it is being used. We may charge a reasonable fee for processing complex or repeated requests.</li>
+          <li><strong>Right of Correction</strong> — You may request that we correct any personal data about you that is inaccurate, incomplete, misleading, or out of date. We will make corrections within 30 days and, where appropriate, inform third parties to whom the data was disclosed.</li>
+          <li><strong>Right to Withdraw Consent</strong> — Where we rely on your consent as the legal basis for processing, you may withdraw that consent at any time. Withdrawal does not affect the lawfulness of processing carried out before withdrawal. After withdrawal, we will cease the relevant processing unless another legal basis applies.</li>
+          <li><strong>Right to Data Portability</strong> — You may request that we provide your personal data in a structured, commonly used, machine-readable format (e.g. CSV or JSON) so that you can transfer it to another organisation. This right applies to data you have provided to us directly and which is processed on the basis of consent or contract.</li>
+          <li><strong>Right to Erasure</strong> — You may request deletion of your personal data where it is no longer necessary for the purposes for which it was collected, where you have withdrawn consent and there is no other legal basis, or where the data has been processed unlawfully. We will comply unless we are required to retain the data by law (e.g. IRAS records for 7 years).</li>
+          <li><strong>Right to Object</strong> — You may object at any time to the processing of your personal data for direct marketing purposes. Upon receipt of your objection, we will immediately cease using your data for that purpose. You may also object to processing based on legitimate interest, in which case we will balance your interests against ours.</li>
+        </ol>
+
+        <div class="policy-highlight">
+          All rights requests should be sent to <strong>dpo@technext.asia</strong> with the subject line "PDPA Rights Request". Please include your full name, the email address associated with your data, and a description of the data or action concerned. We may ask you to verify your identity before we process the request.
+        </div>
+      </section>
+
+      <!-- 11 -->
+      <section class="policy-section" id="s11">
+        <h2><span class="sec-num">11</span> Data Protection Officer</h2>
+        <p>TechNext Pte. Ltd. has appointed a Data Protection Officer (DPO) as required under the PDPA. The DPO is responsible for overseeing our data protection strategy, ensuring compliance with the PDPA and related regulations, conducting staff training, managing data breach responses, and serving as the primary point of contact for individuals and the PDPC.</p>
+
+        <div class="contact-box">
+          <div class="contact-box-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h3>Data Protection Officer — TechNext Pte. Ltd.</h3>
+            <p>261 Waterloo Street #03-32, Singapore 180261<br/>Available Monday–Friday, 9:00 am–6:00 pm SGT (UTC+8)<br/>Response time: within 5 business days for acknowledgement; 30 days for full response</p>
+            <a href="mailto:dpo@technext.asia">dpo@technext.asia</a> &nbsp;·&nbsp;
+            <a href="mailto:privacy@technext.asia">privacy@technext.asia</a> &nbsp;·&nbsp;
+            <a href="tel:+6584272549">+65 8427 2549</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 -->
+      <section class="policy-section" id="s12">
+        <h2><span class="sec-num">12</span> Contact &amp; Complaints</h2>
+        <p>If you have any questions, concerns, or complaints about this Data Collection Statement or about the way TechNext handles your personal data, please contact us in the first instance using the details in Section 11. We take all complaints seriously and will investigate promptly.</p>
+
+        <h3>12.1 Internal Complaints Procedure</h3>
+        <p>Upon receiving your complaint:</p>
+        <ol>
+          <li>We will acknowledge receipt within <strong>5 business days</strong>.</li>
+          <li>Our DPO will conduct a thorough investigation and may contact you to request further information.</li>
+          <li>We will provide a substantive written response within <strong>30 calendar days</strong> of receiving all necessary information.</li>
+          <li>If you remain dissatisfied, you may escalate to the PDPC (see below).</li>
+        </ol>
+
+        <h3>12.2 Escalation to the PDPC</h3>
+        <p>If you are not satisfied with our response, or if you believe we have failed to comply with our obligations under the PDPA, you may lodge a complaint with the <strong>Personal Data Protection Commission (PDPC)</strong>:</p>
+        <ul>
+          <li><strong>Online:</strong> <a href="https://www.pdpc.gov.sg" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">www.pdpc.gov.sg</a> → "File a complaint"</li>
+          <li><strong>Address:</strong> 10 Pasir Panjang Road, #03-01 Mapletree Business City, Singapore 117438</li>
+          <li><strong>Helpline:</strong> +65 6377 3131</li>
+        </ul>
+        <p>The PDPC has the authority to investigate complaints, require TechNext to take corrective action, and impose financial penalties for serious breaches of the PDPA.</p>
+
+        <h3>12.3 Updates to This Statement</h3>
+        <p>We may update this Data Collection Statement from time to time to reflect changes in our practices, applicable law, or guidance from the PDPC. The "Last Updated" date at the top of this page will be revised accordingly. Material changes will be communicated by a notice on our website and, where appropriate, by email to affected individuals. Continued use of our website or services after any update constitutes acknowledgement of the revised Statement.</p>
+
+        <div class="policy-highlight">
+          <strong>Applicable law references:</strong> Personal Data Protection Act 2012 (No. 26 of 2012) · PDPA (Amendment) Act 2020 · PDPC Advisory Guidelines on the Collection, Use and Disclosure of Personal Data · PDPC Advisory Guidelines on Notification · Do Not Call Provisions (Part IX, PDPA) · Mandatory Data Breach Notification obligation (effective 1 February 2021, ss. 26C–26D PDPA) · PDPC's Guide to Data Protection Practices for ICT Systems
+        </div>
+      </section>
+
+    </article>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#060919;color:rgba(255,255,255,.5);padding:20px 0;">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <a href="landing.html"><img src="../TechNext Branding/Logo/TechNext Logo.png" alt="TechNext" style="height:28px;filter:brightness(0) invert(1);opacity:.75;display:block;"/></a>
+      <div style="width:1px;height:28px;background:rgba(255,255,255,.12);flex-shrink:0;"></div>
+      <img src="../TechNext Branding/Logo/Odoo Ready Partner Logo.png" alt="Odoo Ready Partner" style="height:32px;filter:brightness(0) invert(1);opacity:.65;display:block;"/>
+    </div>
+    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+      <a href="privacy-policy.html" style="font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;">Privacy Policy</a>
+      <a href="terms-and-conditions.html" style="font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;">Terms &amp; Conditions</a>
+      <a href="data-collection.html" style="font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;">Data Collection</a>
+    </div>
+    <p style="font-size:13px;">&copy; 2025 TechNext &middot; technext.asia</p>
+  </div>
+</footer>
+
+
+<script>
+  /* DARK MODE */
+  const darkToggle = document.getElementById('darkToggle');
+  darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  /* NAV SHADOW */
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  /* ACTIVE TOC HIGHLIGHT */
+  const sections = document.querySelectorAll('.policy-section');
+  const tocLinks  = document.querySelectorAll('.toc-list a');
+  const observer  = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  /* PAGE EXIT TRANSITION */
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto') && href.includes('.html')) {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.style.transition = 'opacity .22s ease, transform .22s ease';
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(-6px)';
+        setTimeout(() => { window.location.href = href; }, 230);
+      });
+    }
+  });
+
+  /* MOBILE MENU TOGGLE */
+  (function() {
+    const hamburger = document.getElementById('navHamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (!hamburger || !mobileMenu) return;
+    hamburger.addEventListener('click', e => {
+      e.stopPropagation();
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      }
+    });
+  })();
+</script>
+</body>
+</html>
