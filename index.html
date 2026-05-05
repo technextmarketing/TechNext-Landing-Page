@@ -119,8 +119,9 @@
     .rd1{transition-delay:.1s;} .rd2{transition-delay:.2s;} .rd3{transition-delay:.3s;} .rd4{transition-delay:.4s;}
 
     /* ── NAVBAR ───────────────────────────────────────────── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--white);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--white);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s,transform .35s ease;}
     nav.scrolled{border-color:var(--border);box-shadow:0 2px 16px var(--shadow);}
+    nav.nav-hidden{transform:translateY(-100%);}
     .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:76px;display:flex;align-items:center;justify-content:space-between;}
     .logo{display:flex;align-items:center;}
     .logo img{height:52px;width:auto;display:block;}
@@ -1298,14 +1299,21 @@
   <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 
   <script>
-    /* ── Navbar scroll ── */
+    /* ── Navbar scroll hide/show ── */
     const nav = document.getElementById('navbar');
     const stBtn = document.getElementById('scrollTop');
+    let lastY = 0;
     window.addEventListener('scroll', () => {
-      const s = window.scrollY > 60;
-      nav.classList.toggle('scrolled', s);
-      stBtn.classList.toggle('show', s);
-    });
+      const y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 60);
+      stBtn.classList.toggle('show', y > 300);
+      if(y > 80){
+        nav.classList.toggle('nav-hidden', y > lastY);
+      } else {
+        nav.classList.remove('nav-hidden');
+      }
+      lastY = y;
+    }, {passive:true});
 
     /* ── Scroll reveal ── */
     const obs = new IntersectionObserver((entries) => {
