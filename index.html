@@ -389,13 +389,17 @@
     .vid-wrap::before{content:'';position:absolute;top:0;left:0;right:0;bottom:52px;background:linear-gradient(135deg,rgba(37,99,235,.04),transparent 60%);pointer-events:none;z-index:1;}
     .vid-player{width:100%;display:block;}
     /* Video controls bar */
-    .vid-controls{display:flex;align-items:center;gap:18px;padding:13px 22px 15px;background:#fff;border-top:1px solid #EEE;}
-    .vid-playbtn{background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:#5B3F7A;flex-shrink:0;line-height:1;}
-    .vid-playbtn svg{width:15px;height:15px;fill:#5B3F7A;}
+    .vid-controls{display:flex;align-items:center;gap:14px;padding:13px 22px 15px;background:#fff;border-top:1px solid #EEE;}
+    .vid-playbtn,.vid-volbtn{background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:#5B3F7A;flex-shrink:0;line-height:1;}
+    .vid-playbtn svg,.vid-volbtn svg{width:15px;height:15px;fill:#5B3F7A;}
     .vid-prog{flex:1;position:relative;height:22px;display:flex;align-items:center;cursor:pointer;user-select:none;}
     .vid-rail{position:absolute;left:0;right:0;height:2px;background:#D8D8E0;border-radius:1px;}
     .vid-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:2px;background:#5B3F7A;border-radius:1px;width:0%;pointer-events:none;}
     .vid-dot{position:absolute;width:13px;height:13px;background:#5B3F7A;border-radius:50%;top:50%;left:0%;transform:translate(-50%,-50%);pointer-events:none;transition:left .15s linear;}
+    .vid-vol-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+    .vid-vol-slider{-webkit-appearance:none;appearance:none;width:72px;height:3px;border-radius:2px;background:linear-gradient(to right,#5B3F7A 100%,#D8D8E0 100%);outline:none;cursor:pointer;}
+    .vid-vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#5B3F7A;cursor:pointer;}
+    .vid-vol-slider::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#5B3F7A;border:none;cursor:pointer;}
     /* ── SERVICE DOG-EAR + CHIPS ── */
     .svc-card::after{content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;background:rgba(0,0,0,.09);clip-path:polygon(100% 0,100% 100%,0 100%);}
     .industry-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
@@ -807,6 +811,15 @@
             <div class="vid-rail"></div>
             <div class="vid-bar" id="vidBar"></div>
             <div class="vid-dot" id="vidDot"></div>
+          </div>
+          <div class="vid-vol-wrap">
+            <button class="vid-volbtn" id="vidVolBtn" aria-label="Mute">
+              <!-- volume on -->
+              <svg id="icVolOn" viewBox="0 0 20 20"><path d="M3 7h3l4-4v14l-4-4H3V7zm10 .5a4 4 0 0 1 0 5"/><path d="M15.5 5a7 7 0 0 1 0 10" stroke="#5B3F7A" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>
+              <!-- muted -->
+              <svg id="icVolOff" viewBox="0 0 20 20" style="display:none"><path d="M3 7h3l4-4v14l-4-4H3V7z"/><line x1="13" y1="8" x2="18" y2="13" stroke="#5B3F7A" stroke-width="1.6" stroke-linecap="round"/><line x1="18" y1="8" x2="13" y2="13" stroke="#5B3F7A" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <input type="range" class="vid-vol-slider" id="vidVolSlider" min="0" max="1" step="0.02" value="1" aria-label="Volume"/>
           </div>
         </div>
       </div>
@@ -1423,13 +1436,18 @@
       const bar = document.getElementById('vidBar');
       const dot = document.getElementById('vidDot');
       const prog = document.getElementById('vidProg');
+      const volBtn = document.getElementById('vidVolBtn');
+      const volSlider = document.getElementById('vidVolSlider');
+      const icVolOn = document.getElementById('icVolOn');
+      const icVolOff = document.getElementById('icVolOff');
       if(!vid||!btn) return;
 
+      /* ── Progress ── */
       function setProgress(pct){
         bar.style.width = pct + '%';
         dot.style.left = pct + '%';
       }
-      function updateIcons(){
+      function updatePlayIcons(){
         icPause.style.display = vid.paused ? 'none' : '';
         icPlay.style.display  = vid.paused ? ''     : 'none';
         btn.setAttribute('aria-label', vid.paused ? 'Play video' : 'Pause video');
@@ -1438,11 +1456,17 @@
         if(!vid.duration) return;
         setProgress((vid.currentTime / vid.duration) * 100);
       });
-      vid.addEventListener('ended', () => { vid.currentTime = 0; setProgress(0); updateIcons(); });
-      vid.addEventListener('play',  updateIcons);
-      vid.addEventListener('pause', updateIcons);
-      btn.addEventListener('click', () => { vid.paused ? vid.play() : vid.pause(); });
+      vid.addEventListener('ended', () => { vid.currentTime = 0; setProgress(0); updatePlayIcons(); });
+      vid.addEventListener('play',  updatePlayIcons);
+      vid.addEventListener('pause', updatePlayIcons);
 
+      /* ── Play/Pause — unmute on first interaction ── */
+      btn.addEventListener('click', () => {
+        if(vid.muted){ vid.muted = false; vid.volume = parseFloat(volSlider.value); updateVolIcons(); }
+        vid.paused ? vid.play() : vid.pause();
+      });
+
+      /* ── Seek ── */
       function seek(e){
         const r = prog.getBoundingClientRect();
         const pct = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
@@ -1455,6 +1479,28 @@
       document.addEventListener('mouseup',  () => { dragging = false; });
       prog.addEventListener('touchstart', e => seek(e.touches[0]), {passive:true});
       prog.addEventListener('touchmove',  e => seek(e.touches[0]), {passive:true});
+
+      /* ── Volume ── */
+      function updateVolIcons(){
+        const muted = vid.muted || vid.volume === 0;
+        icVolOn.style.display  = muted ? 'none' : '';
+        icVolOff.style.display = muted ? ''     : 'none';
+        volBtn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
+        const pct = muted ? 0 : vid.volume * 100;
+        volSlider.style.background = `linear-gradient(to right,#5B3F7A ${pct}%,#D8D8E0 ${pct}%)`;
+      }
+      volBtn.addEventListener('click', () => {
+        vid.muted = !vid.muted;
+        if(!vid.muted && vid.volume === 0){ vid.volume = 0.7; volSlider.value = 0.7; }
+        updateVolIcons();
+      });
+      volSlider.addEventListener('input', () => {
+        vid.volume = parseFloat(volSlider.value);
+        vid.muted = vid.volume === 0;
+        updateVolIcons();
+      });
+      vid.addEventListener('volumechange', updateVolIcons);
+      updateVolIcons();
     })();
 
     /* ── ROI Calculator ── */
