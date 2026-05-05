@@ -5,9 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TechNext Asia — Odoo ERP & AI Automations for Growing Businesses</title>
   <meta name="description" content="TechNext Asia is a certified Odoo Ready Partner delivering ERP implementation and AI automations for growing businesses in Southeast Asia."/>
+  <!-- SEO -->
+  <meta name="keywords" content="Odoo ERP Singapore, ERP implementation Southeast Asia, AI automations, Odoo Ready Partner, business automation Singapore, Vietnam Philippines ERP"/>
+  <meta name="author" content="TechNext Asia"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://technextmrkting.github.io/TechNext-Landing-Page/"/>
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="TechNext Asia — Odoo ERP & AI Automations for Growing Businesses"/>
+  <meta property="og:description" content="Certified Odoo Ready Partner delivering ERP implementation and AI automations for growing businesses in Singapore, Vietnam &amp; Philippines. Go live in 4–8 weeks."/>
+  <meta property="og:url" content="https://technextmrkting.github.io/TechNext-Landing-Page/"/>
+  <meta property="og:image" content="https://technextmrkting.github.io/TechNext-Landing-Page/images/TechNext-Logo.png"/>
+  <meta property="og:site_name" content="TechNext Asia"/>
+  <meta property="og:locale" content="en_SG"/>
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="TechNext Asia — Odoo ERP & AI Automations"/>
+  <meta name="twitter:description" content="Certified Odoo Ready Partner. ERP + AI automations for growing businesses in Southeast Asia. Go live in 4–8 weeks."/>
+  <meta name="twitter:image" content="https://technextmrkting.github.io/TechNext-Landing-Page/images/TechNext-Logo.png"/>
+  <!-- Performance: preconnect + preload critical font -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="preload" href="fonts/Caveat-Bold.ttf" as="font" type="font/truetype" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"TechNext Asia",
+    "url":"https://technextmrkting.github.io/TechNext-Landing-Page/",
+    "logo":"https://technextmrkting.github.io/TechNext-Landing-Page/images/TechNext-Logo.png",
+    "description":"Certified Odoo Ready Partner delivering ERP implementation and AI automations for growing businesses in Southeast Asia.",
+    "email":"hello@technext.asia",
+    "areaServed":["SG","VN","PH"],
+    "sameAs":[
+      "https://www.linkedin.com/company/technext-asia",
+      "https://www.facebook.com/technextasia",
+      "https://www.instagram.com/technextasia"
+    ],
+    "hasOfferCatalog":{
+      "@type":"OfferCatalog",
+      "name":"Services",
+      "itemListElement":[
+        {"@type":"Offer","itemOffered":{"@type":"Service","name":"Odoo ERP Implementation"}},
+        {"@type":"Offer","itemOffered":{"@type":"Service","name":"AI Automations"}}
+      ]
+    }
+  }
+  </script>
   <style>
     @font-face{font-family:'Caveat';src:url('fonts/Caveat-Regular.ttf') format('truetype');font-weight:400;font-display:swap;}
     @font-face{font-family:'Caveat';src:url('fonts/Caveat-Medium.ttf') format('truetype');font-weight:500;font-display:swap;}
@@ -259,12 +305,6 @@
     /* ── PROCESS ──────────────────────────────────────────── */
     #process{padding:100px 0;position:relative;}
     .proc-head{text-align:center;margin-bottom:56px;}
-    .proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
-    .proc-steps::before{content:'';position:absolute;top:29px;left:calc(12.5% + 4px);right:calc(12.5% + 4px);height:2px;background:linear-gradient(90deg,var(--purple),rgba(37,99,235,.15));border-radius:1px;}
-    .proc-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px;}
-    .proc-num{width:58px;height:58px;background:var(--white);border:2.5px solid var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:24px;font-weight:700;color:var(--purple);margin-bottom:18px;position:relative;z-index:1;box-shadow:0 0 0 6px var(--bg),0 4px 16px rgba(37,99,235,.15);}
-    .proc-title{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;}
-    .proc-text{font-size:13px;color:var(--muted);line-height:1.7;}
 
     /* ── TESTIMONIALS ─────────────────────────────────────── */
     #testimonials{padding:100px 0;background:var(--white);position:relative;}
@@ -423,7 +463,6 @@
       .nav-cta .btn-primary{display:none;}
       .hamburger{display:flex;}
       .footer-inner{flex-direction:column;align-items:flex-start;}
-      .diff-grid{grid-template-columns:1fr;}
       .cta-f1,.cta-f2{display:none;}
       .deco-s1,.deco-s2{display:none;}
       .deco-sticky:not(.deco-s1):not(.deco-s2){display:none;}
@@ -456,7 +495,7 @@
       </ul>
       <div class="nav-cta">
         <a href="#hero" class="btn-primary" style="padding:10px 22px;font-size:13px;">Book Free Demo</a>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -1325,6 +1364,7 @@
     hamburger.addEventListener('click', () => {
       hamburger.classList.toggle('open');
       mobileNav.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', hamburger.classList.contains('open'));
     });
     mobileNav.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
