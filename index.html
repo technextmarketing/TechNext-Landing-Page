@@ -385,8 +385,16 @@
     /* ── VIDEO SECTION ── */
     #before-after{padding:100px 0;background:var(--white);}
     .vid-wrap{max-width:960px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 56px rgba(37,99,235,.14),0 2px 20px rgba(0,0,0,.08);border:1px solid var(--border);position:relative;}
-    .vid-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(37,99,235,.04),transparent 60%);pointer-events:none;z-index:1;}
-    .vid-player{width:100%;display:block;border-radius:20px;}
+    .vid-wrap::before{content:'';position:absolute;top:0;left:0;right:0;bottom:52px;background:linear-gradient(135deg,rgba(37,99,235,.04),transparent 60%);pointer-events:none;z-index:1;}
+    .vid-player{width:100%;display:block;}
+    /* Video controls bar */
+    .vid-controls{display:flex;align-items:center;gap:18px;padding:13px 22px 15px;background:#fff;border-top:1px solid #EEE;}
+    .vid-playbtn{background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:#5B3F7A;flex-shrink:0;line-height:1;}
+    .vid-playbtn svg{width:15px;height:15px;fill:#5B3F7A;}
+    .vid-prog{flex:1;position:relative;height:22px;display:flex;align-items:center;cursor:pointer;user-select:none;}
+    .vid-rail{position:absolute;left:0;right:0;height:2px;background:#D8D8E0;border-radius:1px;}
+    .vid-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:2px;background:#5B3F7A;border-radius:1px;width:0%;pointer-events:none;}
+    .vid-dot{position:absolute;width:13px;height:13px;background:#5B3F7A;border-radius:50%;top:50%;left:0%;transform:translate(-50%,-50%);pointer-events:none;transition:left .15s linear;}
     /* ── SERVICE DOG-EAR + CHIPS ── */
     .svc-card::after{content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;background:rgba(0,0,0,.09);clip-path:polygon(100% 0,100% 100%,0 100%);}
     .industry-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
@@ -786,9 +794,20 @@
         <p class="section-sub" style="text-align:center;max-width:600px;margin:14px auto 0;">Odoo ERP + AI automations — one platform to run your entire business. Watch how it works.</p>
       </div>
       <div class="vid-wrap reveal">
-        <video class="vid-player" autoplay muted loop playsinline>
+        <video class="vid-player" id="mainVid" autoplay muted playsinline>
           <source src="video/video_ai_homepage.webm" type="video/webm"/>
         </video>
+        <div class="vid-controls">
+          <button class="vid-playbtn" id="vidPlayBtn" aria-label="Pause video">
+            <svg id="icPause" viewBox="0 0 20 20"><rect x="3" y="2" width="5" height="16" rx="1.5"/><rect x="12" y="2" width="5" height="16" rx="1.5"/></svg>
+            <svg id="icPlay" viewBox="0 0 20 20" style="display:none"><path d="M4 2l13 8-13 8V2z"/></svg>
+          </button>
+          <div class="vid-prog" id="vidProg">
+            <div class="vid-rail"></div>
+            <div class="vid-bar" id="vidBar"></div>
+            <div class="vid-dot" id="vidDot"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1380,6 +1399,49 @@
       document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
       if (!isOpen) item.classList.add('open');
     }
+
+    /* ── Video Controls ── */
+    (function(){
+      const vid = document.getElementById('mainVid');
+      const btn = document.getElementById('vidPlayBtn');
+      const icPause = document.getElementById('icPause');
+      const icPlay = document.getElementById('icPlay');
+      const bar = document.getElementById('vidBar');
+      const dot = document.getElementById('vidDot');
+      const prog = document.getElementById('vidProg');
+      if(!vid||!btn) return;
+
+      function setProgress(pct){
+        bar.style.width = pct + '%';
+        dot.style.left = pct + '%';
+      }
+      function updateIcons(){
+        icPause.style.display = vid.paused ? 'none' : '';
+        icPlay.style.display  = vid.paused ? ''     : 'none';
+        btn.setAttribute('aria-label', vid.paused ? 'Play video' : 'Pause video');
+      }
+      vid.addEventListener('timeupdate', () => {
+        if(!vid.duration) return;
+        setProgress((vid.currentTime / vid.duration) * 100);
+      });
+      vid.addEventListener('ended', () => { vid.currentTime = 0; setProgress(0); updateIcons(); });
+      vid.addEventListener('play',  updateIcons);
+      vid.addEventListener('pause', updateIcons);
+      btn.addEventListener('click', () => { vid.paused ? vid.play() : vid.pause(); });
+
+      function seek(e){
+        const r = prog.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+        vid.currentTime = pct * vid.duration;
+        setProgress(pct * 100);
+      }
+      let dragging = false;
+      prog.addEventListener('mousedown', e => { dragging = true; seek(e); });
+      document.addEventListener('mousemove', e => { if(dragging) seek(e); });
+      document.addEventListener('mouseup',  () => { dragging = false; });
+      prog.addEventListener('touchstart', e => seek(e.touches[0]), {passive:true});
+      prog.addEventListener('touchmove',  e => seek(e.touches[0]), {passive:true});
+    })();
 
     /* ── ROI Calculator ── */
     function calcROI() {
