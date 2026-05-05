@@ -75,9 +75,9 @@
     /* ── NAVBAR ───────────────────────────────────────────── */
     nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--white);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s;}
     nav.scrolled{border-color:var(--border);box-shadow:0 2px 16px var(--shadow);}
-    .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:76px;display:flex;align-items:center;justify-content:space-between;}
     .logo{display:flex;align-items:center;}
-    .logo img{height:38px;width:auto;display:block;}
+    .logo img{height:52px;width:auto;display:block;}
     .logo span{color:var(--purple);}
     .nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
     .nav-links a{font-size:14px;font-weight:500;color:var(--muted);transition:color .2s;}
@@ -85,7 +85,7 @@
     .nav-cta{display:flex;align-items:center;gap:12px;}
 
     /* ── HERO ─────────────────────────────────────────────── */
-    #hero{padding:116px 0 80px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;}
+    #hero{padding:124px 0 80px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;}
     /* dot grid background */
     #hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#CBD5E1 1px,transparent 1px);background-size:28px 28px;opacity:.5;pointer-events:none;}
 
@@ -327,7 +327,7 @@
     .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
     .hamburger.open span:nth-child(2){opacity:0;}
     .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    .mobile-nav{position:fixed;top:68px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);z-index:99;transform:translateY(-110%);transition:transform .35s ease;box-shadow:0 8px 24px rgba(0,0,0,.08);}
+    .mobile-nav{position:fixed;top:76px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);z-index:99;transform:translateY(-110%);transition:transform .35s ease;box-shadow:0 8px 24px rgba(0,0,0,.08);}
     .mobile-nav.open{transform:translateY(0);}
     .mobile-nav a{display:block;font-size:16px;font-weight:500;color:var(--text);padding:14px 24px;border-bottom:1px solid var(--border);transition:background .2s,color .2s;}
     .mobile-nav a:hover{background:var(--purple-xl);color:var(--purple);}
