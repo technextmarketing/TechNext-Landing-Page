@@ -186,8 +186,8 @@
     .svc-card{background:var(--sticky-y);border-radius:4px;padding:38px 32px 32px;position:relative;box-shadow:4px 6px 18px rgba(0,0,0,.09),inset 0 -4px 0 rgba(0,0,0,.06);transform:rotate(-.6deg);transition:transform .3s,box-shadow .3s;}
     .svc-card:nth-child(2){background:var(--sticky-b);transform:rotate(.5deg);}
     .svc-card:hover{transform:rotate(0deg) translateY(-8px);box-shadow:6px 14px 32px rgba(0,0,0,.12);}
-    .card-pin{position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:18px;height:18px;background:#9CA3AF;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,.22),inset 0 1px 2px rgba(255,255,255,.3);}
-    .card-pin::after{content:'';position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);width:2px;height:14px;background:rgba(0,0,0,.12);border-radius:1px;}
+    .card-pin{position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:22px;height:22px;background:radial-gradient(circle at 38% 35%,#FCA5A5,#DC2626);border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.28),inset 0 1px 3px rgba(255,255,255,.35);z-index:4;}
+    .card-pin::after{content:'';position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);width:2.5px;height:11px;background:linear-gradient(to bottom,#9CA3AF,rgba(0,0,0,.08));border-radius:0 0 2px 2px;}
     .svc-icon{width:52px;height:52px;background:rgba(37,99,235,.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:var(--purple);}
     .svc-icon svg{width:26px;height:26px;}
     .svc-card:nth-child(2) .svc-icon{background:rgba(29,78,216,.12);color:#1D4ED8;}
@@ -318,7 +318,6 @@
     .ba-list li{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--text-2);line-height:1.6;}
     .ba-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
     /* ── SERVICE DOG-EAR + CHIPS ── */
-    .svc-card{overflow:hidden;}
     .svc-card::after{content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;background:rgba(0,0,0,.09);clip-path:polygon(100% 0,100% 100%,0 100%);}
     .industry-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
     .i-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.65);color:var(--text-2);border:1px solid rgba(0,0,0,.1);}
