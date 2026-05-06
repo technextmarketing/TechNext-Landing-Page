@@ -150,8 +150,8 @@
     .hero-desc{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:36px;max-width:480px;animation:fade-up .6s ease .2s both;}
     .hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:36px;animation:fade-up .6s ease .3s both;}
     .hero-trust{display:flex;align-items:center;gap:16px;flex-wrap:wrap;animation:fade-up .6s ease .4s both;}
-    .htrust-odoo-logo{height:48px;width:auto;opacity:.75;display:block;transition:opacity .2s;}
-    .htrust-odoo-logo:hover{opacity:1;}
+    .htrust-odoo-logo{height:48px;width:auto;opacity:.7;display:block;cursor:pointer;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s,filter .3s,drop-shadow .3s;}
+    .htrust-odoo-logo:hover{opacity:1;filter:drop-shadow(0 4px 14px rgba(113,75,200,.35));}
     .htrust-sep-line{width:1px;height:22px;background:var(--border-2);flex-shrink:0;}
     .htrust-tagline{font-size:14px;font-weight:500;color:var(--muted);font-style:italic;letter-spacing:.01em;}
 
@@ -1698,6 +1698,35 @@
             note.style.boxShadow = '';
           }
         });
+      });
+    })();
+
+    /* ── Odoo logo proximity pop ── */
+    (function(){
+      const logo = document.querySelector('.htrust-odoo-logo');
+      if(!logo) return;
+      const RADIUS = 160;
+      document.addEventListener('mousemove', e=>{
+        const rect = logo.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top  + rect.height/2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < RADIUS){
+          const t = 1 - dist/RADIUS;
+          const scale = 1 + t*0.28;
+          const lift  = -t*8;
+          const op    = 0.7 + t*0.3;
+          const glow  = Math.round(t*18);
+          logo.style.transform = `scale(${scale.toFixed(3)}) translateY(${lift.toFixed(1)}px)`;
+          logo.style.opacity   = op.toFixed(2);
+          logo.style.filter    = `drop-shadow(0 ${glow}px ${glow*2}px rgba(113,75,200,${(t*.4).toFixed(2)}))`;
+        } else {
+          logo.style.transform = '';
+          logo.style.opacity   = '';
+          logo.style.filter    = '';
+        }
       });
     })();
 
