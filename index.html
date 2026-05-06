@@ -247,7 +247,7 @@
     /* ── WHY SECTION ──────────────────────────────────────── */
     #why{padding:100px 0;background:var(--white);position:relative;overflow:visible;}
     #why::after{display:none;}
-    .why-inner{display:grid;grid-template-columns:2fr 1fr;gap:48px;align-items:end;position:relative;z-index:1;}
+    .why-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;position:relative;z-index:1;}
     .why-list{display:flex;flex-direction:column;gap:12px;margin-top:28px;}
     .why-item{display:flex;gap:14px;align-items:center;padding:16px 18px;background:var(--bg);border-radius:12px;border:2px solid var(--border);transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
     .why-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--purple);border-radius:0;transform:scaleY(0);transition:transform .25s;transform-origin:center;}
@@ -268,19 +268,20 @@
     .why-panel{display:none;}
     .why-panel.active{display:block;animation:wp-in .35s ease both;}
     .why-inner .section-title{font-size:clamp(44px,4.8vw,68px);line-height:1.1;}
-    .wp-card{background:var(--bg);border:1.5px solid var(--border);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:18px;box-shadow:0 4px 20px rgba(0,0,0,.05);}
-    .wp-hd{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);}
-    .wp-hd-icon{width:46px;height:46px;background:var(--purple);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
-    .wp-hd-icon svg{width:22px;height:22px;}
-    .wp-hd-title{font-family:var(--fh);font-size:21px;font-weight:700;color:var(--text);line-height:1.2;}
-    .wp-hd-badge{font-size:11px;font-weight:700;background:var(--green-light);color:var(--green);padding:3px 9px;border-radius:20px;margin-top:4px;display:inline-block;}
-    .wp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-    .wp-stat{text-align:center;padding:12px 6px;background:var(--purple-xl);border-radius:10px;}
-    .wp-stat-num{font-family:var(--fh);font-size:26px;font-weight:700;color:var(--purple);line-height:1;}
-    .wp-stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
-    .wp-pills{display:flex;flex-wrap:wrap;gap:6px;}
-    .wp-pill{font-size:12px;font-weight:600;padding:4px 10px;background:var(--purple-light);color:var(--purple);border-radius:20px;}
-    .wp-note{font-size:13px;color:var(--muted);line-height:1.7;padding:12px 16px;background:var(--white);border-radius:10px;border-left:3px solid var(--purple);}
+    .wp-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:20px;box-shadow:0 8px 32px rgba(37,99,235,.08);}
+    .wp-hd{display:flex;flex-direction:column;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+    .wp-hd-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .wp-hd-icon{width:52px;height:52px;background:var(--purple);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+    .wp-hd-icon svg{width:26px;height:26px;}
+    .wp-hd-title{font-family:var(--fh);font-size:26px;font-weight:700;color:var(--text);line-height:1.2;margin-top:6px;}
+    .wp-hd-badge{font-size:12px;font-weight:700;background:var(--green-light);color:var(--green);padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;}
+    .wp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .wp-stat{text-align:center;padding:16px 8px;background:var(--purple-xl);border-radius:12px;}
+    .wp-stat-num{font-family:var(--fh);font-size:32px;font-weight:700;color:var(--purple);line-height:1;}
+    .wp-stat-lbl{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500;}
+    .wp-pills{display:flex;flex-wrap:wrap;gap:7px;}
+    .wp-pill{font-size:13px;font-weight:600;padding:5px 12px;background:var(--purple-light);color:var(--purple);border-radius:20px;}
+    .wp-note{font-size:14px;color:var(--muted);line-height:1.7;padding:14px 18px;background:var(--bg);border-radius:12px;border-left:3px solid var(--purple);}
     /* SEA panel */
     .wp-countries{display:flex;flex-direction:column;gap:9px;}
     .wp-country{display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--white);border-radius:12px;border:1px solid var(--border);transition:border-color .2s,transform .2s;}
@@ -846,18 +847,18 @@
         </div>
 
         <!-- RIGHT: dynamic panels -->
-        <div class="reveal rd2 why-panel-wrap" style="align-self:end;margin-top:auto;">
+        <div class="reveal rd2 why-panel-wrap" style="align-self:start;">
 
           <!-- Panel 0: Odoo Partner -->
           <div class="why-panel active" id="wp0">
             <div class="wp-card">
               <div class="wp-hd">
-                <div class="wp-hd-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0"/></svg></div>
-                <div style="flex:1;">
-                  <div class="wp-hd-title">Certified Odoo Partner</div>
-                  <span class="wp-hd-badge">✓ Officially Verified by Odoo S.A.</span>
+                <div class="wp-hd-top">
+                  <div class="wp-hd-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0"/></svg></div>
+                  <img src="images/odoo_logo.png" alt="Odoo" style="height:40px;width:auto;opacity:.85;"/>
                 </div>
-                <img src="images/odoo_logo.png" alt="Odoo" style="height:44px;width:auto;flex-shrink:0;opacity:.85;"/>
+                <div class="wp-hd-title">Certified Odoo Partner</div>
+                <span class="wp-hd-badge">✓ Officially Verified by Odoo S.A.</span>
               </div>
               <div class="wp-stats">
                 <div class="wp-stat"><div class="wp-stat-num">30+</div><div class="wp-stat-lbl">Implementations</div></div>
