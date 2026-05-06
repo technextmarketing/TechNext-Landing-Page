@@ -165,12 +165,10 @@
     .deco-sticky,.sdeco,.cta-float{cursor:grab;}
     .deco-sticky.is-dragging,.sdeco.is-dragging,.cta-float.is-dragging{cursor:grabbing;z-index:9998!important;}
     .deco-sticky.is-dragging .deco-note,.sdeco.is-dragging .deco-note,.cta-float.is-dragging .deco-note{filter:brightness(1.05);}
-    /* Pin drop zones */
-    .pin-zone{position:fixed;width:88px;height:72px;border:2px dashed rgba(37,99,235,.22);border-radius:8px;z-index:9990;display:none;pointer-events:none;transition:background .15s,border-color .15s,transform .15s;}
-    .pin-zone::before{content:'📌';position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:16px;opacity:.45;transition:opacity .15s;}
-    .pin-zone.active{display:block;}
-    .pin-zone.near{background:rgba(37,99,235,.07);border-color:rgba(37,99,235,.55);transform:scale(1.1);}
-    .pin-zone.near::before{opacity:1;}
+    /* Pinned sticky hint */
+    .deco-sticky.pinned,.sdeco.pinned,.cta-float.pinned{outline:none;}
+    .deco-sticky.pinned::after,.sdeco.pinned::after{content:'✕ return';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;}
+    .deco-sticky.pinned:hover::after,.sdeco.pinned:hover::after{opacity:1;}
     .deco-note.proximity{transform:scale(1.1) translateY(-5px) !important;box-shadow:6px 10px 24px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);}
     .deco-note.y{background:var(--sticky-y);color:#78350F;}
     .deco-note.p{background:var(--sticky-p);color:#9D174D;}
@@ -1710,37 +1708,14 @@
       });
     })();
 
-    /* ── Draggable sticky notes — snap to pin zones ── */
+    /* ── Draggable sticky notes — pin anywhere, dbl-click to return ── */
     (function(){
-      // Pin zone positions: [left vw%, top vh%]
-      const ZONE_DEFS = [
-        [1, 10],[87, 10],
-        [1, 28],[88, 28],
-        [1, 46],[88, 46],
-        [1, 64],[88, 64],
-        [1, 80],[88, 80],
-      ];
-      const SNAP_R = 110; // snap radius in px
-
-      // Build zone elements once
-      const zones = ZONE_DEFS.map(([lv, tv])=>{
-        const z = document.createElement('div');
-        z.className = 'pin-zone';
-        z.style.left = lv + 'vw';
-        z.style.top  = tv + 'vh';
-        document.body.appendChild(z);
-        return z;
-      });
-
-      function zoneCenter(z){
-        const r = z.getBoundingClientRect();
-        return {x: r.left + r.width/2, y: r.top + r.height/2};
-      }
-
-      let drag = null, ox = 0, oy = 0, origParent, origNext, origStyle, origRect;
+      let drag = null, ox = 0, oy = 0;
+      let origParent, origNext, origStyle, origRect;
+      let didMove = false;
 
       function startDrag(el, cx, cy){
-        drag = el;
+        drag = el; didMove = false;
         origRect   = el.getBoundingClientRect();
         origParent = el.parentElement;
         origNext   = el.nextSibling;
@@ -1760,78 +1735,65 @@
           note.style.boxShadow = '10px 24px 56px rgba(0,0,0,.22),inset 0 -3px 0 rgba(0,0,0,.1)';
           note.style.transition = 'none';
         }
-        zones.forEach(z => z.classList.add('active'));
       }
 
       function onMove(cx, cy){
         if(!drag) return;
+        didMove = true;
         drag.style.left = (cx - ox) + 'px';
         drag.style.top  = (cy - oy) + 'px';
-        // Highlight nearest zone
-        zones.forEach(z =>{
-          const c = zoneCenter(z);
-          z.classList.toggle('near', Math.hypot(cx - c.x, cy - c.y) < SNAP_R);
-        });
       }
 
-      function onDrop(cx, cy){
+      function onDrop(){
         if(!drag) return;
         const el = drag; drag = null;
         el.classList.remove('is-dragging');
-        zones.forEach(z => z.classList.remove('active','near'));
 
-        // Find nearest zone within snap radius
-        let best = null, bestD = SNAP_R;
-        zones.forEach(z =>{
-          const c = zoneCenter(z);
-          const d = Math.hypot(cx - c.x, cy - c.y);
-          if(d < bestD){ bestD = d; best = {z, c}; }
-        });
+        if(!didMove){
+          // No actual drag — restore immediately
+          returnHome(el); return;
+        }
 
-        const note = el.querySelector('.deco-note');
+        // Pin right where it was dropped — natural tilt
         const tilt = (Math.random()*10 - 5).toFixed(1);
-
-        if(best){
-          // Snap to zone — spring animation
-          el.style.transition = 'left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
-          el.style.left = (best.c.x - parseFloat(el.style.width)/2) + 'px';
-          el.style.top  = (best.c.y - 28) + 'px';
-          if(note){
-            note.style.transition = 'transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
-            note.style.setProperty('transform',`rotate(${tilt}deg)`,'important');
-            note.style.boxShadow = '';
-          }
-        } else {
-          // No zone nearby — bounce back to origin
-          el.style.transition = 'left .42s cubic-bezier(.34,1.56,.64,1),top .42s cubic-bezier(.34,1.56,.64,1)';
-          el.style.left = origRect.left + 'px';
-          el.style.top  = origRect.top  + 'px';
-          if(note){
-            note.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
-            note.style.setProperty('transform','','important');
-            note.style.boxShadow = '';
-          }
-          setTimeout(()=>{
-            if(origNext) origParent.insertBefore(el, origNext);
-            else origParent.appendChild(el);
-            el.setAttribute('style', origStyle);
-          }, 440);
+        const note = el.querySelector('.deco-note');
+        el.classList.add('pinned');
+        if(note){
+          note.style.transition = 'transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
+          note.style.setProperty('transform',`rotate(${tilt}deg)`,'important');
+          note.style.boxShadow = '4px 10px 28px rgba(0,0,0,.15),inset 0 -3px 0 rgba(0,0,0,.08)';
         }
       }
 
+      function returnHome(el){
+        const note = el.querySelector('.deco-note');
+        el.style.transition = 'left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
+        el.style.left = origRect.left + 'px';
+        el.style.top  = origRect.top  + 'px';
+        if(note){
+          note.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
+          note.style.setProperty('transform','','important');
+          note.style.boxShadow = '';
+        }
+        setTimeout(()=>{
+          if(origNext) origParent.insertBefore(el, origNext);
+          else origParent.appendChild(el);
+          el.setAttribute('style', origStyle);
+          el.classList.remove('pinned');
+        }, 450);
+      }
+
       document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-      document.addEventListener('mouseup',   e => onDrop(e.clientX, e.clientY));
+      document.addEventListener('mouseup', onDrop);
       document.addEventListener('touchmove', e=>{
         if(!drag) return;
         onMove(e.touches[0].clientX, e.touches[0].clientY);
         e.preventDefault();
       },{passive:false});
-      document.addEventListener('touchend', e=>{
-        if(!drag) return;
-        onDrop(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-      });
+      document.addEventListener('touchend', onDrop);
 
       function attach(el){
+        // Drag
         el.addEventListener('mousedown', e=>{
           if(e.button !== 0) return;
           startDrag(el, e.clientX, e.clientY);
@@ -1841,6 +1803,12 @@
           startDrag(el, e.touches[0].clientX, e.touches[0].clientY);
           e.preventDefault();
         },{passive:false});
+        // Double-click → return home
+        el.addEventListener('dblclick', e=>{
+          if(el.classList.contains('pinned')){
+            returnHome(el); e.stopPropagation();
+          }
+        });
       }
       document.querySelectorAll('.deco-sticky,.sdeco,.cta-float').forEach(attach);
     })();
