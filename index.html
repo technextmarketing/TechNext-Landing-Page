@@ -1860,14 +1860,26 @@
         }
       }
 
-      /* ── returnHome: spring back to original position ── */
+      /* ── returnHome: exit animation then restore to original DOM position ── */
       function returnHome(el){
         const home=homeMap.get(el);
-        if(!home) return;
         const note=el.querySelector('.deco-note');
         pinnedMap.delete(el);
+        el.classList.remove('pinned');
 
-        /* Make sure el is in body as fixed so the animation is visible */
+        /* If no home data, just animate out and remove */
+        if(!home){
+          if(note){
+            note.style.transition='transform .32s cubic-bezier(.4,0,.6,1),opacity .32s ease,box-shadow .2s';
+            note.style.setProperty('transform','scale(0.55) rotate(8deg)','important');
+            note.style.opacity='0';
+            note.style.boxShadow='none';
+          }
+          setTimeout(()=>{ if(el.parentElement) el.parentElement.removeChild(el); },360);
+          return;
+        }
+
+        /* Ensure el is in body as position:fixed for the animation */
         if(el.parentElement!==document.body){
           const r=el.getBoundingClientRect();
           document.body.appendChild(el);
@@ -1876,28 +1888,40 @@
             left:r.left+'px', top:r.top+'px',
             right:'auto', bottom:'auto',
             width:home.w+'px', height:'auto',
-            margin:'0', zIndex:'9998', transition:'none'
+            margin:'0', zIndex:'9998', transition:'none', animation:'none'
           });
+          void el.offsetWidth;
         }
 
-        el.classList.remove('pinned');
-        el.style.transition='none';
-        void el.offsetWidth;  /* flush — without this spring transition doesn't fire */
-        el.style.transition='left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
-        el.style.left=home.x+'px';
-        el.style.top =home.y+'px';
-
+        /* Phase 1: scale + fade exit on the note card */
         if(note){
-          note.style.transition='transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
-          note.style.setProperty('transform','','important');
-          note.style.boxShadow='';
+          note.style.transition='transform .28s cubic-bezier(.4,0,.6,1),opacity .28s ease,box-shadow .2s';
+          note.style.setProperty('transform','scale(0.6) rotate(6deg)','important');
+          note.style.opacity='0';
+          note.style.boxShadow='none';
         }
 
+        /* Phase 2: after exit anim, restore quietly to original DOM position */
         setTimeout(()=>{
-          if(home.next) home.parent.insertBefore(el,home.next);
-          else           home.parent.appendChild(el);
+          /* Safe insertion: verify home.next is still inside home.parent */
+          try {
+            if(home.next && home.next.parentElement===home.parent){
+              home.parent.insertBefore(el,home.next);
+            } else {
+              home.parent.appendChild(el);
+            }
+          } catch(e){
+            home.parent.appendChild(el);
+          }
           el.setAttribute('style',home.style);
-        },460);
+          /* Reset note styles so float animation resumes properly */
+          if(note){
+            note.style.transition='';
+            note.style.removeProperty('transform');
+            note.style.opacity='';
+            note.style.boxShadow='';
+          }
+        },320);
       }
 
       /* ── Resize/zoom: keep pinned notes aligned with their zones ──
