@@ -432,6 +432,11 @@
     .vid-vol-slider{-webkit-appearance:none;appearance:none;width:72px;height:3px;border-radius:2px;background:linear-gradient(to right,#5B3F7A 100%,#D8D8E0 100%);outline:none;cursor:pointer;}
     .vid-vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#5B3F7A;cursor:pointer;}
     .vid-vol-slider::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#5B3F7A;border:none;cursor:pointer;}
+    .vid-fullbtn{background:none;border:none;cursor:pointer;padding:0 0 0 10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;transition:opacity .2s,transform .2s;}
+    .vid-fullbtn svg{width:17px;height:17px;}
+    .vid-fullbtn:hover{opacity:.7;transform:scale(1.15);}
+    .vid-wrap:-webkit-full-screen .vid-controls{position:fixed;bottom:0;left:0;right:0;z-index:9999;}
+    .vid-wrap:fullscreen .vid-controls{position:fixed;bottom:0;left:0;right:0;z-index:9999;}
     /* ── SERVICE DOG-EAR + CHIPS ── */
     .svc-card::after{content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;background:rgba(0,0,0,.09);clip-path:polygon(100% 0,100% 100%,0 100%);}
     .industry-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
@@ -832,7 +837,25 @@
             </button>
             <input type="range" class="vid-vol-slider" id="vidVolSlider" min="0" max="1" step="0.02" value="1" aria-label="Volume"/>
           </div>
+          <!-- Fullscreen button -->
+          <button class="vid-fullbtn" id="vidFullBtn" aria-label="Fullscreen">
+            <svg id="icExpand" viewBox="0 0 20 20" fill="none" stroke="#5B3F7A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/>
+            </svg>
+            <svg id="icCollapse" viewBox="0 0 20 20" fill="none" stroke="#5B3F7A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+              <path d="M7 3v4H3M17 7h-4V3M13 17v-4h4M3 13h4v4"/>
+            </svg>
+          </button>
         </div>
+      </div>
+      <!-- Video section CTA -->
+      <div class="reveal" style="text-align:center;margin-top:48px;">
+        <p style="font-family:var(--fh);font-size:28px;font-weight:700;color:var(--text);margin-bottom:6px;">Ready to see it work for your business?</p>
+        <p style="font-size:16px;color:var(--muted);margin-bottom:0;">Book a free 30-minute demo — no commitment required.</p>
+        <form class="cta-email-form" style="margin:24px auto 0;" onsubmit="ctaEmailGo(event)">
+          <input type="email" class="cta-email-input" placeholder="Enter your work email" required/>
+          <button type="submit" class="cta-email-btn">Book Free Demo →</button>
+        </form>
       </div>
     </div>
   </section>
@@ -1542,6 +1565,27 @@
       });
       vid.addEventListener('volumechange', updateVolIcons);
       updateVolIcons();
+
+      /* ── Fullscreen ── */
+      const fullBtn = document.getElementById('vidFullBtn');
+      const icExpand   = document.getElementById('icExpand');
+      const icCollapse = document.getElementById('icCollapse');
+      const vidWrap = vid.closest('.vid-wrap');
+      function updateFullIcons(){
+        const isFull = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        icExpand.style.display   = isFull ? 'none' : '';
+        icCollapse.style.display = isFull ? ''     : 'none';
+        fullBtn.setAttribute('aria-label', isFull ? 'Exit fullscreen' : 'Fullscreen');
+      }
+      fullBtn.addEventListener('click', () => {
+        if(document.fullscreenElement || document.webkitFullscreenElement){
+          (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+        } else {
+          (vidWrap.requestFullscreen || vidWrap.webkitRequestFullscreen).call(vidWrap);
+        }
+      });
+      document.addEventListener('fullscreenchange', updateFullIcons);
+      document.addEventListener('webkitfullscreenchange', updateFullIcons);
     })();
 
     /* ── ROI Calculator ── */
