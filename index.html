@@ -543,30 +543,144 @@
     .wa-float svg{width:28px;height:28px;fill:#fff;}
 
     /* ── RESPONSIVE ───────────────────────────────────────── */
+
+    /* Tablet / large mobile ≤ 900px */
     @media(max-width:900px){
+      /* Grid layouts */
       .hero-inner{grid-template-columns:1fr;}
       .services-grid{grid-template-columns:1fr;}
       .why-inner{grid-template-columns:1fr;gap:40px;}
       #why::after{display:none;}
       .testi-grid{grid-template-columns:1fr;}
+      .roi-inner{grid-template-columns:1fr;}
+
+      /* Nav */
       .nav-links{display:none;}
       .nav-cta .btn-primary{display:none;}
       .hamburger{display:flex;}
-      .cta-f1,.cta-f2{display:none;}
-      .deco-s1,.deco-s2{display:none;}
-      .deco-sticky:not(.deco-s1):not(.deco-s2){display:none;}
-      .sdeco{display:none;}
+      .start-here{display:none;}
+
+      /* Hide ALL sticky notes, floating decorations and drag UI — desktop only */
+      .deco-sticky,.sdeco,.cta-float,.pin-zone{display:none!important;}
+
+      /* Section padding */
+      #hero{padding:96px 0 56px;min-height:auto;}
+      #services,#why,#process,#testimonials,#cta,#faq,#before-after,#roi{padding:64px 0;}
+      #stats{padding:36px 0;}
+
+      /* Typography */
+      .section-label{font-size:22px;}
+      .section-title{font-size:clamp(30px,6vw,52px);}
+      .section-sub{font-size:17px;max-width:100%;}
+      .hero-h1{font-size:clamp(34px,6.5vw,52px);}
+      .badge-sticky,.badge-region{font-size:17px;padding:9px 16px;}
+      .hero-eyebrow{gap:10px;margin-bottom:18px;}
+      .form-heading{font-size:32px;}
+      .form-subhead{white-space:normal;font-size:13px;}
+      .svc-name{font-size:30px;}
+      .svc-desc{font-size:16px;}
+      .feat-list li{font-size:17px;}
+      .why-title{font-size:22px;}
+      .wp-hd-title{font-size:22px;}
+      .faq-q{font-size:22px;padding:18px 22px;}
+      .testi-quote{font-size:17px;}
+      .cta-inner .section-title{font-size:clamp(36px,6.5vw,64px);}
+
+      /* Stats — 2×2 grid */
       .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .stat-num{font-size:clamp(48px,8vw,80px);}
       .stat-item:nth-child(2){border-right:none;}
       .stat-item:nth-child(3){border-right:1px solid rgba(255,255,255,.15);border-top:1px solid rgba(255,255,255,.15);}
       .stat-item:nth-child(4){border-top:1px solid rgba(255,255,255,.15);}
-      .roi-inner{grid-template-columns:1fr;}
-      .start-here{display:none;}
+
+      /* Services CTA form — stretch full width */
+      .svc-cta-form{display:flex;width:100%;}
+      .svc-cta-input{width:0;flex:1;min-width:0;}
+
+      /* Why panel — show below list when stacked */
+      .why-panel-wrap{align-self:auto;}
+
+      /* Footer — stack vertically */
+      .footer-center{flex-direction:column;align-items:center;gap:20px;text-align:center;}
+      .footer-legal{justify-content:center;flex-wrap:wrap;}
+      .social-btn{width:54px;height:54px;font-size:20px;}
     }
+
+    /* Mobile ≤ 600px */
     @media(max-width:600px){
+      /* Form fields */
       .ff-row{grid-template-columns:1fr;}
       .hero-actions{flex-direction:column;align-items:flex-start;}
-      .footer-links{flex-wrap:wrap;gap:12px;}
+      .footer-links{flex-wrap:wrap;gap:10px;justify-content:center;}
+
+      /* Tighter spacing */
+      #hero{padding:82px 0 44px;}
+      #services,#why,#process,#testimonials,#cta,#faq,#before-after,#roi{padding:48px 0;}
+      #stats{padding:28px 0;}
+      .container{padding:0 16px;}
+
+      /* Hero */
+      .hero-h1{font-size:clamp(28px,8.5vw,40px);}
+      .badge-sticky,.badge-region{font-size:14px;padding:7px 12px;}
+      .hero-eyebrow{gap:8px;flex-wrap:wrap;}
+      .hero-desc{font-size:14px;}
+      .hero-form-wrap{padding:24px 18px 20px;}
+      .form-heading{font-size:26px;}
+      .form-subhead{font-size:12px;}
+      .spick-label{font-size:15px;}
+      .spick{padding:11px 13px;}
+
+      /* Section typography */
+      .section-label{font-size:18px;}
+      .section-title{font-size:clamp(26px,8vw,40px);}
+      .section-sub{font-size:15px;}
+
+      /* Services */
+      .svc-card{padding:26px 18px 22px;}
+      .svc-name{font-size:24px;}
+      .svc-desc{font-size:15px;}
+      .feat-list li{font-size:15px;}
+
+      /* Stats */
+      .stat-num{font-size:clamp(40px,9.5vw,64px);}
+      .stat-lbl{font-size:14px;}
+      .stat-sub{font-size:16px;}
+      .stat-item{padding:8px 12px;}
+
+      /* Why */
+      .why-title{font-size:18px;}
+      .why-text{font-size:14px;}
+      .why-item{padding:12px 14px;}
+      .wp-hd-title{font-size:18px;}
+      .wp-stat-num{font-size:24px;}
+      .wp-outcomes{grid-template-columns:1fr 1fr;}
+      .wp-stats{grid-template-columns:1fr 1fr 1fr;}
+
+      /* Process notepad */
+      .pn-body{padding:8px 14px 18px 18px;}
+      .pn-margin{left:40px;}
+      .pn-title{font-size:17px;}
+      .pn-text{font-size:12px;}
+
+      /* Testimonials */
+      .testi-card{padding:30px 20px 22px;}
+      .testi-quote{font-size:15px;}
+
+      /* CTA */
+      .cta-inner .section-title{font-size:clamp(28px,9vw,48px);}
+      .cta-email-form{flex-direction:column;border-radius:14px;max-width:100%;}
+      .cta-email-input{padding:14px 18px;border-radius:14px 14px 0 0;}
+      .cta-email-btn{border-radius:0 0 14px 14px;padding:14px 18px;}
+      .cta-actions{flex-direction:column;align-items:center;}
+
+      /* FAQ */
+      .faq-q{font-size:17px;padding:15px 16px;}
+      .faq-a{font-size:15px;padding:0 16px 14px;}
+
+      /* Footer */
+      .social-btn{width:46px;height:46px;font-size:17px;border-radius:12px;}
+      .footer-socials{gap:8px;}
+      .footer-copy{font-size:11px;}
     }
   </style>
 </head>
@@ -1713,8 +1827,11 @@
       });
     })();
 
-    /* ── Draggable sticky notes — 10 pin zones ── */
+    /* ── Draggable sticky notes — 10 pin zones (desktop only) ── */
     (function(){
+      /* Skip entirely on touch/mobile devices */
+      if(window.matchMedia('(max-width:900px)').matches || window.matchMedia('(pointer:coarse)').matches) return;
+
       /* ── Config ── */
       const ZONE_W=104, ZONE_H=88, EDGE=14, SNAP_R=130;
       const VT=[10,26,42,58,74]; // zone-centre vh% (vertical)
