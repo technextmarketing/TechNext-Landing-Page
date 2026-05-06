@@ -120,7 +120,7 @@
 
     /* ── NAVBAR ───────────────────────────────────────────── */
     nav{position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s,transform .35s ease;}
-    nav.scrolled{background:rgba(255,255,255,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:var(--border);box-shadow:0 2px 16px var(--shadow);}
+    nav.scrolled{background:transparent;border-color:transparent;box-shadow:none;}
     nav.nav-hidden{transform:translateY(-100%);}
     .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:76px;display:flex;align-items:center;justify-content:space-between;}
     .logo{display:flex;align-items:center;}
@@ -307,8 +307,8 @@
     /* ── TESTIMONIALS ─────────────────────────────────────── */
     #testimonials{padding:100px 0;background:var(--white);position:relative;}
     .testi-head{text-align:center;margin-bottom:52px;}
-    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-    .testi-card{padding:28px 24px;border-radius:4px;position:relative;transition:transform .3s,box-shadow .3s;}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;}
+    .testi-card{padding:44px 36px 36px;border-radius:4px;position:relative;transition:transform .3s,box-shadow .3s;}
     .testi-card:nth-child(1){background:var(--sticky-y);transform:rotate(-.7deg);box-shadow:3px 5px 14px rgba(0,0,0,.08),inset 0 -3px 0 rgba(0,0,0,.05);}
     .testi-card:nth-child(2){background:var(--sticky-p);transform:rotate(.4deg);box-shadow:3px 5px 14px rgba(0,0,0,.08),inset 0 -3px 0 rgba(0,0,0,.05);}
     .testi-card:nth-child(3){background:var(--sticky-b);transform:rotate(-.4deg);box-shadow:3px 5px 14px rgba(0,0,0,.08),inset 0 -3px 0 rgba(0,0,0,.05);}
@@ -318,10 +318,10 @@
     .testi-card:nth-child(2) .tc-tape{background:rgba(249,168,212,.7);}
     .testi-card:nth-child(3) .tc-tape{background:rgba(147,197,253,.7);}
     .stars{display:flex;gap:3px;margin-bottom:12px;}
-    .star{color:var(--amber);font-size:13px;}
-    .testi-quote{font-family:var(--fh);font-size:18px;line-height:1.65;color:var(--text);margin-bottom:18px;}
-    .testi-author{display:flex;align-items:center;gap:10px;}
-    .t-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:14px;font-weight:700;color:var(--purple);flex-shrink:0;}
+    .star{color:var(--amber);font-size:17px;}
+    .testi-quote{font-family:var(--fh);font-size:22px;line-height:1.65;color:var(--text);margin-bottom:22px;}
+    .testi-author{display:flex;align-items:center;gap:12px;}
+    .t-avatar{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--purple);flex-shrink:0;}
     .t-name{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--text);line-height:1.2;}
     .t-role{font-size:12px;color:var(--muted);}
 
@@ -548,10 +548,6 @@
           <p class="hero-desc">
             Manual invoicing, disconnected spreadsheets, and growing admin overhead are slowing you down. TechNext implements Odoo ERP and AI automations so your team can stop firefighting and start scaling.
           </p>
-          <form class="hero-email-form" onsubmit="heroEmailGo(event)">
-            <input type="email" class="hero-email-input" id="heroEmailInput" placeholder="Enter your work email" required/>
-            <button type="submit" class="hero-email-btn">Book Free Demo →</button>
-          </form>
           <div class="hero-trust">
             <div class="htrust-item"><span class="chk">✓</span> 50+ Businesses Served</div>
             <div class="htrust-item"><span class="chk">✓</span> 3 Countries</div>
