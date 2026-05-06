@@ -162,6 +162,9 @@
     .deco-note{font-family:var(--fh);font-size:19px;font-weight:600;padding:16px 22px;border-radius:3px;box-shadow:3px 5px 14px var(--shadow-md),inset 0 -3px 0 rgba(0,0,0,.08);line-height:1.3;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,filter .2s;}
     .deco-sticky:hover,.sdeco:hover{animation-play-state:paused;}
     .deco-sticky:hover .deco-note,.sdeco:hover .deco-note{transform:rotate(0deg) scale(1.22) translateY(-10px) !important;box-shadow:8px 16px 36px rgba(0,0,0,.18),inset 0 -3px 0 rgba(0,0,0,.08);filter:brightness(1.04);}
+    .deco-sticky,.sdeco,.cta-float{cursor:grab;}
+    .deco-sticky.is-dragging,.sdeco.is-dragging,.cta-float.is-dragging{cursor:grabbing;z-index:9998!important;}
+    .deco-sticky.is-dragging .deco-note,.sdeco.is-dragging .deco-note,.cta-float.is-dragging .deco-note{filter:brightness(1.05);}
     .deco-note.proximity{transform:scale(1.1) translateY(-5px) !important;box-shadow:6px 10px 24px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);}
     .deco-note.y{background:var(--sticky-y);color:#78350F;}
     .deco-note.p{background:var(--sticky-p);color:#9D174D;}
@@ -1699,6 +1702,78 @@
           }
         });
       });
+    })();
+
+    /* ── Draggable sticky notes ── */
+    (function(){
+      let drag = null, ox = 0, oy = 0;
+
+      function startDrag(el, cx, cy){
+        drag = el;
+        const rect = el.getBoundingClientRect();
+        ox = cx - rect.left;
+        oy = cy - rect.top;
+        // Reparent to body so it can move freely over the entire page
+        document.body.appendChild(el);
+        Object.assign(el.style, {
+          position:'fixed', left:rect.left+'px', top:rect.top+'px',
+          width:rect.width+'px', margin:'0', zIndex:'9998',
+          animation:'none', transition:'none'
+        });
+        el.classList.add('is-dragging');
+        const note = el.querySelector('.deco-note');
+        if(note){
+          note.style.setProperty('transform','rotate(2deg) scale(1.12) translateY(-8px)','important');
+          note.style.boxShadow = '10px 24px 56px rgba(0,0,0,.22),inset 0 -3px 0 rgba(0,0,0,.1)';
+          note.style.transition = 'none';
+        }
+      }
+
+      function onMove(cx, cy){
+        if(!drag) return;
+        drag.style.left = (cx - ox) + 'px';
+        drag.style.top  = (cy - oy) + 'px';
+      }
+
+      function onDrop(){
+        if(!drag) return;
+        const el = drag; drag = null;
+        el.classList.remove('is-dragging');
+        // Random tilt on drop for a natural "pinned" feel
+        const tilt = (Math.random()*10 - 5).toFixed(1);
+        const note = el.querySelector('.deco-note');
+        if(note){
+          note.style.removeProperty('transition');
+          note.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
+          note.style.setProperty('transform',`rotate(${tilt}deg) translateY(0)`,'important');
+          note.style.boxShadow = '';
+        }
+      }
+
+      // Mouse
+      document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+      document.addEventListener('mouseup',   onDrop);
+      // Touch
+      document.addEventListener('touchmove', e=>{
+        if(!drag) return;
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+        e.preventDefault();
+      }, {passive:false});
+      document.addEventListener('touchend',  onDrop);
+
+      function attach(el){
+        el.addEventListener('mousedown', e=>{
+          if(e.button !== 0) return;
+          startDrag(el, e.clientX, e.clientY);
+          e.preventDefault(); e.stopPropagation();
+        });
+        el.addEventListener('touchstart', e=>{
+          startDrag(el, e.touches[0].clientX, e.touches[0].clientY);
+          e.preventDefault();
+        }, {passive:false});
+      }
+
+      document.querySelectorAll('.deco-sticky,.sdeco,.cta-float').forEach(attach);
     })();
 
     /* ── Odoo logo proximity pop ── */
