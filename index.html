@@ -247,7 +247,7 @@
     /* ── WHY SECTION ──────────────────────────────────────── */
     #why{padding:100px 0;background:var(--white);position:relative;overflow:visible;}
     #why::after{content:'';position:absolute;top:0;bottom:0;right:0;width:45%;background:repeating-linear-gradient(transparent,transparent 27px,rgba(199,210,254,.35) 27px,rgba(199,210,254,.35) 28px);pointer-events:none;}
-    .why-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;position:relative;z-index:1;}
+    .why-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;position:relative;z-index:1;}
     .why-list{display:flex;flex-direction:column;gap:12px;margin-top:28px;}
     .why-item{display:flex;gap:14px;align-items:center;padding:16px 18px;background:var(--bg);border-radius:12px;border:2px solid var(--border);transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
     .why-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--purple);border-radius:0;transform:scaleY(0);transition:transform .25s;transform-origin:center;}
@@ -846,7 +846,7 @@
         </div>
 
         <!-- RIGHT: dynamic panels -->
-        <div class="reveal rd2 why-panel-wrap" style="align-self:start;">
+        <div class="reveal rd2 why-panel-wrap" style="align-self:end;margin-top:auto;">
 
           <!-- Panel 0: Odoo Partner -->
           <div class="why-panel active" id="wp0">
