@@ -441,11 +441,12 @@
     .svc-cta-tag{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;}
     .svc-cta-title{font-family:var(--fh);font-size:36px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:8px;}
     .svc-cta-sub{font-size:15px;color:rgba(255,255,255,.75);line-height:1.6;}
-    .svc-cta-btns{display:flex;gap:14px;flex-shrink:0;position:relative;z-index:1;}
-    .svc-cta-btn-primary{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--purple);font-family:var(--fb);font-weight:700;font-size:15px;padding:15px 28px;border-radius:12px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;}
-    .svc-cta-btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.3);}
-    .svc-cta-btn-outline{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#fff;font-family:var(--fb);font-weight:600;font-size:15px;padding:15px 28px;border-radius:12px;border:1.5px solid rgba(255,255,255,.3);cursor:pointer;transition:background .2s,transform .2s;white-space:nowrap;backdrop-filter:blur(4px);}
-    .svc-cta-btn-outline:hover{background:rgba(255,255,255,.22);transform:translateY(-3px);}
+    .svc-cta-form{display:flex;gap:0;border-radius:14px;overflow:hidden;flex-shrink:0;position:relative;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,.25);transition:transform .2s,box-shadow .2s;}
+    .svc-cta-form:focus-within{transform:translateY(-3px);box-shadow:0 14px 48px rgba(0,0,0,.35);}
+    .svc-cta-input{border:none;padding:17px 22px;font-size:15px;font-family:var(--fb);outline:none;background:#fff;color:var(--text);width:260px;}
+    .svc-cta-input::placeholder{color:#9CA3AF;}
+    .svc-cta-submit{flex-shrink:0;background:#1e3a8a;color:#fff;border:none;padding:17px 26px;font-size:15px;font-weight:700;font-family:var(--fb);cursor:pointer;transition:background .2s,letter-spacing .2s;white-space:nowrap;}
+    .svc-cta-submit:hover{background:#1e40af;letter-spacing:.03em;}
     /* ── START HERE ANNOTATION ── */
     .hero-content{position:relative;}
     .start-here{position:absolute;right:-52px;top:50%;transform:translateY(-50%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;z-index:4;}
@@ -795,10 +796,10 @@
           <div class="svc-cta-title">Start with a Free 30-Min Demo.</div>
           <div class="svc-cta-sub">No slides. No sales pitch. We show you exactly how it works — live, for your business.</div>
         </div>
-        <div class="svc-cta-btns">
-          <a href="#cta" class="svc-cta-btn-primary">Book Free Demo →</a>
-          <a href="#why" class="svc-cta-btn-outline">See Why TechNext</a>
-        </div>
+        <form class="svc-cta-form" onsubmit="ctaEmailGo(event)">
+          <input type="email" class="svc-cta-input" id="svcCtaEmail" placeholder="Enter your work email" required/>
+          <button type="submit" class="svc-cta-submit">Get Free Demo →</button>
+        </form>
       </div>
 
     </div>
@@ -1455,9 +1456,11 @@
     /* ── CTA email form ── */
     function ctaEmailGo(e){
       e.preventDefault();
-      const email = document.getElementById('ctaEmailInput').value;
+      const src = e.target;
+      const emailInput = src.querySelector('input[type="email"]') || document.getElementById('ctaEmailInput');
+      const email = emailInput ? emailInput.value : '';
       const fEmail = document.getElementById('f-email');
-      if(fEmail) fEmail.value = email;
+      if(fEmail && email) fEmail.value = email;
       document.getElementById('bookingForm').scrollIntoView({behavior:'smooth',block:'center'});
     }
 
