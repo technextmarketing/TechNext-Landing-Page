@@ -76,7 +76,7 @@
 
     /* ── RESET ────────────────────────────────────────────── */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
+    html{scroll-behavior:smooth;scroll-padding-top:88px;}
     body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.7;overflow-x:hidden;}
     a{text-decoration:none;color:inherit;}
     img{max-width:100%;display:block;}
@@ -236,7 +236,7 @@
     .svc-icon{width:52px;height:52px;background:rgba(37,99,235,.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:var(--purple);}
     .svc-icon svg{width:26px;height:26px;}
     .svc-card:nth-child(2) .svc-icon{background:rgba(29,78,216,.12);color:#1D4ED8;}
-    .svc-name{font-family:var(--fh);font-size:30px;font-weight:700;color:var(--text);margin-bottom:10px;}
+    .svc-name{font-family:var(--fh);font-size:42px;font-weight:700;color:var(--text);margin-bottom:10px;}
     .svc-desc{font-size:15px;color:var(--text-2);line-height:1.8;margin-bottom:22px;}
     .feat-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
     .feat-list li{display:flex;align-items:flex-start;gap:9px;font-family:var(--fh);font-size:22px;font-weight:500;color:var(--text-2);line-height:1.4;}
@@ -728,7 +728,6 @@
       <div class="services-grid">
         <div class="svc-card reveal rd1">
           <div class="card-pin"></div>
-          <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg></div>
           <div class="svc-name">Odoo ERP Implementation</div>
           <p class="svc-desc">We configure, customize, and deploy Odoo ERP tailored to your specific workflows — so your team actually adopts it and gets results from day one.</p>
           <ul class="feat-list">
@@ -748,7 +747,6 @@
         </div>
         <div class="svc-card reveal rd2">
           <div class="card-pin" style="background:#6B7280;"></div>
-          <div class="svc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg></div>
           <div class="svc-name">AI Automations</div>
           <p class="svc-desc">Deploy intelligent automations that eliminate repetitive tasks, reduce human error, and free your team to focus on what actually moves the needle.</p>
           <ul class="feat-list">
@@ -1251,11 +1249,7 @@
     </div>
     <div class="container">
       <div class="cta-inner reveal">
-        <div class="scarcity">
-          <span class="scarcity-dot"></span>
-          Only 3 demo slots left this week
-        </div>
-        <div class="section-label center">Act Now</div>
+<div class="section-label center">Act Now</div>
         <h2 class="section-title">Your Competitors Are<br/><span class="hl">Already Using AI.</span><br/>Are You?</h2>
         <p class="section-sub">Book a free 30-minute live demo. We'll show you exactly how Odoo + AI would work for your specific business — no commitment required.</p>
         <form class="cta-email-form" onsubmit="ctaEmailGo(event)">
@@ -1294,6 +1288,19 @@
   <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 
   <script>
+    /* ── Smooth anchor scrolling ── */
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const id=a.getAttribute('href');
+        const target=document.querySelector(id);
+        if(!target)return;
+        e.preventDefault();
+        const offset=88;
+        const top=target.getBoundingClientRect().top+window.scrollY-offset;
+        window.scrollTo({top,behavior:'smooth'});
+      });
+    });
+
     /* ── Navbar scroll hide/show ── */
     const nav = document.getElementById('navbar');
     const stBtn = document.getElementById('scrollTop');
