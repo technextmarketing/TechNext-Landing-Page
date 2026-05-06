@@ -119,9 +119,10 @@
     .rd1{transition-delay:.1s;} .rd2{transition-delay:.2s;} .rd3{transition-delay:.3s;} .rd4{transition-delay:.4s;}
 
     /* ── NAVBAR ───────────────────────────────────────────── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s,transform .35s ease;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s,transform .35s ease,opacity .8s ease;}
     nav.scrolled{background:transparent;border-color:transparent;box-shadow:none;}
     nav.nav-hidden{transform:translateY(-100%);}
+    nav.nav-faded{opacity:0;pointer-events:none;}
     .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:76px;display:flex;align-items:center;justify-content:space-between;}
     .logo{display:flex;align-items:center;}
     .logo img{height:80px;width:auto;display:block;}
@@ -1300,10 +1301,28 @@
       });
     });
 
-    /* ── Navbar scroll hide/show ── */
+    /* ── Navbar scroll hide/show + idle fade ── */
     const nav = document.getElementById('navbar');
     const stBtn = document.getElementById('scrollTop');
     let lastY = 0;
+    let idleTimer = null;
+
+    function resetIdleFade(){
+      nav.classList.remove('nav-faded');
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(()=>{ nav.classList.add('nav-faded'); }, 3000);
+    }
+
+    // Start idle timer on load
+    idleTimer = setTimeout(()=>{ nav.classList.add('nav-faded'); }, 3000);
+
+    // Restore nav on mouse enter
+    nav.addEventListener('mouseenter', ()=>{
+      nav.classList.remove('nav-faded');
+      clearTimeout(idleTimer);
+    });
+    nav.addEventListener('mouseleave', resetIdleFade);
+
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       nav.classList.toggle('scrolled', y > 60);
@@ -1314,6 +1333,7 @@
         nav.classList.remove('nav-hidden');
       }
       lastY = y;
+      resetIdleFade();
     }, {passive:true});
 
     /* ── Scroll reveal ── */
