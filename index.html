@@ -165,20 +165,14 @@
     .deco-sticky,.sdeco,.cta-float{cursor:grab;}
     .deco-sticky.is-dragging,.sdeco.is-dragging,.cta-float.is-dragging{cursor:grabbing;z-index:9998!important;}
     .deco-sticky.is-dragging .deco-note,.sdeco.is-dragging .deco-note,.cta-float.is-dragging .deco-note{filter:brightness(1.05);}
-    /* Pinned sticky hint */
-    .deco-sticky.pinned,.sdeco.pinned,.cta-float.pinned{outline:none;}
-    .deco-sticky.pinned::after,.sdeco.pinned::after{content:'↩ return';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;}
-    .deco-sticky.pinned:hover::after,.sdeco.pinned:hover::after{opacity:1;}
-    /* Sticky board */
-    .sticky-board{position:fixed;right:0;top:50%;transform:translateY(-50%);width:130px;background:linear-gradient(145deg,#c8964a,#b07d38);border-radius:14px 0 0 14px;border:3px solid #8a5e20;border-right:none;z-index:9989;padding:14px 10px;display:flex;flex-direction:column;gap:10px;box-shadow:-4px 0 28px rgba(0,0,0,.22);transition:opacity .3s,transform .3s;}
-    .sticky-board::before{content:'📌 Board';display:block;font-family:var(--fh);font-size:15px;font-weight:700;color:rgba(255,255,255,.85);text-align:center;margin-bottom:4px;letter-spacing:.02em;}
-    .sticky-board.drag-active{box-shadow:-4px 0 40px rgba(37,99,235,.35),0 0 0 2px rgba(37,99,235,.4);}
-    .board-slot{width:100%;height:72px;border:2px dashed rgba(255,255,255,.35);border-radius:8px;transition:background .2s,border-color .2s,transform .15s;display:flex;align-items:center;justify-content:center;position:relative;}
-    .board-slot::after{content:'＋';font-size:20px;color:rgba(255,255,255,.3);transition:color .2s;}
-    .board-slot.near{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.8);transform:scale(1.04);}
-    .board-slot.near::after{color:rgba(255,255,255,.8);}
-    .board-slot.filled{border-style:solid;border-color:rgba(255,255,255,.25);background:rgba(0,0,0,.08);}
-    .board-slot.filled::after{content:'';}
+    /* Pin drop zones */
+    .pin-zone{position:fixed;width:110px;height:90px;border:2px dashed rgba(37,99,235,.25);border-radius:10px;z-index:9990;display:none;pointer-events:none;transition:background .15s,border-color .15s,transform .2s,box-shadow .2s;background:transparent;}
+    .pin-zone::before{content:'📌';position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:18px;opacity:.4;transition:opacity .2s,transform .2s;}
+    .pin-zone::after{content:'Drop here';position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:10px;font-weight:600;color:rgba(37,99,235,.5);white-space:nowrap;opacity:0;transition:opacity .2s;}
+    .pin-zone.active{display:block;}
+    .pin-zone.near{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.6);border-style:solid;transform:scale(1.08);box-shadow:0 0 0 4px rgba(37,99,235,.1);}
+    .pin-zone.near::before{opacity:1;transform:translateX(-50%) scale(1.2);}
+    .pin-zone.near::after{opacity:1;}
     .deco-note.proximity{transform:scale(1.1) translateY(-5px) !important;box-shadow:6px 10px 24px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);}
     .deco-note.y{background:var(--sticky-y);color:#78350F;}
     .deco-note.p{background:var(--sticky-p);color:#9D174D;}
@@ -1718,44 +1712,38 @@
       });
     })();
 
-    /* ── Sticky Board + Draggable notes ── */
+    /* ── Draggable sticky notes — 10 pin zones ── */
     (function(){
-      const SLOT_COUNT = 5;
-      const SNAP_R = 80;
+      // [left%, top%] — 5 left-edge, 5 right-edge
+      const ZONE_DEFS = [
+        [1,10],[1,28],[1,46],[1,64],[1,80],
+        [87,10],[87,28],[87,46],[87,64],[87,80]
+      ];
+      const SNAP_R = 150;
 
-      // Build the board
-      const board = document.createElement('div');
-      board.className = 'sticky-board';
-      const slots = Array.from({length: SLOT_COUNT}, ()=>{
-        const s = document.createElement('div');
-        s.className = 'board-slot';
-        s._occupant = null;
-        board.appendChild(s);
-        return s;
+      const zones = ZONE_DEFS.map(([lv,tv])=>{
+        const z = document.createElement('div');
+        z.className = 'pin-zone';
+        z.style.cssText = `left:calc(${lv}vw);top:calc(${tv}vh - 45px);`;
+        document.body.appendChild(z);
+        return z;
       });
-      document.body.appendChild(board);
 
-      function slotCenter(s){
-        const r = s.getBoundingClientRect();
-        return {x: r.left + r.width/2, y: r.top + r.height/2};
+      function zoneCenter(z){
+        const r = z.getBoundingClientRect();
+        return {x:r.left+r.width/2, y:r.top+r.height/2};
       }
 
-      let drag = null, ox = 0, oy = 0;
-      let origParent, origNext, origStyle, origRect, origSlot;
+      let drag=null, ox=0, oy=0, origParent, origNext, origStyle, origRect;
 
-      function startDrag(el, cx, cy){
-        drag = el;
+      function startDrag(el,cx,cy){
+        drag=el;
         origRect   = el.getBoundingClientRect();
         origParent = el.parentElement;
         origNext   = el.nextSibling;
-        origStyle  = el.getAttribute('style') || '';
-        origSlot   = slots.find(s => s._occupant === el) || null;
+        origStyle  = el.getAttribute('style')||'';
         ox = cx - origRect.left;
         oy = cy - origRect.top;
-
-        // Free from current slot if pinned there
-        if(origSlot){ origSlot._occupant = null; origSlot.classList.remove('filled'); }
-
         document.body.appendChild(el);
         Object.assign(el.style,{
           position:'fixed', left:origRect.left+'px', top:origRect.top+'px',
@@ -1763,110 +1751,99 @@
           animation:'none', transition:'none'
         });
         el.classList.add('is-dragging');
-        board.classList.add('drag-active');
-
-        const note = el.querySelector('.deco-note');
+        zones.forEach(z=>z.classList.add('active'));
+        const note=el.querySelector('.deco-note');
         if(note){
-          note.style.setProperty('transform','rotate(2deg) scale(1.1) translateY(-8px)','important');
-          note.style.boxShadow = '10px 24px 56px rgba(0,0,0,.22),inset 0 -3px 0 rgba(0,0,0,.1)';
-          note.style.transition = 'none';
+          note.style.setProperty('transform','rotate(2deg) scale(1.12) translateY(-8px)','important');
+          note.style.boxShadow='10px 24px 56px rgba(0,0,0,.22),inset 0 -3px 0 rgba(0,0,0,.1)';
+          note.style.transition='none';
         }
       }
 
-      function onMove(cx, cy){
+      function onMove(cx,cy){
         if(!drag) return;
-        drag.style.left = (cx - ox) + 'px';
-        drag.style.top  = (cy - oy) + 'px';
-        slots.forEach(s => {
-          const c = slotCenter(s);
-          s.classList.toggle('near', !s._occupant && Math.hypot(cx - c.x, cy - c.y) < SNAP_R);
+        drag.style.left=(cx-ox)+'px';
+        drag.style.top =(cy-oy)+'px';
+        zones.forEach(z=>{
+          const c=zoneCenter(z);
+          z.classList.toggle('near', Math.hypot(cx-c.x,cy-c.y)<SNAP_R);
         });
       }
 
-      function onDrop(cx, cy){
+      function onDrop(cx,cy){
         if(!drag) return;
-        const el = drag; drag = null;
+        const el=drag; drag=null;
         el.classList.remove('is-dragging');
-        board.classList.remove('drag-active');
-        slots.forEach(s => s.classList.remove('near'));
+        zones.forEach(z=>z.classList.remove('active','near'));
 
-        // Find nearest empty slot
-        let best = null, bestD = SNAP_R;
-        slots.forEach(s => {
-          if(s._occupant) return;
-          const c = slotCenter(s);
-          const d = Math.hypot(cx - c.x, cy - c.y);
-          if(d < bestD){ bestD = d; best = {s, c}; }
+        let best=null, bestD=SNAP_R;
+        zones.forEach(z=>{
+          const c=zoneCenter(z);
+          const d=Math.hypot(cx-c.x,cy-c.y);
+          if(d<bestD){bestD=d;best={z,c};}
         });
 
-        const note = el.querySelector('.deco-note');
-        const tilt = (Math.random()*8 - 4).toFixed(1);
+        const note=el.querySelector('.deco-note');
+        const tilt=(Math.random()*10-5).toFixed(1);
 
         if(best){
-          // Snap into slot
-          best.s._occupant = el;
-          best.s.classList.add('filled');
           el.classList.add('pinned');
-          el.style.transition = 'left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
-          el.style.left = (best.c.x - parseFloat(el.style.width)/2) + 'px';
-          el.style.top  = (best.c.y - parseFloat(el.style.width)*0.35) + 'px';
+          el.style.transition='left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
+          el.style.left=(best.c.x - parseFloat(el.style.width)/2)+'px';
+          el.style.top =(best.c.y - 30)+'px';
           if(note){
-            note.style.transition = 'transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
-            note.style.setProperty('transform',`rotate(${tilt}deg) scale(.88)`,'important');
-            note.style.boxShadow = '3px 6px 16px rgba(0,0,0,.18),inset 0 -2px 0 rgba(0,0,0,.08)';
+            note.style.transition='transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
+            note.style.setProperty('transform',`rotate(${tilt}deg)`,'important');
+            note.style.boxShadow='';
           }
         } else {
-          // No slot hit — bounce home
-          returnHome(el, note);
+          returnHome(el,note);
         }
       }
 
-      function returnHome(el, note){
-        note = note || el.querySelector('.deco-note');
-        el.style.transition = 'left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
-        el.style.left = origRect.left + 'px';
-        el.style.top  = origRect.top  + 'px';
+      function returnHome(el,note){
+        note=note||el.querySelector('.deco-note');
+        el.style.transition='left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
+        el.style.left=origRect.left+'px';
+        el.style.top =origRect.top+'px';
         if(note){
-          note.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
+          note.style.transition='transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
           note.style.setProperty('transform','','important');
-          note.style.boxShadow = '';
+          note.style.boxShadow='';
         }
         setTimeout(()=>{
-          if(origNext) origParent.insertBefore(el, origNext);
+          if(origNext) origParent.insertBefore(el,origNext);
           else origParent.appendChild(el);
-          el.setAttribute('style', origStyle);
+          el.setAttribute('style',origStyle);
           el.classList.remove('pinned');
-        }, 450);
+        },450);
       }
 
-      document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-      document.addEventListener('mouseup',   e => onDrop(e.clientX, e.clientY));
-      document.addEventListener('touchmove', e=>{
+      document.addEventListener('mousemove',e=>onMove(e.clientX,e.clientY));
+      document.addEventListener('mouseup',  e=>onDrop(e.clientX,e.clientY));
+      document.addEventListener('touchmove',e=>{
         if(!drag) return;
-        onMove(e.touches[0].clientX, e.touches[0].clientY);
+        onMove(e.touches[0].clientX,e.touches[0].clientY);
         e.preventDefault();
       },{passive:false});
-      document.addEventListener('touchend', e=>{
+      document.addEventListener('touchend',e=>{
         if(!drag) return;
-        onDrop(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+        onDrop(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
       });
 
       function attach(el){
-        el.addEventListener('mousedown', e=>{
-          if(e.button !== 0) return;
-          startDrag(el, e.clientX, e.clientY);
+        el.addEventListener('mousedown',e=>{
+          if(e.button!==0) return;
+          startDrag(el,e.clientX,e.clientY);
           e.preventDefault(); e.stopPropagation();
         });
-        el.addEventListener('touchstart', e=>{
-          startDrag(el, e.touches[0].clientX, e.touches[0].clientY);
+        el.addEventListener('touchstart',e=>{
+          startDrag(el,e.touches[0].clientX,e.touches[0].clientY);
           e.preventDefault();
         },{passive:false});
-        // Double-click pinned note → return home
-        el.addEventListener('dblclick', e=>{
+        el.addEventListener('dblclick',e=>{
           if(el.classList.contains('pinned')){
-            const slot = slots.find(s => s._occupant === el);
-            if(slot){ slot._occupant = null; slot.classList.remove('filled'); }
-            returnHome(el, null); e.stopPropagation();
+            returnHome(el,null); e.stopPropagation();
           }
         });
       }
