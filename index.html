@@ -137,8 +137,14 @@
     .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;}
 
     .hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:24px;animation:fade-in .5s ease both;}
-    .badge-sticky{font-family:var(--fh);font-size:26px;font-weight:600;background:var(--sticky-y);color:#78350F;padding:13px 26px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md),inset 0 -2px 0 rgba(0,0,0,.08);display:inline-block;transform:rotate(-1deg);}
-    .badge-region{font-family:var(--fh);font-size:26px;font-weight:600;background:var(--sticky-b);color:#1E40AF;padding:13px 26px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md);transform:rotate(.8deg);display:inline-block;}
+    .badge-sticky{font-family:var(--fh);font-size:26px;font-weight:600;background:var(--sticky-y);color:#78350F;padding:13px 26px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md),inset 0 -2px 0 rgba(0,0,0,.08);display:inline-block;transform:rotate(-1deg);cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,filter .15s;user-select:none;position:relative;}
+    .badge-sticky:hover{transform:rotate(0deg) scale(1.1) translateY(-4px);box-shadow:4px 10px 24px rgba(0,0,0,.16),inset 0 -2px 0 rgba(0,0,0,.08);filter:brightness(1.03);}
+    .badge-sticky:active{transform:rotate(0deg) scale(.97);transition-duration:.1s;}
+    .badge-sticky::after{content:'→ See why';position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);font-family:var(--fh);font-size:14px;color:var(--purple);white-space:nowrap;opacity:0;transition:opacity .2s;}
+    .badge-sticky:hover::after{opacity:1;}
+    .badge-region{font-family:var(--fh);font-size:26px;font-weight:600;background:var(--sticky-b);color:#1E40AF;padding:13px 26px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md);transform:rotate(.8deg);display:inline-block;cursor:default;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,filter .15s;user-select:none;}
+    .badge-region:hover{transform:rotate(0deg) scale(1.08) translateY(-4px);box-shadow:4px 10px 22px rgba(37,99,235,.18);filter:brightness(1.03);}
+    .badge-region:active{transform:rotate(0deg) scale(.97);transition-duration:.1s;}
 
     .hero-h1{font-family:var(--fh);font-size:clamp(42px,4.8vw,68px);font-weight:700;line-height:1.1;color:var(--text);margin-bottom:22px;animation:fade-up .6s ease .1s both;}
     .hero-desc{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:36px;max-width:480px;animation:fade-up .6s ease .2s both;}
@@ -589,7 +595,7 @@
         <!-- Left: copy -->
         <div class="hero-content">
           <div class="hero-eyebrow">
-            <div class="badge-sticky">✦ Certified Odoo Partner</div>
+            <div class="badge-sticky" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth',block:'start'})">✦ Certified Odoo Partner</div>
             <div class="badge-region" id="regionBadge">🌍 Worldwide</div>
           </div>
           <h1 class="hero-h1">
