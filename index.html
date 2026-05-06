@@ -352,11 +352,16 @@
     .hero-email-btn{flex-shrink:0;background:var(--purple);color:#fff;border:none;padding:15px 24px;font-size:14px;font-weight:700;font-family:var(--fb);cursor:pointer;transition:background .2s;white-space:nowrap;}
     .hero-email-btn:hover{background:#1d4ed8;}
     /* CTA email form */
-    .cta-email-form{display:flex;gap:0;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(37,99,235,.22);max-width:500px;margin:28px auto 0;}
+    @keyframes form-glow{0%,100%{box-shadow:0 4px 24px rgba(37,99,235,.22);}50%{box-shadow:0 4px 36px rgba(37,99,235,.42);}}
+    .cta-email-form{display:flex;gap:0;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(37,99,235,.22);max-width:500px;margin:28px auto 0;animation:form-glow 3s ease-in-out infinite;transition:transform .2s,box-shadow .2s;}
+    .cta-email-form:focus-within{transform:translateY(-2px);box-shadow:0 8px 40px rgba(37,99,235,.38);animation:none;}
     .cta-email-input{flex:1;border:none;padding:17px 22px;font-size:15px;font-family:var(--fb);outline:none;background:var(--white);color:var(--text);}
     .cta-email-input::placeholder{color:#9CA3AF;}
-    .cta-email-btn{flex-shrink:0;background:var(--purple);color:#fff;border:none;padding:17px 28px;font-size:15px;font-weight:700;font-family:var(--fb);cursor:pointer;transition:background .2s;white-space:nowrap;}
-    .cta-email-btn:hover{background:#1d4ed8;}
+    .cta-email-btn{flex-shrink:0;background:var(--purple);color:#fff;border:none;padding:17px 28px;font-size:15px;font-weight:700;font-family:var(--fb);cursor:pointer;transition:background .2s,transform .15s,letter-spacing .2s;white-space:nowrap;position:relative;overflow:hidden;}
+    .cta-email-btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.15);opacity:0;transition:opacity .2s;}
+    .cta-email-btn:hover{background:#1d4ed8;letter-spacing:.02em;}
+    .cta-email-btn:hover::after{opacity:1;}
+    .cta-email-btn:active{transform:scale(.97);}
     .footer-links a{font-size:14px;font-weight:500;color:var(--muted);transition:color .2s;}
     .footer-links a:hover{color:var(--text);}
     .footer-socials{display:flex;gap:12px;justify-content:center;}
