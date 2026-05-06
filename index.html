@@ -167,8 +167,18 @@
     .deco-sticky.is-dragging .deco-note,.sdeco.is-dragging .deco-note,.cta-float.is-dragging .deco-note{filter:brightness(1.05);}
     /* Pinned sticky hint */
     .deco-sticky.pinned,.sdeco.pinned,.cta-float.pinned{outline:none;}
-    .deco-sticky.pinned::after,.sdeco.pinned::after{content:'✕ return';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;}
+    .deco-sticky.pinned::after,.sdeco.pinned::after{content:'↩ return';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;}
     .deco-sticky.pinned:hover::after,.sdeco.pinned:hover::after{opacity:1;}
+    /* Sticky board */
+    .sticky-board{position:fixed;right:0;top:50%;transform:translateY(-50%);width:130px;background:linear-gradient(145deg,#c8964a,#b07d38);border-radius:14px 0 0 14px;border:3px solid #8a5e20;border-right:none;z-index:9989;padding:14px 10px;display:flex;flex-direction:column;gap:10px;box-shadow:-4px 0 28px rgba(0,0,0,.22);transition:opacity .3s,transform .3s;}
+    .sticky-board::before{content:'📌 Board';display:block;font-family:var(--fh);font-size:15px;font-weight:700;color:rgba(255,255,255,.85);text-align:center;margin-bottom:4px;letter-spacing:.02em;}
+    .sticky-board.drag-active{box-shadow:-4px 0 40px rgba(37,99,235,.35),0 0 0 2px rgba(37,99,235,.4);}
+    .board-slot{width:100%;height:72px;border:2px dashed rgba(255,255,255,.35);border-radius:8px;transition:background .2s,border-color .2s,transform .15s;display:flex;align-items:center;justify-content:center;position:relative;}
+    .board-slot::after{content:'＋';font-size:20px;color:rgba(255,255,255,.3);transition:color .2s;}
+    .board-slot.near{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.8);transform:scale(1.04);}
+    .board-slot.near::after{color:rgba(255,255,255,.8);}
+    .board-slot.filled{border-style:solid;border-color:rgba(255,255,255,.25);background:rgba(0,0,0,.08);}
+    .board-slot.filled::after{content:'';}
     .deco-note.proximity{transform:scale(1.1) translateY(-5px) !important;box-shadow:6px 10px 24px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);}
     .deco-note.y{background:var(--sticky-y);color:#78350F;}
     .deco-note.p{background:var(--sticky-p);color:#9D174D;}
@@ -1708,20 +1718,44 @@
       });
     })();
 
-    /* ── Draggable sticky notes — pin anywhere, dbl-click to return ── */
+    /* ── Sticky Board + Draggable notes ── */
     (function(){
+      const SLOT_COUNT = 5;
+      const SNAP_R = 80;
+
+      // Build the board
+      const board = document.createElement('div');
+      board.className = 'sticky-board';
+      const slots = Array.from({length: SLOT_COUNT}, ()=>{
+        const s = document.createElement('div');
+        s.className = 'board-slot';
+        s._occupant = null;
+        board.appendChild(s);
+        return s;
+      });
+      document.body.appendChild(board);
+
+      function slotCenter(s){
+        const r = s.getBoundingClientRect();
+        return {x: r.left + r.width/2, y: r.top + r.height/2};
+      }
+
       let drag = null, ox = 0, oy = 0;
-      let origParent, origNext, origStyle, origRect;
-      let didMove = false;
+      let origParent, origNext, origStyle, origRect, origSlot;
 
       function startDrag(el, cx, cy){
-        drag = el; didMove = false;
+        drag = el;
         origRect   = el.getBoundingClientRect();
         origParent = el.parentElement;
         origNext   = el.nextSibling;
         origStyle  = el.getAttribute('style') || '';
+        origSlot   = slots.find(s => s._occupant === el) || null;
         ox = cx - origRect.left;
         oy = cy - origRect.top;
+
+        // Free from current slot if pinned there
+        if(origSlot){ origSlot._occupant = null; origSlot.classList.remove('filled'); }
+
         document.body.appendChild(el);
         Object.assign(el.style,{
           position:'fixed', left:origRect.left+'px', top:origRect.top+'px',
@@ -1729,9 +1763,11 @@
           animation:'none', transition:'none'
         });
         el.classList.add('is-dragging');
+        board.classList.add('drag-active');
+
         const note = el.querySelector('.deco-note');
         if(note){
-          note.style.setProperty('transform','rotate(2deg) scale(1.12) translateY(-8px)','important');
+          note.style.setProperty('transform','rotate(2deg) scale(1.1) translateY(-8px)','important');
           note.style.boxShadow = '10px 24px 56px rgba(0,0,0,.22),inset 0 -3px 0 rgba(0,0,0,.1)';
           note.style.transition = 'none';
         }
@@ -1739,34 +1775,54 @@
 
       function onMove(cx, cy){
         if(!drag) return;
-        didMove = true;
         drag.style.left = (cx - ox) + 'px';
         drag.style.top  = (cy - oy) + 'px';
+        slots.forEach(s => {
+          const c = slotCenter(s);
+          s.classList.toggle('near', !s._occupant && Math.hypot(cx - c.x, cy - c.y) < SNAP_R);
+        });
       }
 
-      function onDrop(){
+      function onDrop(cx, cy){
         if(!drag) return;
         const el = drag; drag = null;
         el.classList.remove('is-dragging');
+        board.classList.remove('drag-active');
+        slots.forEach(s => s.classList.remove('near'));
 
-        if(!didMove){
-          // No actual drag — restore immediately
-          returnHome(el); return;
-        }
+        // Find nearest empty slot
+        let best = null, bestD = SNAP_R;
+        slots.forEach(s => {
+          if(s._occupant) return;
+          const c = slotCenter(s);
+          const d = Math.hypot(cx - c.x, cy - c.y);
+          if(d < bestD){ bestD = d; best = {s, c}; }
+        });
 
-        // Pin right where it was dropped — natural tilt
-        const tilt = (Math.random()*10 - 5).toFixed(1);
         const note = el.querySelector('.deco-note');
-        el.classList.add('pinned');
-        if(note){
-          note.style.transition = 'transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
-          note.style.setProperty('transform',`rotate(${tilt}deg)`,'important');
-          note.style.boxShadow = '4px 10px 28px rgba(0,0,0,.15),inset 0 -3px 0 rgba(0,0,0,.08)';
+        const tilt = (Math.random()*8 - 4).toFixed(1);
+
+        if(best){
+          // Snap into slot
+          best.s._occupant = el;
+          best.s.classList.add('filled');
+          el.classList.add('pinned');
+          el.style.transition = 'left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
+          el.style.left = (best.c.x - parseFloat(el.style.width)/2) + 'px';
+          el.style.top  = (best.c.y - parseFloat(el.style.width)*0.35) + 'px';
+          if(note){
+            note.style.transition = 'transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
+            note.style.setProperty('transform',`rotate(${tilt}deg) scale(.88)`,'important');
+            note.style.boxShadow = '3px 6px 16px rgba(0,0,0,.18),inset 0 -2px 0 rgba(0,0,0,.08)';
+          }
+        } else {
+          // No slot hit — bounce home
+          returnHome(el, note);
         }
       }
 
-      function returnHome(el){
-        const note = el.querySelector('.deco-note');
+      function returnHome(el, note){
+        note = note || el.querySelector('.deco-note');
         el.style.transition = 'left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
         el.style.left = origRect.left + 'px';
         el.style.top  = origRect.top  + 'px';
@@ -1784,16 +1840,18 @@
       }
 
       document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-      document.addEventListener('mouseup', onDrop);
+      document.addEventListener('mouseup',   e => onDrop(e.clientX, e.clientY));
       document.addEventListener('touchmove', e=>{
         if(!drag) return;
         onMove(e.touches[0].clientX, e.touches[0].clientY);
         e.preventDefault();
       },{passive:false});
-      document.addEventListener('touchend', onDrop);
+      document.addEventListener('touchend', e=>{
+        if(!drag) return;
+        onDrop(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      });
 
       function attach(el){
-        // Drag
         el.addEventListener('mousedown', e=>{
           if(e.button !== 0) return;
           startDrag(el, e.clientX, e.clientY);
@@ -1803,10 +1861,12 @@
           startDrag(el, e.touches[0].clientX, e.touches[0].clientY);
           e.preventDefault();
         },{passive:false});
-        // Double-click → return home
+        // Double-click pinned note → return home
         el.addEventListener('dblclick', e=>{
           if(el.classList.contains('pinned')){
-            returnHome(el); e.stopPropagation();
+            const slot = slots.find(s => s._occupant === el);
+            if(slot){ slot._occupant = null; slot.classList.remove('filled'); }
+            returnHome(el, null); e.stopPropagation();
           }
         });
       }
