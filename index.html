@@ -1776,9 +1776,16 @@
 
         pinnedMap.delete(el);
         document.body.appendChild(el);
+        /* right/bottom MUST be forced auto — if the element had bottom:60px or
+           right:28px (inline or class), they stay active and fight with our
+           top/left, causing the element to be crushed/stretched and drift upward
+           as top updates each frame while bottom stays fixed. */
         Object.assign(el.style,{
-          position:'fixed', left:r.left+'px', top:r.top+'px',
-          width:r.width+'px', margin:'0', zIndex:'9998',
+          position:'fixed',
+          left:r.left+'px', top:r.top+'px',
+          right:'auto',     bottom:'auto',
+          width:r.width+'px', height:'auto',
+          margin:'0', zIndex:'9998',
           transition:'none', animation:'none'
         });
         el.classList.add('is-dragging');
@@ -1863,8 +1870,11 @@
           const r=el.getBoundingClientRect();
           document.body.appendChild(el);
           Object.assign(el.style,{
-            position:'fixed', left:r.left+'px', top:r.top+'px',
-            width:home.w+'px', margin:'0', zIndex:'9998', transition:'none'
+            position:'fixed',
+            left:r.left+'px', top:r.top+'px',
+            right:'auto', bottom:'auto',
+            width:home.w+'px', height:'auto',
+            margin:'0', zIndex:'9998', transition:'none'
           });
         }
 
