@@ -1739,13 +1739,16 @@
       const homeMap=new WeakMap();
 
       /* ── Drag state ── */
-      let drag=null, ox=0, oy=0;
+      let drag=null, ox=0, oy=0, dragW=0, dragH=0;
 
       function startDrag(el,cx,cy){
         if(drag) return;
         drag=el;
 
         const r=el.getBoundingClientRect();
+        /* Capture true dimensions HERE before element is reparented/restyled */
+        dragW=r.width;
+        dragH=r.height||el.querySelector('.deco-note')?.offsetHeight||80;
 
         /* Only capture home when starting from original resting place */
         if(!el.classList.contains('pinned')){
@@ -1753,7 +1756,7 @@
             parent:el.parentElement,
             next:el.nextSibling,
             style:el.getAttribute('style')||'',
-            x:r.left, y:r.top, w:r.width
+            x:r.left, y:r.top, w:dragW, h:dragH
           });
         }
 
@@ -1804,11 +1807,9 @@
         const note=el.querySelector('.deco-note');
 
         if(best){
-          /* True center-align: measure element height after drag */
-          const elW=parseFloat(el.style.width)||el.offsetWidth;
-          const elH=el.getBoundingClientRect().height||el.offsetHeight;
-          const snapL=best.c.x - elW/2;
-          const snapT=best.c.y - elH/2;
+          /* Use dimensions captured at drag-start (reliable, pre-reparent) */
+          const snapL=best.c.x - dragW/2;
+          const snapT=best.c.y - dragH/2;
 
           el.style.transition='left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
           el.style.left=snapL+'px';
