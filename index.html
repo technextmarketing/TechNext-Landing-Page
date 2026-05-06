@@ -1795,14 +1795,17 @@
         if(!drag) return;
         const el=drag; drag=null;
         el.classList.remove('is-dragging');
-        zones.forEach(z=>z.classList.remove('active','near'));
 
+        /* !! Find best zone BEFORE removing 'active' —
+           display:none elements return {x:0,y:0} from getBoundingClientRect,
+           which breaks all distance checks and nothing ever snaps !! */
         let best=null, bestD=SNAP_R;
         zones.forEach(z=>{
           const c=zoneCenter(z);
           const d=Math.hypot(cx-c.x,cy-c.y);
           if(d<bestD){bestD=d;best={z,c};}
         });
+        zones.forEach(z=>z.classList.remove('active','near'));
 
         const note=el.querySelector('.deco-note');
 
