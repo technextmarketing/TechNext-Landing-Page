@@ -149,9 +149,11 @@
     .hero-h1{font-family:var(--fh);font-size:clamp(42px,4.8vw,68px);font-weight:700;line-height:1.1;color:var(--text);margin-bottom:22px;animation:fade-up .6s ease .1s both;}
     .hero-desc{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:36px;max-width:480px;animation:fade-up .6s ease .2s both;}
     .hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:36px;animation:fade-up .6s ease .3s both;}
-    .hero-trust{display:flex;align-items:center;gap:20px;flex-wrap:wrap;animation:fade-up .6s ease .4s both;}
-    .htrust-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);}
-    .htrust-item .chk{color:var(--green);font-size:14px;}
+    .hero-trust{display:flex;align-items:center;gap:16px;flex-wrap:wrap;animation:fade-up .6s ease .4s both;}
+    .htrust-odoo-logo{height:32px;width:auto;opacity:.75;display:block;transition:opacity .2s;}
+    .htrust-odoo-logo:hover{opacity:1;}
+    .htrust-sep-line{width:1px;height:22px;background:var(--border-2);flex-shrink:0;}
+    .htrust-tagline{font-size:14px;font-weight:500;color:var(--muted);font-style:italic;letter-spacing:.01em;}
 
     /* Floating sticky decorations */
     .deco-sticky,.sdeco{position:absolute;pointer-events:auto;z-index:3;cursor:default;}
@@ -606,9 +608,9 @@
             Manual invoicing, disconnected spreadsheets, and growing admin overhead are slowing you down. TechNext implements Odoo ERP and AI automations so your team can stop firefighting and start scaling.
           </p>
           <div class="hero-trust">
-            <div class="htrust-item"><span class="chk">✓</span> 30+ Businesses Served</div>
-            <div class="htrust-item"><span class="chk">✓</span> Global</div>
-            <div class="htrust-item"><span class="chk">✓</span> Go-Live in 4–8 Weeks</div>
+            <img src="images/odoo_logo.png" alt="Odoo Certified Partner" class="htrust-odoo-logo"/>
+            <span class="htrust-sep-line"></span>
+            <span class="htrust-tagline">Trusted by Clients around the world.</span>
           </div>
         </div>
 
