@@ -199,9 +199,9 @@
     .spick{display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid var(--border);border-radius:12px;cursor:pointer;background:var(--bg);transition:border-color .25s,background .25s,transform .2s,box-shadow .25s;user-select:none;}
     .spick:hover{border-color:var(--purple-mid);background:var(--purple-xl);transform:translateX(4px);}
     .spick.sel{border-color:var(--purple);background:var(--purple-xl);box-shadow:0 4px 18px rgba(37,99,235,.15);animation:spick-pop .3s ease;}
-    .spick-icon{width:40px;height:40px;background:var(--purple-light);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--purple);transition:background .25s,color .25s,transform .25s;}
-    .spick:hover .spick-icon{transform:scale(1.1);}
-    .spick.sel .spick-icon{background:var(--purple);color:#fff;transform:scale(1.1);}
+    .spick-icon{width:40px;height:40px;background:transparent;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--muted);transition:color .25s,transform .25s;}
+    .spick:hover .spick-icon{color:var(--purple);transform:scale(1.1);}
+    .spick.sel .spick-icon{color:var(--purple);transform:scale(1.1);}
     .spick-icon svg{width:22px;height:22px;}
     .spick-body{flex:1;}
     .spick-label{font-weight:700;font-size:18px;color:var(--text);line-height:1.2;}
