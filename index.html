@@ -124,7 +124,7 @@
     nav.nav-hidden{transform:translateY(-100%);}
     .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:76px;display:flex;align-items:center;justify-content:space-between;}
     .logo{display:flex;align-items:center;}
-    .logo img{height:64px;width:auto;display:block;}
+    .logo img{height:80px;width:auto;display:block;}
     .logo span{color:var(--purple);}
     .nav-cta{display:flex;align-items:center;gap:12px;}
 
@@ -136,8 +136,8 @@
     .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;}
 
     .hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:24px;animation:fade-in .5s ease both;}
-    .badge-sticky{font-family:var(--fh);font-size:16px;font-weight:600;background:var(--sticky-y);color:#78350F;padding:7px 14px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md),inset 0 -2px 0 rgba(0,0,0,.08);display:inline-block;transform:rotate(-1deg);}
-    .badge-region{font-family:var(--fh);font-size:15px;font-weight:600;background:var(--sticky-b);color:#1E40AF;padding:7px 14px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md);transform:rotate(.8deg);display:inline-block;}
+    .badge-sticky{font-family:var(--fh);font-size:20px;font-weight:600;background:var(--sticky-y);color:#78350F;padding:10px 20px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md),inset 0 -2px 0 rgba(0,0,0,.08);display:inline-block;transform:rotate(-1deg);}
+    .badge-region{font-family:var(--fh);font-size:19px;font-weight:600;background:var(--sticky-b);color:#1E40AF;padding:10px 20px;border-radius:3px;box-shadow:2px 3px 8px var(--shadow-md);transform:rotate(.8deg);display:inline-block;}
 
     .hero-h1{font-family:var(--fh);font-size:clamp(46px,5.5vw,74px);font-weight:700;line-height:1.08;color:var(--text);margin-bottom:22px;animation:fade-up .6s ease .1s both;}
     .hero-desc{font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:36px;max-width:460px;animation:fade-up .6s ease .2s both;}
@@ -319,7 +319,7 @@
     .testi-card:nth-child(3) .tc-tape{background:rgba(147,197,253,.7);}
     .stars{display:flex;gap:3px;margin-bottom:12px;}
     .star{color:var(--amber);font-size:17px;}
-    .testi-quote{font-family:var(--fh);font-size:22px;line-height:1.65;color:var(--text);margin-bottom:22px;}
+    .testi-quote{font-family:var(--fb);font-size:16px;font-style:italic;line-height:1.75;color:var(--text);margin-bottom:22px;}
     .testi-author{display:flex;align-items:center;gap:12px;}
     .t-avatar{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--purple);flex-shrink:0;}
     .t-name{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--text);line-height:1.2;}
@@ -1034,6 +1034,13 @@
           </div>
         </div>
       </div>
+      <div style="text-align:center;margin-top:48px;" class="reveal">
+        <form class="cta-email-form" style="margin:0 auto;" onsubmit="ctaEmailGo(event)">
+          <input type="email" class="cta-email-input" placeholder="Enter your work email to get started" required/>
+          <button type="submit" class="cta-email-btn">Book Free Demo →</button>
+        </form>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px;">✓ Reply within 24 hours &nbsp;·&nbsp; ✓ Tailored to your industry</p>
+      </div>
     </div>
   </section>
 
@@ -1087,6 +1094,13 @@
           </div>
           <p class="roi-note">* Estimate only. Book a free demo for a tailored ROI analysis.</p>
         </div>
+      </div>
+      <div style="text-align:center;margin-top:48px;" class="reveal">
+        <form class="cta-email-form" style="margin:0 auto;" onsubmit="ctaEmailGo(event)">
+          <input type="email" class="cta-email-input" placeholder="Enter your work email to see your savings" required/>
+          <button type="submit" class="cta-email-btn">Get My Free ROI Demo →</button>
+        </form>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px;">✓ Free 30-min demo &nbsp;·&nbsp; ✓ Tailored ROI analysis included</p>
       </div>
     </div>
   </section>
