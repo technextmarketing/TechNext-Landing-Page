@@ -1717,41 +1717,51 @@
     (function(){
       /* ── Config ── */
       const ZONE_W=104, ZONE_H=88, EDGE=14, SNAP_R=130;
-      const VT=[10,26,42,58,74]; // zone-center vh positions
+      const VT=[10,26,42,58,74]; // zone-centre vh% (vertical)
 
-      /* ── Build 10 zones: 5 left, 5 right ── */
+      /* ── Build 10 zones (5 left, 5 right) ── */
       const zones=[];
       ['left','right'].forEach(side=>{
         VT.forEach(tv=>{
           const z=document.createElement('div');
           z.className='pin-zone';
+          /* Size in px only — no vw/vh for dimensions so zoom doesn't distort them */
           z.style.cssText=`${side}:${EDGE}px;top:calc(${tv}vh - ${ZONE_H/2}px);width:${ZONE_W}px;height:${ZONE_H}px;`;
           document.body.appendChild(z);
           zones.push(z);
         });
       });
 
-      function zoneCenter(z){
-        const r=z.getBoundingClientRect();
-        return {x:r.left+r.width/2, y:r.top+r.height/2};
+      /* ── Zone centre: computed mathematically, never getBoundingClientRect
+         so display:none and zoom/resize never break it ── */
+      function zoneCtr(z){
+        const idx=zones.indexOf(z);
+        const isRight=idx>=5;
+        const tv=VT[idx%5];
+        return {
+          x: isRight ? window.innerWidth  - EDGE - ZONE_W/2
+                     : EDGE + ZONE_W/2,
+          y: window.innerHeight * tv/100
+        };
       }
 
-      /* ── Per-element home storage (WeakMap so GC-safe) ── */
-      const homeMap=new WeakMap();
+      /* ── Storage ── */
+      const homeMap  =new WeakMap(); // original parent/style/pos per element
+      const pinnedMap=new Map();     // el → {zone, w, h}  (for resize sync)
 
       /* ── Drag state ── */
       let drag=null, ox=0, oy=0, dragW=0, dragH=0;
 
+      /* ── startDrag ── */
       function startDrag(el,cx,cy){
         if(drag) return;
         drag=el;
 
         const r=el.getBoundingClientRect();
-        /* Capture true dimensions HERE before element is reparented/restyled */
         dragW=r.width;
-        dragH=r.height||el.querySelector('.deco-note')?.offsetHeight||80;
+        dragH=r.height||el.querySelector('.deco-note')?.offsetHeight||60;
 
-        /* Only capture home when starting from original resting place */
+        /* Save home only when dragging from original position (not pinned) */
         if(!el.classList.contains('pinned')){
           homeMap.set(el,{
             parent:el.parentElement,
@@ -1764,6 +1774,7 @@
         ox=cx-r.left;
         oy=cy-r.top;
 
+        pinnedMap.delete(el);
         document.body.appendChild(el);
         Object.assign(el.style,{
           position:'fixed', left:r.left+'px', top:r.top+'px',
@@ -1782,27 +1793,32 @@
         }
       }
 
+      /* ── onMove: highlight ONLY the single nearest zone ── */
       function onMove(cx,cy){
         if(!drag) return;
         drag.style.left=(cx-ox)+'px';
         drag.style.top =(cy-oy)+'px';
+
+        let nearZ=null, nearD=SNAP_R;
         zones.forEach(z=>{
-          const c=zoneCenter(z);
-          z.classList.toggle('near', Math.hypot(cx-c.x,cy-c.y)<SNAP_R);
+          const c=zoneCtr(z);
+          const d=Math.hypot(cx-c.x,cy-c.y);
+          if(d<nearD){nearD=d;nearZ=z;}
         });
+        /* Only one zone is 'near' at a time */
+        zones.forEach(z=>z.classList.toggle('near',z===nearZ));
       }
 
+      /* ── onDrop ── */
       function onDrop(cx,cy){
         if(!drag) return;
         const el=drag; drag=null;
         el.classList.remove('is-dragging');
 
-        /* !! Find best zone BEFORE removing 'active' —
-           display:none elements return {x:0,y:0} from getBoundingClientRect,
-           which breaks all distance checks and nothing ever snaps !! */
+        /* Find best zone with mathematical centres — no display:none pitfall */
         let best=null, bestD=SNAP_R;
         zones.forEach(z=>{
-          const c=zoneCenter(z);
+          const c=zoneCtr(z);
           const d=Math.hypot(cx-c.x,cy-c.y);
           if(d<bestD){bestD=d;best={z,c};}
         });
@@ -1811,14 +1827,13 @@
         const note=el.querySelector('.deco-note');
 
         if(best){
-          /* Use dimensions captured at drag-start (reliable, pre-reparent) */
           const snapL=best.c.x - dragW/2;
           const snapT=best.c.y - dragH/2;
-
           el.style.transition='left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
           el.style.left=snapL+'px';
           el.style.top =snapT+'px';
           el.classList.add('pinned');
+          pinnedMap.set(el,{zone:best.z, w:dragW, h:dragH});
 
           const tilt=(Math.random()*8-4).toFixed(1);
           if(note){
@@ -1831,12 +1846,14 @@
         }
       }
 
+      /* ── returnHome: spring back to original position ── */
       function returnHome(el){
         const home=homeMap.get(el);
         if(!home) return;
         const note=el.querySelector('.deco-note');
+        pinnedMap.delete(el);
 
-        /* Ensure el is in body as position:fixed so animation plays */
+        /* Make sure el is in body as fixed so the animation is visible */
         if(el.parentElement!==document.body){
           const r=el.getBoundingClientRect();
           document.body.appendChild(el);
@@ -1847,9 +1864,8 @@
         }
 
         el.classList.remove('pinned');
-        /* Always flush any existing transition:'none' before animating */
         el.style.transition='none';
-        void el.offsetWidth; // force reflow — without this the spring never fires
+        void el.offsetWidth;  /* flush — without this spring transition doesn't fire */
         el.style.transition='left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
         el.style.left=home.x+'px';
         el.style.top =home.y+'px';
@@ -1867,6 +1883,19 @@
         },460);
       }
 
+      /* ── Resize/zoom: keep pinned notes aligned with their zones ──
+         When browser zoom changes, vh recomputes → zone centres shift →
+         we reposition every pinned note instantly so it stays inside its zone */
+      window.addEventListener('resize',()=>{
+        pinnedMap.forEach(({zone,w,h},el)=>{
+          if(!el.classList.contains('pinned')) return;
+          const c=zoneCtr(zone);
+          el.style.transition='none';
+          el.style.left=(c.x-w/2)+'px';
+          el.style.top =(c.y-h/2)+'px';
+        });
+      });
+
       /* ── Global pointer events ── */
       document.addEventListener('mousemove',e=>onMove(e.clientX,e.clientY));
       document.addEventListener('mouseup',  e=>onDrop(e.clientX,e.clientY));
@@ -1880,20 +1909,16 @@
         onDrop(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
       });
 
-      /* ── Attach per element ── */
+      /* ── Attach drag to .deco-note handle only (not shadow/overflow) ── */
       function attach(el){
-        /* Only the card itself is draggable — not the shadow/overflow area */
         const handle=el.querySelector('.deco-note')||el;
-        handle.style.pointerEvents='auto'; // ensure cta-float children fire events
+        handle.style.pointerEvents='auto';
 
         let lastDown=0;
-
         handle.addEventListener('mousedown',e=>{
           if(e.button!==0) return;
           e.preventDefault(); e.stopPropagation();
-
           const now=Date.now();
-          /* Double-click on pinned → smooth spring back, no drag */
           if(now-lastDown<300 && el.classList.contains('pinned')){
             lastDown=0;
             returnHome(el);
@@ -1902,7 +1927,6 @@
           lastDown=now;
           startDrag(el,e.clientX,e.clientY);
         });
-
         handle.addEventListener('touchstart',e=>{
           e.preventDefault();
           startDrag(el,e.touches[0].clientX,e.touches[0].clientY);
