@@ -1827,6 +1827,11 @@
         const note=el.querySelector('.deco-note');
 
         if(best){
+          /* Evict any note already pinned to this zone before placing the new one */
+          pinnedMap.forEach(({zone},occupant)=>{
+            if(zone===best.z && occupant!==el) returnHome(occupant);
+          });
+
           const snapL=best.c.x - dragW/2;
           const snapT=best.c.y - dragH/2;
           el.style.transition='left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
