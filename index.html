@@ -166,11 +166,11 @@
     .deco-sticky.is-dragging,.sdeco.is-dragging,.cta-float.is-dragging{cursor:grabbing;z-index:9998!important;}
     .deco-sticky.is-dragging .deco-note,.sdeco.is-dragging .deco-note,.cta-float.is-dragging .deco-note{filter:brightness(1.05);}
     /* Pin drop zones */
-    .pin-zone{position:fixed;width:110px;height:90px;border:2px dashed rgba(37,99,235,.25);border-radius:10px;z-index:9990;display:none;pointer-events:none;transition:background .15s,border-color .15s,transform .2s,box-shadow .2s;background:transparent;}
-    .pin-zone::before{content:'📌';position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:18px;opacity:.4;transition:opacity .2s,transform .2s;}
-    .pin-zone::after{content:'Drop here';position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:10px;font-weight:600;color:rgba(37,99,235,.5);white-space:nowrap;opacity:0;transition:opacity .2s;}
+    .pin-zone{position:fixed;width:132px;height:112px;border:2px dashed rgba(37,99,235,.22);border-radius:12px;z-index:9990;display:none;pointer-events:none;transition:background .15s,border-color .15s,transform .2s,box-shadow .2s;background:transparent;box-sizing:border-box;}
+    .pin-zone::before{content:'📌';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:16px;opacity:.35;transition:opacity .2s,transform .2s;}
+    .pin-zone::after{content:'Drop here';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:10px;font-weight:600;color:rgba(37,99,235,.5);white-space:nowrap;opacity:0;transition:opacity .2s;letter-spacing:.02em;}
     .pin-zone.active{display:block;}
-    .pin-zone.near{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.6);border-style:solid;transform:scale(1.08);box-shadow:0 0 0 4px rgba(37,99,235,.1);}
+    .pin-zone.near{background:rgba(37,99,235,.09);border-color:rgba(37,99,235,.65);border-style:solid;transform:scale(1.06);box-shadow:0 0 0 5px rgba(37,99,235,.09);}
     .pin-zone.near::before{opacity:1;transform:translateX(-50%) scale(1.2);}
     .pin-zone.near::after{opacity:1;}
     .deco-note.proximity{transform:scale(1.1) translateY(-5px) !important;box-shadow:6px 10px 24px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);}
@@ -1714,44 +1714,62 @@
 
     /* ── Draggable sticky notes — 10 pin zones ── */
     (function(){
-      // [left%, top%] — 5 left-edge, 5 right-edge
-      const ZONE_DEFS = [
-        [1,10],[1,28],[1,46],[1,64],[1,80],
-        [87,10],[87,28],[87,46],[87,64],[87,80]
-      ];
-      const SNAP_R = 150;
+      /* ── Config ── */
+      const ZONE_W=132, ZONE_H=112, EDGE=14, SNAP_R=145;
+      const VT=[10,26,42,58,74]; // zone-center vh positions
 
-      const zones = ZONE_DEFS.map(([lv,tv])=>{
-        const z = document.createElement('div');
-        z.className = 'pin-zone';
-        z.style.cssText = `left:calc(${lv}vw);top:calc(${tv}vh - 45px);`;
-        document.body.appendChild(z);
-        return z;
+      /* ── Build 10 zones: 5 left, 5 right ── */
+      const zones=[];
+      ['left','right'].forEach(side=>{
+        VT.forEach(tv=>{
+          const z=document.createElement('div');
+          z.className='pin-zone';
+          z.style.cssText=`${side}:${EDGE}px;top:calc(${tv}vh - ${ZONE_H/2}px);width:${ZONE_W}px;height:${ZONE_H}px;`;
+          document.body.appendChild(z);
+          zones.push(z);
+        });
       });
 
       function zoneCenter(z){
-        const r = z.getBoundingClientRect();
+        const r=z.getBoundingClientRect();
         return {x:r.left+r.width/2, y:r.top+r.height/2};
       }
 
-      let drag=null, ox=0, oy=0, origParent, origNext, origStyle, origRect;
+      /* ── Per-element home storage (WeakMap so GC-safe) ── */
+      const homeMap=new WeakMap();
+
+      /* ── Drag state ── */
+      let drag=null, ox=0, oy=0;
 
       function startDrag(el,cx,cy){
+        if(drag) return;
         drag=el;
-        origRect   = el.getBoundingClientRect();
-        origParent = el.parentElement;
-        origNext   = el.nextSibling;
-        origStyle  = el.getAttribute('style')||'';
-        ox = cx - origRect.left;
-        oy = cy - origRect.top;
+
+        const r=el.getBoundingClientRect();
+
+        /* Only capture home when starting from original resting place */
+        if(!el.classList.contains('pinned')){
+          homeMap.set(el,{
+            parent:el.parentElement,
+            next:el.nextSibling,
+            style:el.getAttribute('style')||'',
+            x:r.left, y:r.top, w:r.width
+          });
+        }
+
+        ox=cx-r.left;
+        oy=cy-r.top;
+
         document.body.appendChild(el);
         Object.assign(el.style,{
-          position:'fixed', left:origRect.left+'px', top:origRect.top+'px',
-          width:origRect.width+'px', margin:'0', zIndex:'9998',
-          animation:'none', transition:'none'
+          position:'fixed', left:r.left+'px', top:r.top+'px',
+          width:r.width+'px', margin:'0', zIndex:'9998',
+          transition:'none', animation:'none'
         });
         el.classList.add('is-dragging');
+        el.classList.remove('pinned');
         zones.forEach(z=>z.classList.add('active'));
+
         const note=el.querySelector('.deco-note');
         if(note){
           note.style.setProperty('transform','rotate(2deg) scale(1.12) translateY(-8px)','important');
@@ -1784,41 +1802,66 @@
         });
 
         const note=el.querySelector('.deco-note');
-        const tilt=(Math.random()*10-5).toFixed(1);
 
         if(best){
-          el.classList.add('pinned');
+          /* True center-align: measure element height after drag */
+          const elW=parseFloat(el.style.width)||el.offsetWidth;
+          const elH=el.getBoundingClientRect().height||el.offsetHeight;
+          const snapL=best.c.x - elW/2;
+          const snapT=best.c.y - elH/2;
+
           el.style.transition='left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
-          el.style.left=(best.c.x - parseFloat(el.style.width)/2)+'px';
-          el.style.top =(best.c.y - 30)+'px';
+          el.style.left=snapL+'px';
+          el.style.top =snapT+'px';
+          el.classList.add('pinned');
+
+          const tilt=(Math.random()*8-4).toFixed(1);
           if(note){
             note.style.transition='transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
             note.style.setProperty('transform',`rotate(${tilt}deg)`,'important');
             note.style.boxShadow='';
           }
         } else {
-          returnHome(el,note);
+          returnHome(el);
         }
       }
 
-      function returnHome(el,note){
-        note=note||el.querySelector('.deco-note');
+      function returnHome(el){
+        const home=homeMap.get(el);
+        if(!home) return;
+        const note=el.querySelector('.deco-note');
+
+        /* Ensure el is in body as position:fixed so animation plays */
+        if(el.parentElement!==document.body){
+          const r=el.getBoundingClientRect();
+          document.body.appendChild(el);
+          Object.assign(el.style,{
+            position:'fixed', left:r.left+'px', top:r.top+'px',
+            width:home.w+'px', margin:'0', zIndex:'9998', transition:'none'
+          });
+          /* Force reflow so transition fires */
+          void el.offsetWidth;
+        }
+
+        el.classList.remove('pinned');
         el.style.transition='left .44s cubic-bezier(.34,1.56,.64,1),top .44s cubic-bezier(.34,1.56,.64,1)';
-        el.style.left=origRect.left+'px';
-        el.style.top =origRect.top+'px';
+        el.style.left=home.x+'px';
+        el.style.top =home.y+'px';
+
         if(note){
           note.style.transition='transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
           note.style.setProperty('transform','','important');
           note.style.boxShadow='';
         }
+
         setTimeout(()=>{
-          if(origNext) origParent.insertBefore(el,origNext);
-          else origParent.appendChild(el);
-          el.setAttribute('style',origStyle);
-          el.classList.remove('pinned');
-        },450);
+          if(home.next) home.parent.insertBefore(el,home.next);
+          else           home.parent.appendChild(el);
+          el.setAttribute('style',home.style);
+        },460);
       }
 
+      /* ── Global pointer events ── */
       document.addEventListener('mousemove',e=>onMove(e.clientX,e.clientY));
       document.addEventListener('mouseup',  e=>onDrop(e.clientX,e.clientY));
       document.addEventListener('touchmove',e=>{
@@ -1831,22 +1874,31 @@
         onDrop(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
       });
 
+      /* ── Attach per element ── */
       function attach(el){
+        let lastDown=0;
+
         el.addEventListener('mousedown',e=>{
           if(e.button!==0) return;
-          startDrag(el,e.clientX,e.clientY);
           e.preventDefault(); e.stopPropagation();
-        });
-        el.addEventListener('touchstart',e=>{
-          startDrag(el,e.touches[0].clientX,e.touches[0].clientY);
-          e.preventDefault();
-        },{passive:false});
-        el.addEventListener('dblclick',e=>{
-          if(el.classList.contains('pinned')){
-            returnHome(el,null); e.stopPropagation();
+
+          const now=Date.now();
+          /* Double-click on pinned → smooth return home, no drag */
+          if(now-lastDown<280 && el.classList.contains('pinned')){
+            lastDown=0;
+            returnHome(el);
+            return;
           }
+          lastDown=now;
+          startDrag(el,e.clientX,e.clientY);
         });
+
+        el.addEventListener('touchstart',e=>{
+          e.preventDefault();
+          startDrag(el,e.touches[0].clientX,e.touches[0].clientY);
+        },{passive:false});
       }
+
       document.querySelectorAll('.deco-sticky,.sdeco,.cta-float').forEach(attach);
     })();
 
