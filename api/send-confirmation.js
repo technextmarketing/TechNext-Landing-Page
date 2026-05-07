@@ -1,83 +1,3 @@
-/* ── Google Calendar: JWT auth + event creation ── */
-async function gcalGetToken(sa) {
-  const now  = Math.floor(Date.now() / 1000);
-  const b64u = obj => Buffer.from(JSON.stringify(obj)).toString('base64url');
-  const head = b64u({ alg: 'RS256', typ: 'JWT' });
-  const body = b64u({
-    iss:   sa.client_email,
-    sub:   'hello@technext.asia',
-    scope: 'https://www.googleapis.com/auth/calendar',
-    aud:   'https://oauth2.googleapis.com/token',
-    exp:   now + 3600,
-    iat:   now,
-  });
-  const keyBuf = Buffer.from(
-    sa.private_key.replace(/-----[^-]+-----/g, '').replace(/\s/g, ''),
-    'base64'
-  );
-  const cryptoKey = await globalThis.crypto.subtle.importKey(
-    'pkcs8', keyBuf, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']
-  );
-  const sig = await globalThis.crypto.subtle.sign(
-    'RSASSA-PKCS1-v1_5', cryptoKey, new TextEncoder().encode(`${head}.${body}`)
-  );
-  const jwt = `${head}.${body}.${Buffer.from(sig).toString('base64url')}`;
-  const r = await fetch('https://oauth2.googleapis.com/token', {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body:    new URLSearchParams({
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      assertion:  jwt,
-    }),
-  });
-  const d = await r.json();
-  if (!d.access_token) throw new Error('GCal token error: ' + JSON.stringify(d));
-  return d.access_token;
-}
-
-async function gcalCreateEvent({ name, email, phone, company, slot, slotISO, slotTime24, serviceLabel }) {
-  const raw = process.env.GOOGLE_SA_JSON;
-  if (!raw || !slotISO || !slotTime24) return null;
-  const sa    = JSON.parse(raw);
-  const token = await gcalGetToken(sa);
-  const [yr, mo, dy] = slotISO.split('-').map(Number);
-  const [hh, mm]     = slotTime24.split(':').map(Number);
-  const startUTC = new Date(Date.UTC(yr, mo - 1, dy, hh - 8, mm));
-  const endUTC   = new Date(startUTC.getTime() + 30 * 60 * 1000);
-  const reqId    = `${slotISO}-${slotTime24}-${email}`.replace(/[^a-z0-9]/gi, '-');
-  const event = {
-    summary:     `Demo — ${name || 'New Lead'} × TechNext Asia`,
-    description: `Service: ${serviceLabel}\nClient: ${name || '—'} | ${email} | ${phone || '—'} | ${company || '—'}`,
-    start: { dateTime: startUTC.toISOString(), timeZone: 'Asia/Singapore' },
-    end:   { dateTime: endUTC.toISOString(),   timeZone: 'Asia/Singapore' },
-    attendees: [
-      { email: 'hello@technext.asia' },
-      { email, displayName: name || email },
-    ],
-    conferenceData: {
-      createRequest: {
-        requestId:             reqId,
-        conferenceSolutionKey: { type: 'hangoutsMeet' },
-      },
-    },
-    reminders: {
-      useDefault: false,
-      overrides: [{ method: 'popup', minutes: 30 }, { method: 'email', minutes: 60 }],
-    },
-  };
-  const resp = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent('hello@technext.asia')}/events?sendUpdates=all&conferenceDataVersion=1`,
-    {
-      method:  'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify(event),
-    }
-  );
-  const data = await resp.json();
-  if (data.error) throw new Error('GCal API error: ' + JSON.stringify(data.error));
-  return data.id;
-}
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -458,14 +378,6 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: d1.message || 'Confirmation email failed' });
     }
     if (!r2.ok) console.error('Notify email failed:', d2);
-
-    // Google Calendar — add event + send invite to recipient
-    try {
-      const calId = await gcalCreateEvent({ name, email, phone, company, slot, slotISO, slotTime24, serviceLabel });
-      if (calId) console.log('GCal event created:', calId);
-    } catch (calErr) {
-      console.error('GCal error:', calErr);
-    }
 
     return res.status(200).json({ success: true });
   } catch (err) {
