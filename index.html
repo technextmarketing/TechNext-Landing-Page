@@ -599,6 +599,20 @@
     .bk-confirm-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
     .bk-confirm-btn:hover:not(:disabled){background:#5b21b6;}
     .bk-confirm-btn:disabled{opacity:.3;cursor:not-allowed;}
+    /* Booking success panel */
+    .bk-success{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 36px;background:#fff;min-width:0;}
+    .bk-success.show{display:flex;}
+    .bk-success-anim{width:80px;height:80px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:bkSuccessPop .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+    @keyframes bkSuccessPop{0%{transform:scale(0);opacity:0;}100%{transform:scale(1);opacity:1;}}
+    .bk-success-anim svg{width:40px;height:40px;stroke:#16a34a;}
+    .bk-success-title{font-family:var(--fh);font-size:30px;font-weight:700;color:var(--text);margin-bottom:8px;}
+    .bk-success-sub{font-size:13px;color:var(--muted);line-height:1.6;max-width:300px;margin:0 auto 22px;}
+    .bk-success-detail{background:var(--purple-xl);border:1px solid var(--purple-light);border-radius:14px;padding:14px 22px;margin-bottom:28px;width:100%;max-width:320px;}
+    .bk-success-detail-label{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--purple);text-transform:uppercase;margin-bottom:6px;}
+    .bk-success-detail-slot{font-family:var(--fb);font-size:15px;font-weight:700;color:var(--text);line-height:1.4;}
+    .bk-success-detail-meta{font-size:12px;color:var(--muted);margin-top:3px;}
+    .bk-done-btn{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:14px;padding:12px 32px;border-radius:12px;border:none;cursor:pointer;transition:background .15s;}
+    .bk-done-btn:hover{background:#1d4ed8;}
     /* Right time panel */
     .bk-right{background:#fafafa;width:190px;flex-shrink:0;display:none;flex-direction:column;border-left:1px solid var(--border);}
     .bk-right.visible{display:flex;}
@@ -1658,6 +1672,24 @@
         <div class="bk-slots-list" id="bkSlots"></div>
       </div>
 
+      <!-- SUCCESS: Shown after Confirm Slot -->
+      <div class="bk-success" id="bkSuccess">
+        <div class="bk-success-anim">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        </div>
+        <div class="bk-success-title">You're all set!</div>
+        <p class="bk-success-sub">Your slot is reserved. We'll send a calendar invite and confirmation to your email shortly.</p>
+        <div class="bk-success-detail">
+          <div class="bk-success-detail-label">Your demo is booked for</div>
+          <div class="bk-success-detail-slot" id="bkSuccessSlot">—</div>
+          <div class="bk-success-detail-meta">30 min · Singapore Time · Free, no commitment</div>
+        </div>
+        <button class="bk-done-btn" onclick="closeBkModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          Done
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -1698,6 +1730,10 @@
     function closeBkModal() {
       document.getElementById('bkOverlay').classList.remove('open');
       document.body.style.overflow = '';
+      // Reset success state for next open
+      document.getElementById('bkSuccess').classList.remove('show');
+      document.querySelector('.bk-mid').style.display = '';
+      document.getElementById('bkRight').style.display = '';
     }
 
     function bkOverlayClick(e) {
@@ -1903,8 +1939,15 @@
     }
 
     function bkConfirm() {
-      window.open(BK_URL, '_blank');
-      closeBkModal();
+      if (!bkSelDate || !bkSelTime) return;
+      const day  = BK_DAYS_S[bkSelDate.getDay()];
+      const mon  = BK_MONTHS_S[bkSelDate.getMonth()];
+      const date = bkSelDate.getDate();
+      document.getElementById('bkSuccessSlot').textContent = day + ', ' + mon + ' ' + date + ' · ' + bkSelTime + ' SGT';
+      // Hide calendar + slots, show success
+      document.querySelector('.bk-mid').style.display = 'none';
+      document.getElementById('bkRight').style.display = 'none';
+      document.getElementById('bkSuccess').classList.add('show');
     }
 
     /* ── Sticker toggle ── */
