@@ -187,10 +187,10 @@ export default async function handler(req, res) {
         style="background:${dark};padding:20px 40px;text-align:center;">
         <p style="margin:0 0 4px;font-family:${fBody};font-size:12px;font-weight:600;
           color:rgba(255,255,255,.65);">
-          TechNext Asia &nbsp;&middot;&nbsp; hello@technext.asia
+          TechNext &nbsp;&middot;&nbsp; hello@technext.asia
         </p>
         <p style="margin:0;font-family:${fBody};font-size:11px;color:rgba(255,255,255,.3);">
-          Certified Odoo Ready Partner &nbsp;&middot;&nbsp; Serving businesses worldwide
+          Odoo Partner &nbsp;&middot;&nbsp; Serving businesses worldwide
         </p>
       </td>
     </tr>
