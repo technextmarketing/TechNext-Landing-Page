@@ -1,4 +1,4 @@
-// Vercel serverless function — POST form data, create a lead in Odoo CRM.
+// Vercel serverless function - POST form data, create a lead in Odoo CRM.
 // Env vars (set in Vercel → Project → Settings → Environment Variables):
 //   ODOO_URL      e.g. https://technext.odoo.com
 //   ODOO_DB       database name (visible at /web/database/selector or in Settings)
@@ -48,13 +48,13 @@ module.exports = async function handler(req, res) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email' });
 
     const fullName = [fname, lname].filter(Boolean).join(' ');
-    const serviceLabel = { odoo: 'Odoo ERP Implementation', ai: 'AI Automations', both: 'Both — Full Package' }[service] || service || 'Unspecified';
+    const serviceLabel = { odoo: 'Odoo ERP Implementation', ai: 'AI Automations', both: 'Both - Full Package' }[service] || service || 'Unspecified';
 
     const uid = await odooRpc(ODOO_URL, 'common', 'login', [ODOO_DB, ODOO_USER, ODOO_API_KEY]);
     if (!uid) return res.status(502).json({ error: 'Odoo authentication failed' });
 
     const lead = {
-      name: `[Landing Page] ${fullName}${company ? ' — ' + company : ''} (${serviceLabel})`,
+      name: `[Landing Page] ${fullName}${company ? ' - ' + company : ''} (${serviceLabel})`,
       contact_name: fullName,
       partner_name: company || false,
       email_from: email,
