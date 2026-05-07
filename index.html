@@ -1587,11 +1587,31 @@
       document.querySelector('.form-subhead').textContent = '30 minutes. No commitment. We show you exactly how it works.';
     }
 
-    function submitForm() {
+    async function submitForm() {
+      const btn = document.querySelector('#fstep2 .btn-primary.btn-block');
       const email = document.getElementById('f-email').value.trim();
       const fname = document.getElementById('f-fname').value.trim();
+      const lname = document.getElementById('f-lname').value.trim();
+      const company = document.getElementById('f-company').value.trim();
+      const message = document.getElementById('f-msg').value.trim();
       if (!fname || !email) {
         alert('Please fill in your name and email.');
+        return;
+      }
+      const originalLabel = btn ? btn.innerHTML : '';
+      if (btn) { btn.disabled = true; btn.innerHTML = 'Sending…'; }
+      try {
+        const r = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fname, lname, email, company, message, service: selectedService }),
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || 'Request failed');
+      } catch (err) {
+        if (btn) { btn.disabled = false; btn.innerHTML = originalLabel; }
+        alert("Sorry — we couldn't submit your request. Please email us at sky@technext.asia or try again.");
+        console.error(err);
         return;
       }
       document.getElementById('fstep2').classList.remove('active');
