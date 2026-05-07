@@ -595,11 +595,17 @@
     .bk-cal-day.bk-sel{background:var(--purple) !important;color:#fff !important;font-weight:700;}
     .bk-cal-day.bk-disabled{color:#e5e7eb;cursor:default;pointer-events:none;}
     /* Footer */
-    .bk-foot{padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-shrink:0;}
+    .bk-foot{padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;flex-shrink:0;}
+    .bk-foot-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
     .bk-sel-info{font-size:12px;color:var(--muted);line-height:1.4;}
     .bk-sel-info strong{color:var(--text);}
-    .bk-confirm-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
-    .bk-confirm-btn:hover:not(:disabled){background:#5b21b6;}
+    .bk-email-wrap{display:flex;flex-direction:column;gap:3px;}
+    .bk-email-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+    .bk-email-input{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--fb);font-size:12px;color:var(--text);background:#fff;outline:none;transition:border-color .15s;}
+    .bk-email-input:focus{border-color:var(--purple);}
+    .bk-email-input::placeholder{color:var(--muted);}
+    .bk-confirm-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
+    .bk-confirm-btn:hover:not(:disabled){background:#1d4ed8;}
     .bk-confirm-btn:disabled{opacity:.3;cursor:not-allowed;}
     /* Booking success panel */
     .bk-success{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 36px;background:#fff;min-width:0;}
@@ -1668,8 +1674,17 @@
         </div>
         <div class="bk-cal-grid" id="bkGrid"></div>
         <div class="bk-foot">
-          <div class="bk-sel-info" id="bkSelInfo">Pick a date →</div>
-          <button class="bk-confirm-btn" id="bkConfirmBtn" disabled onclick="bkConfirm()">Confirm Slot</button>
+          <div class="bk-foot-row">
+            <div class="bk-sel-info" id="bkSelInfo">Pick a date and time</div>
+          </div>
+          <div class="bk-email-wrap">
+            <span class="bk-email-label">Your email — confirmation will be sent here</span>
+            <input class="bk-email-input" id="bkEmailInput" type="email" placeholder="john@company.com" oninput="bkCheckConfirm()"/>
+          </div>
+          <button class="bk-confirm-btn" id="bkConfirmBtn" disabled onclick="bkConfirm()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+            Confirm Slot
+          </button>
         </div>
       </div>
 
@@ -1732,12 +1747,23 @@
       bkSelDate = null; bkSelTime = null; bkFmt = 12;
       document.getElementById('bkRight').classList.add('visible');
       document.getElementById('bkRightDate').textContent = 'Select a date';
-      document.getElementById('bkSelInfo').textContent = 'Pick a date →';
+      document.getElementById('bkSelInfo').textContent = 'Pick a date and time';
       document.getElementById('bkConfirmBtn').disabled = true;
       document.getElementById('bkFmt12').classList.add('active');
       document.getElementById('bkFmt24').classList.remove('active');
+      // Pre-fill email from form if available
+      const formEmail = (document.getElementById('f-email') || {}).value || '';
+      document.getElementById('bkEmailInput').value = formEmail;
       bkRenderSlots();
       bkRenderCal();
+    }
+
+    function bkCheckConfirm() {
+      const hasSlot  = bkSelDate && bkSelTime;
+      const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        document.getElementById('bkEmailInput').value.trim()
+      );
+      document.getElementById('bkConfirmBtn').disabled = !(hasSlot && hasEmail);
     }
 
     function closeBkModal() {
@@ -1940,13 +1966,13 @@
       const btn  = document.getElementById('bkConfirmBtn');
       if (bkSelDate && bkSelTime) {
         info.innerHTML = '<strong>' + BK_DAYS_S[bkSelDate.getDay()] + ', ' + BK_MONTHS_S[bkSelDate.getMonth()] + ' ' + bkSelDate.getDate() + '</strong> · <strong>' + bkSelTime + ' SGT</strong>';
-        btn.disabled = false;
+        bkCheckConfirm();
       } else if (bkSelDate && bkGetAvailCount(bkSelDate) === 0) {
         const next = bkFindNextAvailDate(bkSelDate);
         info.innerHTML = next ? 'Fully booked — try <strong>' + BK_DAYS_S[next.getDay()] + ', ' + BK_MONTHS_S[next.getMonth()] + ' ' + next.getDate() + '</strong>' : 'Fully booked';
         btn.disabled = true;
       } else {
-        info.textContent = bkSelDate ? 'Pick a time →' : 'Pick a date →';
+        info.textContent = bkSelDate ? 'Pick a time →' : 'Pick a date and time';
         btn.disabled = true;
       }
     }
@@ -1972,18 +1998,16 @@
       const slotEl = document.getElementById('fsDoneSlot');
       if (slotEl) slotEl.textContent = slot;
       // Send confirmation + internal notification (fire-and-forget)
-      const email   = (document.getElementById('f-email')   || {}).value || '';
-      const name    = (document.getElementById('f-fname')   || {}).value || '';
-      const phone   = (document.getElementById('f-phone')   || {}).value || '';
-      const company = (document.getElementById('f-company') || {}).value || '';
+      const email   = document.getElementById('bkEmailInput').value.trim();
+      const name    = (document.getElementById('f-fname')   || {}).value.trim() || '';
+      const phone   = (document.getElementById('f-phone')   || {}).value.trim() || '';
+      const company = (document.getElementById('f-company') || {}).value.trim() || '';
       const service = document.querySelector('.spick.sel')?.dataset.val || '';
-      if (email) {
-        fetch('/api/send-confirmation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, slot, phone, company, service })
-        }).catch(err => console.warn('Confirmation email:', err));
-      }
+      fetch('/api/send-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, slot, phone, company, service })
+      }).catch(err => console.warn('Confirmation email:', err));
     }
 
     /* ── Sticker toggle ── */
