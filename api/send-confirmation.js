@@ -13,166 +13,321 @@ export default async function handler(req, res) {
 
   const firstName = name ? name.split(' ')[0] : 'there';
 
+  /* ─── Design tokens (mirrors Landing Page.html :root) ─── */
+  const C = {
+    purple:      '#2563EB',
+    purpleDeep:  '#4338CA',
+    purpleLight: '#DBEAFE',
+    purpleXl:    '#EFF6FF',
+    green:       '#059669',
+    greenLight:  '#D1FAE5',
+    bg:          '#FAFAF7',
+    white:       '#FFFFFF',
+    text:        '#1F2937',
+    text2:       '#374151',
+    muted:       '#6B7280',
+    border:      '#E5E7EB',
+    dark:        '#111827',
+  };
+
+  /* ─── Icon URLs (hosted PNG, Gmail-safe) ─── */
+  const LOGO = 'https://technextmarketing.github.io/TechNext-Landing-Page/images/TechNext-Logo.png';
+  const ICON_SEARCH  = 'https://cdn-icons-png.flaticon.com/128/1320/1320974.png';
+  const ICON_SCREEN  = 'https://cdn-icons-png.flaticon.com/128/1320/1320988.png';
+  const ICON_ROCKET  = 'https://cdn-icons-png.flaticon.com/128/1320/1320960.png';
+  const ICON_FB      = 'https://img.icons8.com/ios-filled/100/94A3B8/facebook-new.png';
+  const ICON_LI      = 'https://img.icons8.com/ios-filled/100/94A3B8/linkedin.png';
+  const ICON_X       = 'https://img.icons8.com/ios-filled/100/94A3B8/twitterx--v1.png';
+  const ICON_IG      = 'https://img.icons8.com/ios-filled/100/94A3B8/instagram-new.png';
+
+  /* ─── Font stack ─── */
+  /* Caveat (display) + Plus Jakarta Sans (body) via Google Fonts.
+     Supported by Apple Mail, Outlook desktop, Thunderbird.
+     Gmail webmail falls back to the Arial/Georgia stacks. */
+  const FONT_BODY    = "'Plus Jakarta Sans', Arial, Helvetica, sans-serif";
+  const FONT_DISPLAY = "'Caveat', Georgia, cursive";
+
   const htmlContent = `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background-color:#f0f4ff;font-family:Arial,Helvetica,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0f4ff">
-  <tr><td align="center" style="padding:32px 16px;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Your TechNext Demo is Confirmed</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap');
+    body { margin:0; padding:0; background-color:${C.bg}; }
+    .body-wrap { background-color:${C.bg}; }
+    @media only screen and (max-width:620px) {
+      .card { width:100% !important; border-radius:0 !important; }
+      .pad  { padding-left:24px !important; padding-right:24px !important; }
+      .slot-card { padding:18px 20px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:${C.bg};" class="body-wrap">
 
-    <!-- Card -->
-    <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(37,99,235,.12);">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${C.bg}" style="background-color:${C.bg};">
+<tr><td align="center" style="padding:32px 16px;">
 
-      <!-- Header -->
-      <tr>
-        <td bgcolor="#1e3a8a" style="background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);padding:36px 40px 28px;text-align:center;">
-          <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:4px;color:rgba(255,255,255,.65);text-transform:uppercase;">TechNext Asia</p>
-          <p style="margin:0;font-size:28px;font-weight:900;color:#ffffff;letter-spacing:-0.5px;">Your Demo is Confirmed!</p>
-          <p style="margin:8px 0 0;font-size:14px;color:rgba(255,255,255,.75);">Odoo ERP &amp; AI Automations</p>
-        </td>
-      </tr>
+  <!-- ── CARD ── -->
+  <table class="card" width="600" cellpadding="0" cellspacing="0" border="0"
+         style="max-width:600px;width:100%;background-color:${C.white};border-radius:20px;overflow:hidden;box-shadow:0 12px 48px rgba(37,99,235,.13);">
 
-      <!-- Green check banner -->
-      <tr>
-        <td bgcolor="#16a34a" style="background:#16a34a;padding:14px 40px;text-align:center;">
-          <p style="margin:0;font-size:13px;font-weight:700;color:#ffffff;letter-spacing:0.5px;">
-            &#10003;&nbsp;&nbsp;Booking Confirmed — See you soon, ${firstName}!
-          </p>
-        </td>
-      </tr>
+    <!-- ── HEADER ── -->
+    <tr>
+      <td bgcolor="${C.purple}"
+          style="background:linear-gradient(160deg,${C.purple} 0%,${C.purpleDeep} 100%);padding:36px 40px 32px;text-align:center;"
+          class="pad">
 
-      <!-- White body -->
-      <tr>
-        <td bgcolor="#ffffff" style="background:#ffffff;padding:40px 40px 32px;">
+        <!-- Logo -->
+        <img src="${LOGO}" width="140" alt="TechNext Asia"
+             style="display:inline-block;height:auto;margin-bottom:20px;filter:brightness(0) invert(1);">
 
-          <!-- Greeting -->
-          <p style="margin:0 0 20px;font-size:16px;color:#1f2937;line-height:1.6;">
-            Hi <strong>${name || 'there'}</strong>,
-          </p>
-          <p style="margin:0 0 28px;font-size:15px;color:#374151;line-height:1.7;">
-            Thank you for booking a free demo with TechNext Asia. We're excited to show you how
-            <strong>Odoo ERP</strong> and <strong>AI Automations</strong> can transform your business operations.
-          </p>
+        <!-- Divider accent -->
+        <div style="width:40px;height:3px;background:rgba(255,255,255,.45);border-radius:2px;margin:0 auto 20px;"></div>
 
-          <!-- Slot detail card -->
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
-            <tr>
-              <td bgcolor="#eff6ff" style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:24px 28px;">
-                <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:3px;color:#2563eb;text-transform:uppercase;">Your Scheduled Demo</p>
-                <p style="margin:0 0 4px;font-size:22px;font-weight:900;color:#1e3a8a;">${slot}</p>
-                <p style="margin:0;font-size:13px;color:#6b7280;">30 minutes &nbsp;·&nbsp; Singapore Time (SGT) &nbsp;·&nbsp; Video Call</p>
-              </td>
-            </tr>
-          </table>
+        <!-- Display heading -->
+        <p style="margin:0;font-family:${FONT_DISPLAY};font-size:38px;font-weight:700;color:${C.white};line-height:1.15;letter-spacing:0.5px;">
+          Demo Confirmed
+        </p>
+        <p style="margin:10px 0 0;font-family:${FONT_BODY};font-size:13px;font-weight:500;color:rgba(255,255,255,.72);letter-spacing:0.3px;">
+          Odoo ERP &amp; AI Automations for Growing Businesses
+        </p>
 
-          <!-- What to expect -->
-          <p style="margin:0 0 14px;font-size:14px;font-weight:700;color:#1f2937;text-transform:uppercase;letter-spacing:1px;">What to Expect</p>
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
-            <tr>
-              <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;vertical-align:top;">
-                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="padding-right:14px;vertical-align:top;">
-                    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;text-align:center;line-height:32px;font-size:16px;">&#128269;</div>
+      </td>
+    </tr>
+
+    <!-- ── CONFIRMED STRIP ── -->
+    <tr>
+      <td bgcolor="${C.green}"
+          style="background:${C.green};padding:12px 40px;text-align:center;" class="pad">
+        <p style="margin:0;font-family:${FONT_BODY};font-size:13px;font-weight:700;color:${C.white};letter-spacing:0.4px;">
+          Booking Confirmed &mdash; See you soon, ${firstName}!
+        </p>
+      </td>
+    </tr>
+
+    <!-- ── BODY ── -->
+    <tr>
+      <td bgcolor="${C.white}"
+          style="background:${C.white};padding:40px 40px 12px;" class="pad">
+
+        <!-- Greeting -->
+        <p style="margin:0 0 8px;font-family:${FONT_BODY};font-size:16px;font-weight:700;color:${C.text};">
+          Hi ${name || 'there'},
+        </p>
+        <p style="margin:0 0 28px;font-family:${FONT_BODY};font-size:14px;font-weight:400;color:${C.text2};line-height:1.75;">
+          Thank you for booking a free demo with TechNext Asia. We are looking forward to showing you
+          how <span style="font-weight:700;color:${C.text};">Odoo ERP</span> and
+          <span style="font-weight:700;color:${C.text};">AI Automations</span> can streamline your
+          business operations &mdash; from accounting and inventory to intelligent workflows.
+        </p>
+
+        <!-- ── SLOT CARD ── -->
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+          <tr>
+            <td bgcolor="${C.purpleXl}"
+                style="background:${C.purpleXl};border:1.5px solid ${C.purpleLight};border-radius:14px;padding:24px 28px;"
+                class="slot-card">
+
+              <!-- Label -->
+              <p style="margin:0 0 10px;font-family:${FONT_BODY};font-size:10px;font-weight:700;
+                         color:${C.purple};text-transform:uppercase;letter-spacing:3px;">
+                Your Scheduled Demo
+              </p>
+
+              <!-- Slot value in Caveat -->
+              <p style="margin:0 0 8px;font-family:${FONT_DISPLAY};font-size:28px;font-weight:700;
+                         color:${C.text};line-height:1.2;">
+                ${slot}
+              </p>
+
+              <!-- Meta row -->
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-right:16px;">
+                    <p style="margin:0;font-family:${FONT_BODY};font-size:12px;font-weight:600;color:${C.muted};">
+                      30 minutes
+                    </p>
                   </td>
-                  <td style="vertical-align:top;">
-                    <p style="margin:2px 0 2px;font-size:14px;font-weight:700;color:#1f2937;">Business Discovery</p>
-                    <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.5;">We'll understand your current processes and pain points first.</p>
+                  <td style="padding-right:16px;">
+                    <p style="margin:0;font-family:${FONT_BODY};font-size:12px;font-weight:600;color:${C.muted};">
+                      Singapore Time (SGT)
+                    </p>
                   </td>
-                </tr></table>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;vertical-align:top;">
-                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="padding-right:14px;vertical-align:top;">
-                    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;text-align:center;line-height:32px;font-size:16px;">&#128187;</div>
+                  <td>
+                    <p style="margin:0;font-family:${FONT_BODY};font-size:12px;font-weight:600;color:${C.muted};">
+                      Video Call
+                    </p>
                   </td>
-                  <td style="vertical-align:top;">
-                    <p style="margin:2px 0 2px;font-size:14px;font-weight:700;color:#1f2937;">Live Product Demo</p>
-                    <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.5;">See Odoo ERP and AI automations live, tailored to your industry.</p>
-                  </td>
-                </tr></table>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;vertical-align:top;">
-                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="padding-right:14px;vertical-align:top;">
-                    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;text-align:center;line-height:32px;font-size:16px;">&#128200;</div>
-                  </td>
-                  <td style="vertical-align:top;">
-                    <p style="margin:2px 0 2px;font-size:14px;font-weight:700;color:#1f2937;">Custom Roadmap</p>
-                    <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.5;">You'll leave with a clear implementation plan and next steps — no commitment required.</p>
-                  </td>
-                </tr></table>
-              </td>
-            </tr>
-          </table>
+                </tr>
+              </table>
 
-          <!-- Questions note -->
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
-            <tr>
-              <td bgcolor="#fefce8" style="background:#fefce8;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;">
-                <p style="margin:0;font-size:13px;color:#374151;line-height:1.6;">
-                  <strong>Have questions before the call?</strong><br>
-                  Reply to this email or reach us at
-                  <a href="mailto:hello@technext.asia" style="color:#2563eb;text-decoration:none;font-weight:700;">hello@technext.asia</a> —
-                  we typically respond within a few hours.
-                </p>
-              </td>
-            </tr>
-          </table>
+            </td>
+          </tr>
+        </table>
 
-          <p style="margin:0 0 4px;font-size:15px;color:#1f2937;">Talk to you soon!</p>
-          <p style="margin:0;font-size:14px;color:#6b7280;">The TechNext Asia Team</p>
+        <!-- ── SECTION LABEL ── -->
+        <p style="margin:0 0 16px;font-family:${FONT_BODY};font-size:10px;font-weight:700;
+                   color:${C.purple};text-transform:uppercase;letter-spacing:3px;">
+          What to Expect
+        </p>
 
-        </td>
-      </tr>
+        <!-- ── EXPECT ROWS ── -->
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
 
-      <!-- Divider -->
-      <tr><td bgcolor="#ffffff" style="background:#ffffff;padding:0 40px;"><div style="height:1px;background:#e5e7eb;"></div></td></tr>
+          <!-- Row 1 -->
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid ${C.border};vertical-align:middle;">
+              <table cellpadding="0" cellspacing="0" border="0"><tr>
+                <td style="padding-right:16px;vertical-align:middle;">
+                  <table cellpadding="0" cellspacing="0" border="0">
+                    <tr><td bgcolor="${C.purpleXl}"
+                             style="background:${C.purpleXl};width:40px;height:40px;border-radius:10px;text-align:center;vertical-align:middle;">
+                      <img src="${ICON_SEARCH}" width="20" height="20" alt=""
+                           style="display:inline-block;vertical-align:middle;margin-top:10px;">
+                    </td></tr>
+                  </table>
+                </td>
+                <td style="vertical-align:middle;">
+                  <p style="margin:0 0 3px;font-family:${FONT_BODY};font-size:14px;font-weight:700;color:${C.text};">
+                    Business Discovery
+                  </p>
+                  <p style="margin:0;font-family:${FONT_BODY};font-size:13px;font-weight:400;color:${C.muted};line-height:1.55;">
+                    We start by understanding your current processes and biggest pain points.
+                  </p>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
 
-      <!-- Footer -->
-      <tr>
-        <td bgcolor="#ffffff" style="background:#ffffff;padding:24px 40px 32px;text-align:center;">
+          <!-- Row 2 -->
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid ${C.border};vertical-align:middle;">
+              <table cellpadding="0" cellspacing="0" border="0"><tr>
+                <td style="padding-right:16px;vertical-align:middle;">
+                  <table cellpadding="0" cellspacing="0" border="0">
+                    <tr><td bgcolor="${C.purpleXl}"
+                             style="background:${C.purpleXl};width:40px;height:40px;border-radius:10px;text-align:center;vertical-align:middle;">
+                      <img src="${ICON_SCREEN}" width="20" height="20" alt=""
+                           style="display:inline-block;vertical-align:middle;margin-top:10px;">
+                    </td></tr>
+                  </table>
+                </td>
+                <td style="vertical-align:middle;">
+                  <p style="margin:0 0 3px;font-family:${FONT_BODY};font-size:14px;font-weight:700;color:${C.text};">
+                    Live Product Demo
+                  </p>
+                  <p style="margin:0;font-family:${FONT_BODY};font-size:13px;font-weight:400;color:${C.muted};line-height:1.55;">
+                    See Odoo ERP and AI automations in action, tailored to your industry.
+                  </p>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
 
-          <!-- Social icons -->
-          <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
-            <tr>
-              <td style="padding:0 6px;">
-                <a href="https://web.facebook.com/technextasia" style="text-decoration:none;">
-                  <img src="https://img.icons8.com/ios-filled/100/94A3B8/facebook-new.png" width="22" height="22" alt="Facebook" style="display:block;">
-                </a>
-              </td>
-              <td style="padding:0 6px;">
-                <a href="https://www.linkedin.com/company/technextasia/" style="text-decoration:none;">
-                  <img src="https://img.icons8.com/ios-filled/100/94A3B8/linkedin.png" width="22" height="22" alt="LinkedIn" style="display:block;">
-                </a>
-              </td>
-              <td style="padding:0 6px;">
-                <a href="https://x.com/technextasia" style="text-decoration:none;">
-                  <img src="https://img.icons8.com/ios-filled/100/94A3B8/twitterx--v1.png" width="22" height="22" alt="X" style="display:block;">
-                </a>
-              </td>
-              <td style="padding:0 6px;">
-                <a href="https://www.instagram.com/technextasia/" style="text-decoration:none;">
-                  <img src="https://img.icons8.com/ios-filled/100/94A3B8/instagram-new.png" width="22" height="22" alt="Instagram" style="display:block;">
-                </a>
-              </td>
-            </tr>
-          </table>
+          <!-- Row 3 -->
+          <tr>
+            <td style="padding:12px 0;vertical-align:middle;">
+              <table cellpadding="0" cellspacing="0" border="0"><tr>
+                <td style="padding-right:16px;vertical-align:middle;">
+                  <table cellpadding="0" cellspacing="0" border="0">
+                    <tr><td bgcolor="${C.purpleXl}"
+                             style="background:${C.purpleXl};width:40px;height:40px;border-radius:10px;text-align:center;vertical-align:middle;">
+                      <img src="${ICON_ROCKET}" width="20" height="20" alt=""
+                           style="display:inline-block;vertical-align:middle;margin-top:10px;">
+                    </td></tr>
+                  </table>
+                </td>
+                <td style="vertical-align:middle;">
+                  <p style="margin:0 0 3px;font-family:${FONT_BODY};font-size:14px;font-weight:700;color:${C.text};">
+                    Your Custom Roadmap
+                  </p>
+                  <p style="margin:0;font-family:${FONT_BODY};font-size:13px;font-weight:400;color:${C.muted};line-height:1.55;">
+                    You will leave with a clear implementation plan &mdash; no commitment required.
+                  </p>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
 
-          <p style="margin:0 0 4px;font-size:12px;color:#9ca3af;">TechNext Asia &nbsp;·&nbsp; hello@technext.asia</p>
-          <p style="margin:0;font-size:11px;color:#d1d5db;">Certified Odoo Ready Partner &nbsp;·&nbsp; Serving businesses worldwide</p>
+        </table>
 
-        </td>
-      </tr>
+        <!-- ── QUESTION NOTE ── -->
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:36px;">
+          <tr>
+            <td bgcolor="${C.purpleXl}"
+                style="background:${C.purpleXl};border-left:3px solid ${C.purple};border-radius:0 10px 10px 0;padding:14px 18px;">
+              <p style="margin:0;font-family:${FONT_BODY};font-size:13px;font-weight:400;color:${C.text2};line-height:1.65;">
+                <span style="font-weight:700;color:${C.text};">Have questions before the call?</span><br>
+                Reply to this email or write to us at
+                <a href="mailto:hello@technext.asia"
+                   style="color:${C.purple};font-weight:700;text-decoration:none;">hello@technext.asia</a>
+                &mdash; we respond within a few hours.
+              </p>
+            </td>
+          </tr>
+        </table>
 
-    </table>
-    <!-- End card -->
+        <!-- Sign-off -->
+        <p style="margin:0 0 4px;font-family:${FONT_BODY};font-size:14px;font-weight:600;color:${C.text};">
+          Talk to you soon,
+        </p>
+        <p style="margin:0 0 40px;font-family:${FONT_BODY};font-size:13px;font-weight:400;color:${C.muted};">
+          The TechNext Asia Team
+        </p>
 
-  </td></tr>
+      </td>
+    </tr>
+
+    <!-- ── FOOTER ── -->
+    <tr>
+      <td bgcolor="${C.dark}"
+          style="background:${C.dark};padding:28px 40px 32px;text-align:center;" class="pad">
+
+        <!-- Social icons -->
+        <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+          <tr>
+            <td style="padding:0 8px;">
+              <a href="https://web.facebook.com/technextasia" style="text-decoration:none;">
+                <img src="${ICON_FB}" width="20" height="20" alt="Facebook" style="display:block;">
+              </a>
+            </td>
+            <td style="padding:0 8px;">
+              <a href="https://www.linkedin.com/company/technextasia/" style="text-decoration:none;">
+                <img src="${ICON_LI}" width="20" height="20" alt="LinkedIn" style="display:block;">
+              </a>
+            </td>
+            <td style="padding:0 8px;">
+              <a href="https://x.com/technextasia" style="text-decoration:none;">
+                <img src="${ICON_X}" width="20" height="20" alt="X" style="display:block;">
+              </a>
+            </td>
+            <td style="padding:0 8px;">
+              <a href="https://www.instagram.com/technextasia/" style="text-decoration:none;">
+                <img src="${ICON_IG}" width="20" height="20" alt="Instagram" style="display:block;">
+              </a>
+            </td>
+          </tr>
+        </table>
+
+        <p style="margin:0 0 5px;font-family:${FONT_BODY};font-size:12px;font-weight:600;color:rgba(255,255,255,.75);">
+          TechNext Asia &nbsp;&middot;&nbsp; hello@technext.asia
+        </p>
+        <p style="margin:0;font-family:${FONT_BODY};font-size:11px;font-weight:400;color:rgba(255,255,255,.38);">
+          Certified Odoo Ready Partner &nbsp;&middot;&nbsp; Serving businesses worldwide
+        </p>
+
+      </td>
+    </tr>
+
+  </table>
+  <!-- ── END CARD ── -->
+
+</td></tr>
 </table>
+
 </body>
 </html>`;
 
