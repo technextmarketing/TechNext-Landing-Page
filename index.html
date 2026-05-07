@@ -596,7 +596,7 @@
     .bk-foot{padding:14px 28px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-shrink:0;}
     .bk-sel-info{font-size:14px;color:var(--muted);line-height:1.4;}
     .bk-sel-info strong{color:var(--text);}
-    .bk-confirm-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:#fff;font-family:var(--fh);font-weight:700;font-size:15px;padding:13px 26px;border-radius:12px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
+    .bk-confirm-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:15px;padding:13px 26px;border-radius:12px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
     .bk-confirm-btn:hover:not(:disabled){background:#5b21b6;}
     .bk-confirm-btn:disabled{opacity:.3;cursor:not-allowed;}
     /* Right time panel */
@@ -611,6 +611,25 @@
     .bk-slot{padding:12px 8px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;text-align:center;transition:all .13s;background:#fff;}
     .bk-slot:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-xl);}
     .bk-slot.bk-sel{background:var(--purple);color:#fff;border-color:var(--purple);}
+    .bk-slot.bk-booked{color:#d1d5db !important;border-color:#f3f4f6 !important;background:#fafafa !important;cursor:not-allowed !important;pointer-events:none;}
+    .bk-slot.bk-recommended{border-color:#16a34a !important;color:#15803d !important;background:#f0fdf4 !important;}
+    .bk-rec-badge{font-size:9px;font-weight:700;color:#16a34a;display:block;margin-top:1px;letter-spacing:.02em;}
+    .bk-avail-banner{grid-column:1/-1;text-align:center;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;margin-bottom:2px;}
+    .bk-avail-banner.low{background:#fff7ed;color:#ea580c;}
+    .bk-avail-banner.good{background:#f0fdf4;color:#16a34a;}
+    .bk-full-wrap{padding:20px 14px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;grid-column:1/-1;}
+    .bk-full-title{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--text);}
+    .bk-full-sub{font-size:12px;color:var(--muted);line-height:1.5;margin:0;}
+    .bk-next-btn{display:inline-flex;align-items:center;gap:6px;background:var(--purple);color:#fff;font-family:var(--fh);font-weight:700;font-size:12px;padding:9px 14px;border-radius:9px;border:none;cursor:pointer;transition:background .15s;margin-top:4px;}
+    .bk-next-btn:hover{background:#5b21b6;}
+    /* Calendar day dots */
+    .bk-cal-day{flex-direction:column;gap:3px;}
+    .bk-day-num{line-height:1;}
+    .bk-day-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+    .bk-day-dot-avail{background:#22c55e;}
+    .bk-day-dot-low{background:#f59e0b;}
+    .bk-day-dot-full{background:#ef4444;}
+    .bk-cal-day.bk-full-day{opacity:.55;}
     .bk-mid-foot-wrap{display:flex;flex-direction:column;}
     @media(max-width:860px){.bk-modal{flex-direction:column;}.bk-left{width:100%;padding:18px 22px 14px;flex-direction:row;align-items:center;gap:14px;}.bk-left-desc,.bk-left-meta{display:none;}.bk-left-title{font-size:17px;margin:0;}.bk-right{width:100%;border-left:none;border-top:1px solid var(--border);}.bk-right.visible{display:flex;flex-direction:row;}.bk-slots-list{flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:10px;}.bk-slot{white-space:nowrap;flex-shrink:0;}}
     /* ── WHATSAPP FLOAT ── */
@@ -1724,22 +1743,50 @@
         el.textContent = d;
         if (isWeekend || isPast) {
           el.classList.add('bk-disabled');
+          el.innerHTML = '<span class="bk-day-num">' + d + '</span>';
         } else {
+          const avail = bkGetAvailCount(date);
           el.classList.add('bk-avail');
+          if (avail === 0) el.classList.add('bk-full-day');
           if (isToday) el.classList.add('bk-today');
           if (isSel)   el.classList.add('bk-sel');
+          const dotCls = avail === 0 ? 'bk-day-dot-full' : avail <= 4 ? 'bk-day-dot-low' : 'bk-day-dot-avail';
+          el.innerHTML = '<span class="bk-day-num">' + d + '</span><span class="bk-day-dot ' + dotCls + '"></span>';
           el.addEventListener('click', () => bkPickDate(date));
         }
         grid.appendChild(el);
       }
     }
 
+    /* ── Availability simulation (deterministic by date+slot) ── */
+    function bkIsBooked(date, idx) {
+      const n = (date.getFullYear() * 500 + date.getMonth() * 31 + date.getDate()) * 23 + idx;
+      const hash = Math.abs(Math.imul(n, 1664525) + 1013904223) >>> 0;
+      const threshold = idx < 6 ? 58 : 32; // mornings book faster
+      return (hash % 100) < threshold;
+    }
+    function bkGetAvailCount(date) {
+      return BK_TIMES_12.filter((_, i) => !bkIsBooked(date, i)).length;
+    }
+    function bkFirstAvailIdx(date) {
+      return BK_TIMES_12.findIndex((_, i) => !bkIsBooked(date, i));
+    }
+    function bkFindNextAvailDate(fromDate) {
+      const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const d = new Date(fromDate);
+      for (let i = 1; i <= 45; i++) {
+        d.setDate(d.getDate() + 1);
+        const dow = d.getDay();
+        if (dow === 0 || dow === 6 || d < today) continue;
+        if (bkGetAvailCount(d) > 0) return new Date(d);
+      }
+      return null;
+    }
+
     function bkPickDate(date) {
       bkSelDate = date; bkSelTime = null;
       bkRenderCal();
-      // Show right panel
-      const right = document.getElementById('bkRight');
-      right.classList.add('visible');
+      document.getElementById('bkRight').classList.add('visible');
       document.getElementById('bkRightDate').textContent = BK_DAYS_S[date.getDay()] + ' ' + String(date.getDate()).padStart(2,'0');
       bkRenderSlots();
       bkUpdateFooter();
@@ -1758,10 +1805,76 @@
       const times = bkFmt === 12 ? BK_TIMES_12 : BK_TIMES_24;
       const container = document.getElementById('bkSlots');
       container.innerHTML = '';
-      times.forEach(t => {
+
+      if (!bkSelDate) {
+        times.forEach(t => {
+          const el = document.createElement('div');
+          el.className = 'bk-slot';
+          el.innerHTML = '<span class="bk-day-num">' + t + '</span>';
+          el.addEventListener('click', () => bkPickTime(t, el));
+          container.appendChild(el);
+        });
+        return;
+      }
+
+      const avail = bkGetAvailCount(bkSelDate);
+      const firstIdx = bkFirstAvailIdx(bkSelDate);
+
+      if (avail === 0) {
+        const wrap = document.createElement('div');
+        wrap.className = 'bk-full-wrap';
+        wrap.innerHTML = '<div style="font-size:28px">📅</div><div class="bk-full-title">Fully Booked</div><p class="bk-full-sub">All slots on this day are taken.</p>';
+        const nextDate = bkFindNextAvailDate(bkSelDate);
+        if (nextDate) {
+          const btn = document.createElement('button');
+          btn.className = 'bk-next-btn';
+          btn.innerHTML = '→ Next: ' + BK_DAYS_S[nextDate.getDay()] + ', ' + BK_MONTHS_S[nextDate.getMonth()] + ' ' + nextDate.getDate();
+          btn.onclick = () => {
+            bkViewYear = nextDate.getFullYear();
+            bkViewMonth = nextDate.getMonth();
+            bkPickDate(nextDate);
+            bkRenderCal();
+          };
+          wrap.appendChild(btn);
+        }
+        container.appendChild(wrap);
+        return;
+      }
+
+      // Availability banner
+      const banner = document.createElement('div');
+      banner.style.gridColumn = '1 / -1';
+      banner.style.textAlign = 'center';
+      banner.style.fontSize = '11px';
+      banner.style.fontWeight = '700';
+      banner.style.padding = '5px 10px';
+      banner.style.borderRadius = '20px';
+      banner.style.marginBottom = '4px';
+      if (avail <= 4) {
+        banner.style.background = '#fff7ed'; banner.style.color = '#ea580c';
+        banner.textContent = '⚡ Only ' + avail + ' slots left today!';
+      } else {
+        banner.style.background = '#f0fdf4'; banner.style.color = '#16a34a';
+        banner.textContent = '✓ ' + avail + ' slots available';
+      }
+      container.appendChild(banner);
+
+      times.forEach((t, i) => {
+        const booked = bkIsBooked(bkSelDate, i);
+        const isRec  = !booked && i === firstIdx;
         const el = document.createElement('div');
-        el.className = 'bk-slot'; el.textContent = t;
-        el.addEventListener('click', () => bkPickTime(t, el));
+        if (booked) {
+          el.className = 'bk-slot bk-booked';
+          el.innerHTML = '<span style="text-decoration:line-through;font-size:12px">' + t + '</span>';
+        } else if (isRec) {
+          el.className = 'bk-slot bk-recommended';
+          el.innerHTML = '<span class="bk-day-num">' + t + '</span><span class="bk-rec-badge">★ Recommended</span>';
+          el.addEventListener('click', () => bkPickTime(t, el));
+        } else {
+          el.className = 'bk-slot';
+          el.innerHTML = '<span class="bk-day-num">' + t + '</span>';
+          el.addEventListener('click', () => bkPickTime(t, el));
+        }
         container.appendChild(el);
       });
     }
@@ -1779,6 +1892,10 @@
       if (bkSelDate && bkSelTime) {
         info.innerHTML = '<strong>' + BK_DAYS_S[bkSelDate.getDay()] + ', ' + BK_MONTHS_S[bkSelDate.getMonth()] + ' ' + bkSelDate.getDate() + '</strong> · <strong>' + bkSelTime + ' SGT</strong>';
         btn.disabled = false;
+      } else if (bkSelDate && bkGetAvailCount(bkSelDate) === 0) {
+        const next = bkFindNextAvailDate(bkSelDate);
+        info.innerHTML = next ? 'Fully booked — try <strong>' + BK_DAYS_S[next.getDay()] + ', ' + BK_MONTHS_S[next.getMonth()] + ' ' + next.getDate() + '</strong>' : 'Fully booked';
+        btn.disabled = true;
       } else {
         info.textContent = bkSelDate ? 'Pick a time →' : 'Pick a date →';
         btn.disabled = true;
