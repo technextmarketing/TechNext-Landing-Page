@@ -1833,13 +1833,7 @@
       }
     }
 
-    /* ── Availability simulation (deterministic by date+slot) ── */
-    function bkIsBooked(date, idx) {
-      const n = (date.getFullYear() * 500 + date.getMonth() * 31 + date.getDate()) * 23 + idx;
-      const hash = Math.abs(Math.imul(n, 1664525) + 1013904223) >>> 0;
-      const threshold = idx < 6 ? 58 : 32; // mornings book faster
-      return (hash % 100) < threshold;
-    }
+    function bkIsBooked(date, idx) { return false; }
     function bkGetAvailCount(date) {
       return BK_TIMES_12.filter((_, i) => !bkIsBooked(date, i)).length;
     }
