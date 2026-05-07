@@ -215,6 +215,8 @@
     .fp-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s,transform .3s;}
     .fp-dot.active{background:var(--purple);transform:scale(1.35);}
     .fp-dot.done{background:var(--green);}
+    .fp-line{width:28px;height:2px;background:var(--border);border-radius:1px;transition:background .3s;}
+    .fp-line.done{background:var(--green);}
 
     .fstep{display:none;}
     .fstep.active{display:block;}
@@ -849,6 +851,13 @@
           <div class="form-heading">Book a Free Demo</div>
           <div class="form-subhead">30 minutes. No commitment. We show you exactly how it works.</div>
 
+          <div class="form-progress">
+            <div class="fp-dot active" id="dot1"></div>
+            <div class="fp-line" id="line1"></div>
+            <div class="fp-dot" id="dot2"></div>
+            <div class="fp-line" id="line2"></div>
+            <div class="fp-dot" id="dot3"></div>
+          </div>
 
           <!-- Step 1: pick service -->
           <div class="fstep active" id="fstep1">
@@ -918,24 +927,28 @@
 
           <!-- Success + Booking state -->
           <div class="form-success" id="fSuccess">
-            <div class="fs-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
-            <div class="fs-title">Request sent!</div>
-            <p class="fs-sub" style="margin-bottom:18px;">Now pick a time — it only takes 30 seconds.</p>
-            <div class="booking-cta-card">
-              <div class="bcc-title">📅 Schedule Your Free Demo</div>
-              <p class="bcc-sub">30 minutes · No commitment · We show you exactly how it works</p>
-              <div class="bcc-slots">
-                <span class="bcc-slot">Mon – Fri</span>
-                <span class="bcc-slot">9 AM – 6 PM SGT</span>
-                <span class="bcc-slot">Slots available this week</span>
-              </div>
-              <a id="bccBtn" href="https://erp.technext.asia/odoo/appointments" target="_blank" rel="noopener noreferrer" class="bcc-btn">
+
+            <!-- State A: calendar open, waiting for slot pick -->
+            <div id="fsPending">
+              <div class="fs-icon" style="background:var(--purple-xl);color:var(--purple);">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
-                Pick My Demo Slot →
-              </a>
-              <p class="bcc-note">Booking page opened in a new tab · Powered by TechNext</p>
-              <p class="bcc-note" id="bccPopupNote" style="display:none;color:#ef4444;font-weight:600;">Click the button above if it didn't open automatically.</p>
+              </div>
+              <div class="fs-title" style="color:var(--purple);">Pick your slot</div>
+              <p class="fs-sub" style="margin-bottom:18px;">Select a date and time for your free 30-minute demo.</p>
+              <button class="btn-primary" onclick="openBkModal()" style="margin:0 auto;display:inline-flex;align-items:center;gap:8px;padding:11px 24px;font-size:14px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
+                Open Booking Calendar
+              </button>
             </div>
+
+            <!-- State B: slot confirmed, all done -->
+            <div id="fsDone" style="display:none;">
+              <div class="fs-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
+              <div class="fs-title">All set!</div>
+              <p class="fs-sub">Your demo is confirmed — we'll send a calendar invite and details to your email shortly.</p>
+              <p class="fs-sub" id="fsDoneSlot" style="margin-top:10px;font-weight:600;color:var(--text);"></p>
+            </div>
+
           </div>
         </div>
       </div>
@@ -1943,11 +1956,21 @@
       const day  = BK_DAYS_S[bkSelDate.getDay()];
       const mon  = BK_MONTHS_S[bkSelDate.getMonth()];
       const date = bkSelDate.getDate();
-      document.getElementById('bkSuccessSlot').textContent = day + ', ' + mon + ' ' + date + ' · ' + bkSelTime + ' SGT';
-      // Hide calendar + slots, show success
+      const slot = day + ', ' + mon + ' ' + date + ' · ' + bkSelTime + ' SGT';
+      // Show success inside modal
+      document.getElementById('bkSuccessSlot').textContent = slot;
       document.querySelector('.bk-mid').style.display = 'none';
       document.getElementById('bkRight').style.display = 'none';
       document.getElementById('bkSuccess').classList.add('show');
+      // Mark step 3 done in the form card
+      document.getElementById('dot3').classList.remove('active');
+      document.getElementById('dot3').classList.add('done');
+      document.querySelector('.form-heading').textContent = 'All Set!';
+      document.querySelector('.form-subhead').textContent = 'See you at your demo — talk soon!';
+      document.getElementById('fsPending').style.display = 'none';
+      document.getElementById('fsDone').style.display = 'block';
+      const slotEl = document.getElementById('fsDoneSlot');
+      if (slotEl) slotEl.textContent = slot;
     }
 
     /* ── Sticker toggle ── */
@@ -2036,6 +2059,7 @@
       document.getElementById('fstep2').classList.add('active');
       document.getElementById('dot1').classList.remove('active');
       document.getElementById('dot1').classList.add('done');
+      document.getElementById('line1').classList.add('done');
       document.getElementById('dot2').classList.add('active');
       document.querySelector('.form-heading').textContent = 'Tell Us About You';
       document.querySelector('.form-subhead').textContent = 'We\'ll tailor the demo to your business.';
@@ -2046,6 +2070,7 @@
       document.getElementById('fstep1').classList.add('active');
       document.getElementById('dot2').classList.remove('active');
       document.getElementById('dot1').classList.remove('done');
+      document.getElementById('line1').classList.remove('done');
       document.getElementById('dot1').classList.add('active');
       document.querySelector('.form-heading').textContent = 'Book a Free Demo';
       document.querySelector('.form-subhead').textContent = '30 minutes. No commitment. We show you exactly how it works.';
@@ -2075,12 +2100,13 @@
       } catch(e) { console.warn('Lead API:', e); }
 
       document.getElementById('fstep2').classList.remove('active');
-      document.querySelector('.form-progress').style.display = 'none';
-      document.querySelector('.form-heading').textContent = 'Request Sent!';
-      document.querySelector('.form-subhead').textContent = 'Now pick a time for your free demo.';
+      document.querySelector('.form-heading').textContent = 'Book Your Slot';
+      document.querySelector('.form-subhead').textContent = 'One last step — pick a time that works for you.';
       document.getElementById('fSuccess').style.display = 'block';
       document.getElementById('dot2').classList.remove('active');
       document.getElementById('dot2').classList.add('done');
+      document.getElementById('line2').classList.add('done');
+      document.getElementById('dot3').classList.add('active');
       openBkModal();
     }
 
