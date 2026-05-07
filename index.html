@@ -1971,14 +1971,17 @@
       document.getElementById('fsDone').style.display = 'block';
       const slotEl = document.getElementById('fsDoneSlot');
       if (slotEl) slotEl.textContent = slot;
-      // Send confirmation email (fire-and-forget — don't block UI)
-      const email = (document.getElementById('f-email') || {}).value || '';
-      const name  = (document.getElementById('f-fname') || {}).value || '';
+      // Send confirmation + internal notification (fire-and-forget)
+      const email   = (document.getElementById('f-email')   || {}).value || '';
+      const name    = (document.getElementById('f-fname')   || {}).value || '';
+      const phone   = (document.getElementById('f-phone')   || {}).value || '';
+      const company = (document.getElementById('f-company') || {}).value || '';
+      const service = document.querySelector('.spick.sel')?.dataset.val || '';
       if (email) {
         fetch('/api/send-confirmation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, slot })
+          body: JSON.stringify({ name, email, slot, phone, company, service })
         }).catch(err => console.warn('Confirmation email:', err));
       }
     }
