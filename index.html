@@ -537,6 +537,7 @@
     .scarcity{display:inline-flex;align-items:center;gap:8px;background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.25);border-radius:24px;padding:8px 18px;margin-bottom:24px;font-size:14px;font-weight:600;color:#DC2626;}
     .scarcity-dot{width:8px;height:8px;border-radius:50%;background:#DC2626;animation:pulse-red 1.5s ease-in-out infinite;flex-shrink:0;}
     @keyframes pulse-red{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}
+    @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
     /* ── WHATSAPP FLOAT ── */
     .wa-float{position:fixed;bottom:84px;right:28px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.45);z-index:98;transition:transform .2s,box-shadow .2s;text-decoration:none;}
     .wa-float:hover{transform:scale(1.1);}
@@ -1595,12 +1596,29 @@
       document.querySelector('.form-subhead').textContent = '30 minutes. No commitment. We show you exactly how it works.';
     }
 
-    function submitForm() {
+    async function submitForm() {
       const fname = document.getElementById('f-fname').value.trim();
-      if (!fname) {
-        alert('Please enter your name.');
-        return;
-      }
+      if (!fname) { alert('Please enter your name.'); return; }
+
+      const btn = document.querySelector('#fstep2 .btn-primary');
+      btn.disabled = true;
+      btn.innerHTML = '<svg style="animation:spin .8s linear infinite;width:15px;height:15px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Sending…';
+
+      try {
+        await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:    fname,
+            phone:   document.getElementById('f-phone').value.trim(),
+            email:   document.getElementById('f-email').value.trim(),
+            company: document.getElementById('f-company').value.trim(),
+            message: document.getElementById('f-msg').value.trim(),
+            service: document.querySelector('.spick.sel')?.dataset.val || ''
+          })
+        });
+      } catch(e) { console.warn('Lead API:', e); }
+
       document.getElementById('fstep2').classList.remove('active');
       document.querySelector('.form-progress').style.display = 'none';
       document.querySelector('.form-heading').textContent = 'Pick a Demo Slot';
