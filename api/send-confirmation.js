@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { name, email, slot, phone, company, service } = req.body || {};
+  const { name, email, slot, phone, company, service, slotISO, slotTime24 } = req.body || {};
   if (!email) return res.status(400).json({ error: 'Email required' });
 
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
@@ -18,6 +18,44 @@ export default async function handler(req, res) {
     both: 'Both — Full Package (ERP + AI)',
   };
   const serviceLabel = SERVICE_LABELS[service] || service || 'Not specified';
+
+  /* ── iCalendar invite (.ics) ── */
+  function makeICS() {
+    if (!slotISO || !slotTime24) return null;
+    const [yr, mo, dy] = slotISO.split('-').map(Number);
+    const [hh, mm]     = slotTime24.split(':').map(Number);
+    // SGT = UTC+8 → subtract 8 h to get UTC
+    const startUTC = new Date(Date.UTC(yr, mo - 1, dy, hh - 8, mm));
+    const endUTC   = new Date(startUTC.getTime() + 30 * 60 * 1000);
+    const fmt = d => d.toISOString().replace(/[-:.]/g, '').slice(0, 15) + 'Z';
+    const uid = `${slotISO}T${slotTime24}-${email}@technext.asia`.replace(/[^a-z0-9@.]/gi, '-');
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//TechNext Asia//Demo Booking//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:REQUEST',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTART:${fmt(startUTC)}`,
+      `DTEND:${fmt(endUTC)}`,
+      `SUMMARY:Demo — ${name || 'New Lead'} × TechNext Asia`,
+      `DESCRIPTION:30-minute product demo.\\nService: ${serviceLabel}\\nBooked slot: ${slot}`,
+      `ORGANIZER;CN=TechNext Asia:MAILTO:hello@technext.asia`,
+      `ATTENDEE;CN=${name || email};RSVP=TRUE;PARTSTAT=ACCEPTED:MAILTO:${email}`,
+      'STATUS:CONFIRMED',
+      'SEQUENCE:0',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT30M',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Demo with TechNext Asia in 30 minutes',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ].join('\r\n');
+    return Buffer.from(ics).toString('base64');
+  }
+  const icsAttachment = makeICS();
 
   /* ── Shared tokens ── */
   const purple     = '#2563EB';
@@ -313,7 +351,7 @@ export default async function handler(req, res) {
 </html>`;
 
   /* ── Send both emails in parallel ── */
-  const send = (to, toName, subject, html) =>
+  const send = (to, toName, subject, html, attachment) =>
     fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
@@ -322,13 +360,14 @@ export default async function handler(req, res) {
         to:          [{ email: to, name: toName }],
         subject,
         htmlContent: html,
+        ...(attachment ? { attachment: [{ content: attachment, name: 'demo-invite.ics' }] } : {}),
       }),
     });
 
   try {
     const [r1, r2] = await Promise.all([
-      send(email, name || email, `Demo Confirmed — ${slot}`, confirmHtml),
-      send('hello@technext.asia', 'TechNext Team', `New Booking: ${name || email} — ${slot}`, notifyHtml),
+      send(email, name || email, `Demo Confirmed — ${slot}`, confirmHtml, icsAttachment),
+      send('hello@technext.asia', 'TechNext Team', `New Booking: ${name || email} — ${slot}`, notifyHtml, icsAttachment),
     ]);
 
     const d1 = await r1.json();
