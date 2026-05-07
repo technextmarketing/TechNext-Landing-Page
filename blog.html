@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog — TechNext</title>
+  <meta name="description" content="ERP guides, case studies, and implementation insights from the TechNext team. Learn how Odoo ERP can transform your business in Southeast Asia."/>
+  <meta name="keywords" content="Odoo ERP blog, ERP guides Southeast Asia, Odoo implementation tips, ERP for SME, Odoo vs SAP, Odoo case studies, business automation blog"/>
+  <meta name="author" content="TechNext"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://technext.asia/blog"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Blog — TechNext ERP Insights"/>
+  <meta property="og:description" content="ERP guides, case studies, and implementation insights from the TechNext team. Learn how Odoo ERP can transform your business."/>
+  <meta property="og:url" content="https://technext.asia/blog"/>
+  <meta property="og:site_name" content="TechNext"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Blog — TechNext ERP Insights"/>
+  <meta name="twitter:description" content="Odoo ERP guides, case studies, and insights from certified consultants across Southeast Asia."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #4a6cf7;
+      --blue-dark:  #3253DC;
+      --blue-light: #7c8fff;
+      --blue-pale:  #eef1fe;
+      --dark:       #0a0e2a;
+      --dark-card:  #0f1535;
+      --gray-50:    #F9FAFB;
+      --gray-100:   #F3F4F6;
+      --gray-200:   #E5E7EB;
+      --gray-300:   #D1D5DB;
+      --gray-400:   #9CA3AF;
+      --gray-500:   #6B7280;
+      --gray-700:   #374151;
+      --gray-900:   #111827;
+      --white:      #FFFFFF;
+      --green:      #4ade80;
+      --radius:     12px;
+      --radius-lg:  20px;
+      --shadow:     0 4px 24px rgba(74,108,247,.10);
+      --shadow-lg:  0 12px 48px rgba(74,108,247,.18);
+      --gradient:   linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      --gradient-dark: linear-gradient(135deg, #0a0e2a 0%, #0e1640 60%, #0a1a3a 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-900); background: var(--white); overflow-x: hidden; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 15px;
+      border-radius: 10px; padding: 14px 28px; cursor: pointer;
+      text-decoration: none; transition: all .22s; border: 2px solid transparent;
+      white-space: nowrap; line-height: 1;
+    }
+    .btn-primary { background: var(--gradient); color: var(--white); box-shadow: 0 4px 20px rgba(74,108,247,.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(74,108,247,.45); }
+    .btn-outline { background: transparent; color: var(--blue); border-color: var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: #fff; }
+
+    /* ── ANN BAR ── */
+    .ann-bar { background: var(--gradient); color: #fff; padding: 10px 24px; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: .01em; line-height: 1.5; }
+    .ann-bar a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* ── NAV ── */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--gray-200); transition: box-shadow .2s; }
+    .nav.scrolled { box-shadow: 0 4px 20px rgba(74,108,247,.08); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .logo img { height: 48px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links li a { font-size: 14px; font-weight: 600; color: var(--gray-600, #4B5563); text-decoration: none; padding: 8px 13px; border-radius: 8px; transition: all .15s; }
+    .nav-links li a:hover { color: var(--blue); background: var(--blue-pale); }
+    .nav-links .nav-erp a { color: var(--blue); font-weight: 700; }
+    .nav-links .nav-erp a:hover { background: var(--blue-pale); }
+    .nav-links .nav-active a { color: var(--blue); background: var(--blue-pale); }
+    .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
+    .dark-toggle { width: 38px; height: 38px; border-radius: 9px; border: 1.5px solid var(--gray-200); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--gray-500); transition: all .2s; margin-right: 10px; flex-shrink: 0; }
+    .dark-toggle:hover { background: var(--blue-pale); color: var(--blue); border-color: var(--blue); }
+    .dark-toggle .icon-sun { display: none; }
+    .dark-toggle .icon-moon { display: block; }
+    body.dark .dark-toggle .icon-sun { display: block; }
+    body.dark .dark-toggle .icon-moon { display: none; }
+
+    /* ── HERO ── */
+    .blog-hero {
+      background: var(--gradient-dark); padding: 80px 0 72px;
+      position: relative; overflow: hidden;
+    }
+    .blog-hero-inner { position: relative; z-index: 1; text-align: center; }
+    .tag-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: tagPulse 2s infinite; flex-shrink: 0; }
+    @keyframes tagPulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+    .blog-hero .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.1); color: rgba(255,255,255,.85);
+      border: 1px solid rgba(255,255,255,.15);
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 20px;
+    }
+    .blog-hero h1 {
+      font-family: 'Manrope', sans-serif; font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900; color: #fff; line-height: 1.08; letter-spacing: -.03em; margin-bottom: 18px;
+    }
+    .blog-hero h1 em { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
+    .blog-hero p { font-size: 17px; color: rgba(255,255,255,.6); max-width: 540px; margin: 0 auto 32px; line-height: 1.7; }
+
+    /* Search bar */
+    .search-wrap {
+      position: relative; max-width: 480px; margin: 0 auto;
+    }
+    .search-wrap svg {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,.4); pointer-events: none;
+    }
+    #blogSearch {
+      width: 100%; padding: 14px 20px 14px 46px;
+      background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.15);
+      border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 15px;
+      color: #fff; outline: none; transition: border-color .18s, background .18s;
+    }
+    #blogSearch::placeholder { color: rgba(255,255,255,.4); }
+    #blogSearch:focus { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.15); }
+
+    /* ── BLOG SECTION ── */
+    .blog-section { padding: 80px 0 96px; background: var(--gray-50); }
+    body.dark .blog-section { background: var(--dark); }
+
+    /* Category filters */
+    .filter-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 36px; }
+    .filter-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 100px; border: 1.5px solid var(--gray-200);
+      background: var(--white); color: var(--gray-500); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .18s; font-family: 'Inter', sans-serif;
+    }
+    body.dark .filter-btn { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.5); }
+    .filter-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-pale); }
+    body.dark .filter-btn:hover { background: rgba(74,108,247,.15); border-color: var(--blue-light); color: var(--blue-light); }
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    body.dark .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* Featured post */
+    .featured-card {
+      display: flex; gap: 0; border-radius: var(--radius-lg); overflow: hidden;
+      border: 1.5px solid var(--gray-200); background: var(--white);
+      box-shadow: var(--shadow); margin-bottom: 40px;
+      transition: transform .22s, box-shadow .22s;
+    }
+    body.dark .featured-card { background: var(--dark-card); border-color: rgba(255,255,255,.08); }
+    .featured-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .featured-img {
+      width: 360px; min-width: 360px; height: 280px;
+      background: var(--gradient-dark); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; position: relative; overflow: hidden;
+    }
+    .featured-img-inner { position: relative; z-index: 1; opacity: .7; }
+    .featured-body { padding: 36px 40px; display: flex; flex-direction: column; justify-content: center; flex: 1; }
+    .featured-labels { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .featured-body h2 {
+      font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800;
+      color: var(--gray-900); line-height: 1.3; letter-spacing: -.02em; margin-bottom: 12px;
+    }
+    body.dark .featured-body h2 { color: #fff; }
+    .featured-body p { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 20px; flex: 1; }
+    body.dark .featured-body p { color: rgba(255,255,255,.45); }
+    .post-meta { font-size: 12px; color: var(--gray-400); margin-bottom: 20px; }
+    body.dark .post-meta { color: rgba(255,255,255,.3); }
+    .read-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 700; color: var(--blue); text-decoration: none;
+      transition: gap .15s;
+    }
+    body.dark .read-link { color: var(--blue-light); }
+    .read-link:hover { gap: 10px; }
+
+    /* Category badges */
+    .cat-badge {
+      display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .cat-badge.odoo-erp    { background: #eef1fe; color: #4a6cf7; }
+    .cat-badge.erp-guide   { background: #eff6ff; color: #2563eb; }
+    .cat-badge.case-study  { background: #ecfdf5; color: #065f46; }
+    .cat-badge.ai-automation { background: #f5f3ff; color: #6d28d9; }
+    .cat-badge.industry    { background: #e0f2fe; color: #0369a1; }
+    .cat-badge.featured    { background: var(--gradient); color: #fff; }
+
+    /* Blog grid */
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .blog-card {
+      background: var(--white); border: 1.5px solid var(--gray-200);
+      border-radius: 16px; overflow: hidden; transition: transform .22s, box-shadow .22s;
+      display: flex; flex-direction: column;
+    }
+    body.dark .blog-card { background: var(--dark-card); border-color: rgba(255,255,255,.08); }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .blog-card.hidden { display: none; }
+    .blog-img {
+      height: 180px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .blog-body { padding: 22px 24px 24px; display: flex; flex-direction: column; flex: 1; }
+    .blog-body .cat-badge { margin-bottom: 12px; }
+    .blog-body h3 {
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 800;
+      color: var(--gray-900); line-height: 1.35; letter-spacing: -.015em; margin-bottom: 10px;
+    }
+    body.dark .blog-body h3 { color: #fff; }
+    .blog-excerpt {
+      font-size: 13px; color: var(--gray-500); line-height: 1.65;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      margin-bottom: 16px; flex: 1;
+    }
+    body.dark .blog-excerpt { color: rgba(255,255,255,.4); }
+    .blog-meta { font-size: 11px; color: var(--gray-400); margin-top: auto; }
+    body.dark .blog-meta { color: rgba(255,255,255,.28); }
+
+    /* Empty state */
+    .no-results {
+      grid-column: 1 / -1; text-align: center; padding: 64px 20px;
+      display: none;
+    }
+    .no-results p { font-size: 15px; color: var(--gray-400); }
+    body.dark .no-results p { color: rgba(255,255,255,.3); }
+
+    /* ── NEWSLETTER CTA ── */
+    .newsletter-section {
+      background: var(--dark); padding: 88px 0;
+      position: relative; overflow: hidden;
+    }
+    .newsletter-inner { position: relative; z-index: 1; text-align: center; max-width: 580px; margin: 0 auto; }
+    .newsletter-inner h2 {
+      font-family: 'Manrope', sans-serif; font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 900; color: #fff; letter-spacing: -.03em; margin-bottom: 14px;
+    }
+    .newsletter-inner p { font-size: 16px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 32px; }
+    .newsletter-form { display: flex; gap: 12px; max-width: 460px; margin: 0 auto 16px; }
+    .newsletter-input {
+      flex: 1; padding: 14px 18px; border-radius: 10px;
+      border: 1.5px solid rgba(255,255,255,.15); background: rgba(255,255,255,.08);
+      font-family: 'Inter', sans-serif; font-size: 14px; color: #fff; outline: none;
+      transition: border-color .18s, background .18s;
+    }
+    .newsletter-input::placeholder { color: rgba(255,255,255,.35); }
+    .newsletter-input:focus { border-color: var(--blue-light); background: rgba(255,255,255,.12); }
+    .newsletter-btn {
+      padding: 14px 24px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 700;
+      background: var(--gradient); color: #fff; white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(74,108,247,.4); transition: transform .2s, box-shadow .2s;
+    }
+    .newsletter-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(74,108,247,.5); }
+    .newsletter-note { font-size: 12px; color: rgba(255,255,255,.3); }
+
+    /* ── FOOTER ── */
+    footer { background: #0f1535; color: rgba(255,255,255,.5); padding: 72px 0 36px; }
+    .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+    .footer-logos { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .footer-logo { display: block; }
+    .footer-logo img { height: 32px; width: auto; display: block; filter: brightness(0) invert(1); }
+    .footer-logo-sep { width: 1px; height: 36px; background: rgba(255,255,255,.12); flex-shrink: 0; }
+    .odoo-partner-logo img { height: 44px; width: auto; display: block; }
+    .footer-desc { font-size: 14px; line-height: 1.75; margin-bottom: 22px; max-width: 280px; }
+    .footer-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(74,108,247,.15); border: 1px solid rgba(74,108,247,.25); border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); }
+    .footer-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .footer-col h5 { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.85); margin-bottom: 18px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul li a { font-size: 14px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .15s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-col ul li a.hl { color: var(--blue-light); font-weight: 600; }
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,.07); margin-bottom: 28px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 13px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn { width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background .15s; color: rgba(255,255,255,.6); }
+    .social-btn:hover { background: var(--blue); color: #fff; }
+    .footer-offices { margin-top: 28px; }
+    .footer-offices p { font-size: 12px; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 8px; }
+    .footer-offices .office { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
+    .office-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-light); flex-shrink: 0; }
+
+    /* ── DARK MODE ── */
+    body.dark {
+      --gray-50: #0f1535; --gray-100: #131b3d; --gray-200: #1e2a4a;
+      --gray-300: #2a3a5c; --gray-400: #4a5f80; --gray-500: #8899b8;
+      --gray-700: #c8d6f0; --gray-900: #eef2ff; --white: #0a0e2a;
+      background: var(--dark);
+    }
+    body.dark .nav { background: rgba(10,14,42,.96); border-bottom-color: rgba(255,255,255,.08); }
+    body.dark .logo img { filter: brightness(0) invert(1); }
+    body.dark .nav-links li a { color: rgba(255,255,255,.7); }
+    body.dark .nav-links li a:hover { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    body.dark .nav-links .nav-erp a { color: var(--blue-light); }
+    body.dark .nav-links .nav-active a { color: var(--blue-light); background: rgba(74,108,247,.15); }
+    body.dark .dark-toggle { border-color: rgba(255,255,255,.15); color: rgba(255,255,255,.7); }
+    body.dark .dark-toggle:hover { background: rgba(74,108,247,.2); border-color: var(--blue); color: #fff; }
+    body.dark footer { background: #060919; }
+
+    /* PAGE TRANSITION */
+    @keyframes pageFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    body { animation: pageFadeIn .32s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .blog-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-card { flex-direction: column; }
+      .featured-img { width: 100%; min-width: 0; height: 220px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+    }
+    @media (max-width: 640px) {
+      .blog-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .newsletter-form { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .filter-bar { gap: 6px; }
+      .filter-btn { font-size: 12px; padding: 6px 12px; }
+    }
+
+    /* MOBILE NAV */
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 38px; height: 38px; background: transparent; border: 1.5px solid var(--gray-200); border-radius: 9px; cursor: pointer; padding: 8px; margin-left: 8px; flex-shrink: 0; transition: all .2s; }
+    .nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gray-500); border-radius: 2px; transition: all .25s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    body.dark .nav-hamburger { border-color: rgba(255,255,255,.15); }
+    body.dark .nav-hamburger span { background: rgba(255,255,255,.7); }
+    .mobile-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 99; background: var(--white); border-bottom: 1px solid var(--gray-200); box-shadow: 0 8px 32px rgba(0,0,0,.1); padding: 16px 20px 24px; }
+    body.dark .mobile-menu { background: #0a0e2a; border-color: rgba(255,255,255,.08); }
+    .mobile-menu.open { display: block; animation: menuSlide .2s ease; }
+    @keyframes menuSlide { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+    .mobile-links { list-style: none; display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; }
+    .mobile-links li a { display: block; font-size: 15px; font-weight: 600; color: var(--gray-700); padding: 10px 12px; border-radius: 8px; text-decoration: none; transition: all .15s; }
+    .mobile-links li a:hover, .mobile-links li a:active { background: var(--blue-pale); color: var(--blue); }
+    .mobile-links .nav-erp a { color: var(--blue); }
+    .mobile-links .nav-active a { color: var(--blue); background: var(--blue-pale); }
+    body.dark .mobile-links li a { color: rgba(255,255,255,.75); }
+    body.dark .mobile-links li a:hover { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    body.dark .mobile-links .nav-erp a { color: var(--blue-light); }
+    body.dark .mobile-links .nav-active a { color: var(--blue-light); background: rgba(74,108,247,.15); }
+    .mobile-cta { width: 100%; text-align: center; justify-content: center; }
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none !important; }
+      .nav-cta { display: none; }
+      .logo { flex: 1; }
+      .logo img { height: 36px; max-width: 150px; object-fit: contain; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "TechNext ERP Insights",
+    "url": "https://technext.asia/blog",
+    "description": "ERP guides, case studies, and Odoo implementation insights from the TechNext team.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "TechNext",
+      "url": "https://technext.asia"
+    }
+  }
+  </script>
+</head>
+<body>
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="ann-bar">
+  TechNext is a certified <strong>Odoo Ready Partner</strong> — claim your free ERP consultation this month. <a href="contact.html">Book now →</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo"><img src="../TechNext Branding/Logo/TechNext Logo.png" alt="TechNext"/></a>
+    <ul class="nav-links">
+      <li class="nav-erp"><a href="index.html#services">Odoo ERP</a></li>
+      <li><a href="index.html#modules">Modules</a></li>
+      <li><a href="about.html">About</a></li>
+      <li class="nav-active"><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="dark-toggle" id="darkToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a href="contact.html" class="btn btn-primary nav-cta">Get Free Consultation</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-links">
+    <li class="nav-erp"><a href="index.html#services">Odoo ERP</a></li>
+    <li><a href="index.html#modules">Modules</a></li>
+    <li><a href="about.html">About</a></li>
+    <li class="nav-active"><a href="blog.html">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="btn btn-primary mobile-cta">Get Free Consultation</a>
+</div>
+
+<!-- HERO -->
+<section class="blog-hero">
+  <canvas id="heroCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+  <div class="container blog-hero-inner">
+    <div class="tag">
+      <span class="tag-dot"></span>
+      ERP Insights
+    </div>
+    <h1>Learn. Decide. <em>Grow.</em></h1>
+    <p>ERP guides, case studies, and implementation insights from the TechNext team.</p>
+    <div class="search-wrap">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="blogSearch" placeholder="Search articles..." autocomplete="off"/>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG SECTION -->
+<section class="blog-section">
+  <div class="container">
+
+    <!-- CATEGORY FILTERS -->
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="odoo-erp">Odoo ERP</button>
+      <button class="filter-btn" data-filter="erp-guide">ERP Guide</button>
+      <button class="filter-btn" data-filter="case-study">Case Study</button>
+      <button class="filter-btn" data-filter="ai-automation">AI &amp; Automation</button>
+      <button class="filter-btn" data-filter="industry">Industry</button>
+    </div>
+
+    <!-- FEATURED POST -->
+    <div class="featured-card" id="featuredCard">
+      <div class="featured-img">
+        <!-- Floating bg lights handled via inline style gradient; icon centred -->
+        <div class="featured-img-inner">
+          <svg width="96" height="96" fill="none" stroke="#4a6cf7" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="3" y="12" width="4" height="9" rx="1"/>
+            <rect x="10" y="7" width="4" height="14" rx="1"/>
+            <rect x="17" y="3" width="4" height="18" rx="1"/>
+            <line x1="2" y1="22" x2="22" y2="22" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="featured-body">
+        <div class="featured-labels">
+          <span class="cat-badge odoo-erp">Odoo ERP</span>
+          <span class="cat-badge featured">Featured</span>
+        </div>
+        <h2>Why Odoo ERP Is the Best Fit for SMEs in Southeast Asia</h2>
+        <p>Growing businesses in Southeast Asia face a unique challenge: the tools built for enterprises are too complex and expensive, while simple accounting software isn't powerful enough to scale. Odoo hits the sweet spot — and here's exactly why.</p>
+        <div class="post-meta">Apr 18, 2026 &nbsp;·&nbsp; 6 min read &nbsp;·&nbsp; Marcus Tan</div>
+        <a href="#" class="read-link">
+          Read Article
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- BLOG GRID -->
+    <div class="blog-grid" id="blogGrid">
+
+      <!-- Card 1 — erp-guide -->
+      <div class="blog-card" data-cat="erp-guide">
+        <div class="blog-img" style="background:linear-gradient(135deg,#f0f9ff,#dbeafe);">
+          <svg width="52" height="52" fill="none" stroke="#3b82f6" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="3" y="12" width="4" height="9" rx="1"/>
+            <rect x="10" y="7" width="4" height="14" rx="1"/>
+            <rect x="17" y="3" width="4" height="18" rx="1"/>
+            <line x1="2" y1="22" x2="22" y2="22" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge erp-guide">ERP Guide</span>
+          <h3>Odoo vs SAP vs NetSuite: Which ERP Is Right for Your Business?</h3>
+          <p class="blog-excerpt">Choosing an ERP is one of the biggest decisions a growing business can make. We break down the key differences so you can choose with confidence...</p>
+          <div class="blog-meta">Apr 15, 2026 &nbsp;·&nbsp; 8 min &nbsp;·&nbsp; James Lim</div>
+        </div>
+      </div>
+
+      <!-- Card 2 — case-study -->
+      <div class="blog-card" data-cat="case-study">
+        <div class="blog-img" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);">
+          <svg width="52" height="52" fill="none" stroke="#10b981" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge case-study">Case Study</span>
+          <h3>How We Helped a Jakarta Logistics Firm Cut Inventory Errors by 99%</h3>
+          <p class="blog-excerpt">Manual inventory tracking was costing this logistics company thousands per month. Here's how Odoo fixed it — and what the numbers looked like after go-live...</p>
+          <div class="blog-meta">Apr 10, 2026 &nbsp;·&nbsp; 5 min &nbsp;·&nbsp; Sarah Nguyen</div>
+        </div>
+      </div>
+
+      <!-- Card 3 — odoo-erp -->
+      <div class="blog-card" data-cat="odoo-erp">
+        <div class="blog-img" style="background:linear-gradient(135deg,#eef1fe,#dde4fd);">
+          <svg width="52" height="52" fill="none" stroke="#4a6cf7" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge odoo-erp">Odoo ERP</span>
+          <h3>Setting Up Odoo Accounting for Multi-Currency Businesses in SEA</h3>
+          <p class="blog-excerpt">Operating across Singapore, Vietnam, and the Philippines means dealing with SGD, VND, and PHP simultaneously. Here's how to configure Odoo to handle it all...</p>
+          <div class="blog-meta">Apr 5, 2026 &nbsp;·&nbsp; 7 min &nbsp;·&nbsp; Marcus Tan</div>
+        </div>
+      </div>
+
+      <!-- Card 4 — erp-guide -->
+      <div class="blog-card" data-cat="erp-guide">
+        <div class="blog-img" style="background:linear-gradient(135deg,#fef9ec,#fde68a);">
+          <svg width="52" height="52" fill="none" stroke="#d97706" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge erp-guide">ERP Guide</span>
+          <h3>5 Signs Your Business Has Outgrown Spreadsheets</h3>
+          <p class="blog-excerpt">If you're still running operations on Excel, you might be leaving serious money on the table. These five warning signs mean it's time to make the switch...</p>
+          <div class="blog-meta">Apr 1, 2026 &nbsp;·&nbsp; 4 min &nbsp;·&nbsp; James Lim</div>
+        </div>
+      </div>
+
+      <!-- Card 5 — ai-automation -->
+      <div class="blog-card" data-cat="ai-automation">
+        <div class="blog-img" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);">
+          <svg width="52" height="52" fill="none" stroke="#7c3aed" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge ai-automation">AI &amp; Automation</span>
+          <h3>AI Automation + Odoo: How to Auto-Approve Purchase Orders Under SGD 500</h3>
+          <p class="blog-excerpt">By combining Odoo's approval workflows with a simple AI rule engine, you can eliminate routine PO approvals entirely — freeing your team for higher-value work...</p>
+          <div class="blog-meta">Mar 28, 2026 &nbsp;·&nbsp; 6 min &nbsp;·&nbsp; David Chen</div>
+        </div>
+      </div>
+
+      <!-- Card 6 — odoo-erp -->
+      <div class="blog-card" data-cat="odoo-erp">
+        <div class="blog-img" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6);">
+          <svg width="52" height="52" fill="none" stroke="#e11d48" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            <line x1="12" y1="12" x2="12" y2="16"/>
+            <line x1="10" y1="14" x2="14" y2="14"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge odoo-erp">Odoo ERP</span>
+          <h3>Odoo Manufacturing Module: A Complete Guide for SEA SMEs</h3>
+          <p class="blog-excerpt">From bill of materials to work orders and quality checks — here's everything the Odoo Manufacturing module can do for your production operations...</p>
+          <div class="blog-meta">Mar 22, 2026 &nbsp;·&nbsp; 9 min &nbsp;·&nbsp; Marcus Tan</div>
+        </div>
+      </div>
+
+      <!-- Card 7 — case-study -->
+      <div class="blog-card" data-cat="case-study">
+        <div class="blog-img" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+          <svg width="52" height="52" fill="none" stroke="#16a34a" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge case-study">Case Study</span>
+          <h3>8-Week Odoo Rollout: How a Vietnam Retail Chain Went Live Faster Than Expected</h3>
+          <p class="blog-excerpt">Most ERP projects drag on for months. Here's how we delivered a 6-module Odoo implementation in under 8 weeks — and what made it possible...</p>
+          <div class="blog-meta">Mar 15, 2026 &nbsp;·&nbsp; 5 min &nbsp;·&nbsp; Sarah Nguyen</div>
+        </div>
+      </div>
+
+      <!-- Card 8 — industry -->
+      <div class="blog-card" data-cat="industry">
+        <div class="blog-img" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);">
+          <svg width="52" height="52" fill="none" stroke="#0284c7" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+        <div class="blog-body">
+          <span class="cat-badge industry">Industry</span>
+          <h3>PDPA Compliance and Your ERP: What Singapore Businesses Need to Know</h3>
+          <p class="blog-excerpt">Singapore's Personal Data Protection Act has real implications for how your ERP stores and processes customer data. Here's a practical compliance checklist...</p>
+          <div class="blog-meta">Mar 8, 2026 &nbsp;·&nbsp; 6 min &nbsp;·&nbsp; James Lim</div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="no-results" id="noResults">
+        <p>No articles found. Try a different search or category.</p>
+      </div>
+
+    </div><!-- /blog-grid -->
+  </div>
+</section>
+
+<!-- NEWSLETTER CTA -->
+<section class="newsletter-section">
+  <canvas id="ctaCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+  <div class="container newsletter-inner">
+    <h2>Never Miss an ERP Insight</h2>
+    <p>Get practical Odoo tips, case studies, and industry updates — straight to your inbox. No spam, ever.</p>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" placeholder="Your work email" autocomplete="off" id="newsletterEmail"/>
+      <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+    <p class="newsletter-note">Join 500+ ERP professionals across Southeast Asia</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logos">
+          <div class="footer-logo"><img src="../TechNext Branding/Logo/TechNext Logo.png" alt="TechNext"/></div>
+          <div class="footer-logo-sep"></div>
+          <div class="odoo-partner-logo">
+            <img src="../TechNext Branding/Logo/Odoo Ready Partner Logo.png" alt="Odoo Ready Partner"/>
+          </div>
+        </div>
+        <p class="footer-desc">Certified Odoo Ready Partner specialising in ERP implementation, customisation, and support across Southeast Asia since 2018.</p>
+        <div class="footer-badge"><span class="dot"></span> Odoo Ready Partner</div>
+        <div class="footer-offices">
+          <p>Our Offices</p>
+          <div class="office"><span class="office-dot"></span> Singapore — 261 Waterloo Street #03-32</div>
+          <div class="office"><span class="office-dot"></span> Ho Chi Minh City, Vietnam</div>
+          <div class="office"><span class="office-dot"></span> BGC, Taguig, Philippines</div>
+          <div class="office" style="margin-top:10px; color:rgba(255,255,255,.55);">+65 8427 2549 &nbsp;·&nbsp; sales@technext.asia</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>ERP Solutions</h5>
+        <ul>
+          <li><a href="#" class="hl">Odoo Implementation</a></li>
+          <li><a href="#">Odoo Customisation</a></li>
+          <li><a href="#">System Integration</a></li>
+          <li><a href="#">Data Migration</a></li>
+          <li><a href="#">Odoo Hosting</a></li>
+          <li><a href="#">Odoo Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="#">Odoo ERP Guide</a></li>
+          <li><a href="#">Implementation FAQ</a></li>
+          <li><a href="#">Odoo Modules</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+        <div style="margin-top:28px;">
+          <h5>Follow Us</h5>
+          <div class="footer-socials" style="margin-top:10px; flex-wrap:wrap; gap:8px;">
+            <a class="social-btn" href="#" title="LinkedIn"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+            <a class="social-btn" href="#" title="Facebook"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+            <a class="social-btn" href="#" title="Instagram"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+            <a class="social-btn" href="#" title="TikTok"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.54V6.79a4.85 4.85 0 01-1.02-.1z"/></svg></a>
+            <a class="social-btn" href="#" title="Threads"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.471 12.01v-.017c.029-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.594 12c.022 3.089.713 5.5 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79a5.55 5.55 0 01-2.504-.493C8.516 17.19 7.5 16.143 7.5 14.817c0-1.41 1.09-2.507 3.239-3.042.904-.226 1.961-.34 3.164-.345.356 0 .706.014 1.047.04-.148-.95-.48-1.678-1.003-2.135-.644-.564-1.612-.855-2.875-.868h-.07c-.97 0-2.264.27-3.091 1.646l-1.757-1.098C7.268 7.199 9.05 6.424 11.007 6.424h.09c3.609.05 5.744 2.207 5.74 5.874v.012c0 .138-.003.274-.01.411.48.209.907.465 1.27.765 1.019.85 1.664 2.008 1.869 3.345.2 1.305-.026 3.152-1.431 4.527-1.787 1.75-3.948 2.611-6.349 2.642z"/></svg></a>
+            <a class="social-btn" href="#" title="YouTube"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider"/>
+    <div class="footer-bottom">
+      <p>© 2026 TechNext — All rights reserved.</p>
+      <p style="font-size:12px; color:rgba(255,255,255,.25);">Registered in Singapore · UEN: XXXXXXXX</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── DARK MODE ── */
+  const darkToggle = document.getElementById('darkToggle');
+  darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  /* ── NAV SCROLL SHADOW ── */
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  /* ── CATEGORY FILTER ── */
+  let activeFilter = 'all';
+  let searchQuery  = '';
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  /* ── SEARCH FILTER ── */
+  document.getElementById('blogSearch').addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  function applyFilters() {
+    const cards = document.querySelectorAll('.blog-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cat   = card.dataset.cat;
+      const title = card.querySelector('h3').textContent.toLowerCase();
+
+      const catMatch    = (activeFilter === 'all') || (cat === activeFilter);
+      const searchMatch = (searchQuery === '') || title.includes(searchQuery);
+
+      if (catMatch && searchMatch) {
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+
+    /* Also filter the featured card by search (category filter doesn't hide it) */
+    const featured = document.getElementById('featuredCard');
+    const featuredTitle = featured.querySelector('h2').textContent.toLowerCase();
+    if (searchQuery !== '' && !featuredTitle.includes(searchQuery)) {
+      featured.style.display = 'none';
+    } else {
+      featured.style.display = '';
+    }
+  }
+
+  /* ── NEWSLETTER ── */
+  function subscribeNewsletter() {
+    const input = document.getElementById('newsletterEmail');
+    const btn   = input.nextElementSibling;
+    const email = input.value.trim();
+    if (!email || !email.includes('@')) {
+      input.style.borderColor = '#ef4444';
+      input.focus();
+      setTimeout(() => { input.style.borderColor = ''; }, 2000);
+      return;
+    }
+    btn.textContent = 'Subscribed!';
+    btn.style.background = 'linear-gradient(135deg,#22c55e,#4ade80)';
+    btn.disabled = true;
+    input.disabled = true;
+    input.value = '';
+    input.placeholder = 'Thank you for subscribing!';
+  }
+
+  /* ── FLOATING LIGHTS — reusable factory ── */
+  function initFloatingLights(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const COLORS = [[74,108,247],[124,143,255],[99,102,241],[139,92,246],[14,165,233]];
+    let W, H, lights = [];
+
+    function mkLight() {
+      return {
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 2.0, vy: (Math.random() - 0.5) * 1.6,
+        r: Math.random() * 120 + 60, baseAlpha: Math.random() * 0.12 + 0.04,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        phase: Math.random() * Math.PI * 2, phaseSpeed: Math.random() * 0.004 + 0.001,
+      };
+    }
+
+    function resize() {
+      const parent = canvas.parentElement;
+      W = canvas.width  = parent.offsetWidth;
+      H = canvas.height = parent.offsetHeight;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      lights.forEach(l => {
+        l.x += l.vx; l.y += l.vy; l.phase += l.phaseSpeed;
+        if (l.x < -l.r) l.x = W + l.r; if (l.x > W + l.r) l.x = -l.r;
+        if (l.y < -l.r) l.y = H + l.r; if (l.y > H + l.r) l.y = -l.r;
+        const a = l.baseAlpha + Math.sin(l.phase) * 0.025;
+        const [r, g, b] = l.color;
+        const grd = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
+        grd.addColorStop(0, `rgba(${r},${g},${b},${a})`);
+        grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(l.x, l.y, l.r, 0, Math.PI * 2); ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    lights = Array.from({ length: 6 }, mkLight);
+    draw();
+  }
+
+  initFloatingLights('heroCanvas');
+  initFloatingLights('ctaCanvas');
+
+  /* ── PAGE EXIT TRANSITION ── */
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto') && href.includes('.html')) {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.style.transition = 'opacity .22s ease, transform .22s ease';
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(-6px)';
+        setTimeout(() => { window.location.href = href; }, 230);
+      });
+    }
+  });
+
+  /* MOBILE MENU TOGGLE */
+  (function() {
+    const hamburger = document.getElementById('navHamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (!hamburger || !mobileMenu) return;
+    hamburger.addEventListener('click', e => {
+      e.stopPropagation();
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      }
+    });
+  })();
+</script>
+</body>
+</html>

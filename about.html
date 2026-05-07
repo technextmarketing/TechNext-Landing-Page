@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — TechNext</title>
+  <meta name="description" content="TechNext is a certified Odoo Ready Partner helping businesses across Singapore, Vietnam and the Philippines modernise their operations with ERP and AI."/>
+  <meta name="keywords" content="about TechNext, Odoo partner Singapore, Odoo ERP team, certified Odoo consultants, ERP company Southeast Asia, Odoo Ready Partner"/>
+  <meta name="author" content="TechNext"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://technext.asia/about"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="About TechNext — Certified Odoo ERP Partner"/>
+  <meta property="og:description" content="TechNext is a certified Odoo Ready Partner helping businesses across Singapore, Vietnam and the Philippines modernise their operations with ERP and AI."/>
+  <meta property="og:url" content="https://technext.asia/about"/>
+  <meta property="og:site_name" content="TechNext"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="About TechNext — Certified Odoo ERP Partner"/>
+  <meta name="twitter:description" content="TechNext is a certified Odoo Ready Partner with offices in Singapore, Vietnam and the Philippines."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #4a6cf7; --blue-dark: #3253DC; --blue-light: #7c8fff; --blue-pale: #eef1fe;
+      --dark: #0a0e2a; --dark-card: #0f1535;
+      --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB; --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF; --gray-500: #6B7280; --gray-700: #374151; --gray-900: #111827;
+      --white: #FFFFFF; --green: #4ade80;
+      --radius: 12px; --radius-lg: 20px;
+      --shadow: 0 4px 24px rgba(74,108,247,.10); --shadow-lg: 0 12px 48px rgba(74,108,247,.18);
+      --gradient: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      --gradient-dark: linear-gradient(135deg, #0a0e2a 0%, #0e1640 60%, #0a1a3a 100%);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-900); background: var(--white); overflow-x: hidden; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+    .section { padding: 96px 0; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 15px; border-radius: 10px; padding: 14px 28px; cursor: pointer; text-decoration: none; transition: all .22s; border: 2px solid transparent; white-space: nowrap; line-height: 1; }
+    .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 20px rgba(74,108,247,.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(74,108,247,.45); }
+    .btn-outline { background: transparent; color: var(--blue); border-color: var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: #fff; }
+    .btn-ghost-white { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.25); }
+    .btn-ghost-white:hover { background: rgba(255,255,255,.22); }
+    .tag { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-pale); color: var(--blue-dark); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 16px; }
+    .tag.light { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.15); }
+    .section-title { font-family: 'Manrope', sans-serif; font-size: clamp(26px, 3.5vw, 40px); font-weight: 800; color: var(--gray-900); line-height: 1.15; margin-bottom: 14px; letter-spacing: -.02em; }
+    .section-title.white { color: #fff; }
+    .section-sub { font-size: 16px; color: var(--gray-500); line-height: 1.75; max-width: 560px; }
+    .section-sub.white { color: rgba(255,255,255,.6); }
+
+    /* ANN BAR */
+    .ann-bar { background: var(--gradient); color: #fff; padding: 10px 24px; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: .01em; line-height: 1.5; }
+    .ann-bar a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--gray-200); transition: box-shadow .2s; }
+    .nav.scrolled { box-shadow: 0 4px 20px rgba(74,108,247,.08); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .logo img { height: 48px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links li a { font-size: 14px; font-weight: 600; color: var(--gray-600, #4B5563); text-decoration: none; padding: 8px 13px; border-radius: 8px; transition: all .15s; }
+    .nav-links li a:hover { color: var(--blue); background: var(--blue-pale); }
+    .nav-links .nav-erp a { color: var(--blue); font-weight: 700; }
+    .nav-links .nav-erp a:hover { background: var(--blue-pale); }
+    .nav-links .nav-active a { color: var(--blue); background: var(--blue-pale); }
+    .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
+    .dark-toggle { width: 38px; height: 38px; border-radius: 9px; border: 1.5px solid var(--gray-200); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--gray-500); transition: all .2s; margin-right: 10px; flex-shrink: 0; }
+    .dark-toggle:hover { background: var(--blue-pale); color: var(--blue); border-color: var(--blue); }
+    .dark-toggle .icon-sun { display: none; }
+    .dark-toggle .icon-moon { display: block; }
+    body.dark .dark-toggle .icon-sun { display: block; }
+    body.dark .dark-toggle .icon-moon { display: none; }
+
+    /* ── HERO ── */
+    .about-hero { background: var(--gradient-dark); padding: 88px 0 80px; position: relative; overflow: hidden; }
+    .about-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(32px, 4.5vw, 52px); font-weight: 900; color: #fff; line-height: 1.08; letter-spacing: -.03em; margin-bottom: 20px; }
+    .about-hero h1 em { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
+    .about-hero p { font-size: 17px; color: rgba(255,255,255,.6); line-height: 1.75; margin-bottom: 32px; }
+    .about-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    .about-hero-visual { display: flex; flex-direction: column; gap: 14px; }
+    .hero-stat-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 22px 26px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 18px; }
+    .hero-stat-card .stat-icon { width: 48px; height: 48px; border-radius: 13px; background: rgba(74,108,247,.25); display: flex; align-items: center; justify-content: center; color: var(--blue-light); flex-shrink: 0; }
+    .hero-stat-card .stat-icon svg { width: 22px; height: 22px; }
+    .hero-stat-card strong { font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 900; color: #fff; display: block; line-height: 1; margin-bottom: 3px; }
+    .hero-stat-card span { font-size: 13px; color: rgba(255,255,255,.45); font-weight: 500; }
+    .hero-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── STORY ── */
+    .story-section { padding: 96px 0; }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .story-img { position: relative; }
+    .story-img-main { width: 100%; border-radius: var(--radius-lg); overflow: hidden; position: relative; height: 380px; }
+    #storyMap { width: 100%; height: 100%; }
+    /* Day mode — invert dark tiles to light, cool blue tint */
+    .leaflet-tile-pane { filter: invert(0.88) hue-rotate(180deg) brightness(1.05) contrast(0.92) sepia(0.08); transition: filter .4s ease; }
+    /* Night mode — deep navy brand tint */
+    body.dark .leaflet-tile-pane { filter: sepia(1) hue-rotate(185deg) saturate(2.2) brightness(0.55); }
+    /* Leaflet overrides */
+    .leaflet-container { background: #e8eef8; font-family: 'Inter', sans-serif; }
+    body.dark .leaflet-container { background: #06091e; }
+    /* Zoom controls — day */
+    .leaflet-control-zoom { border: 1px solid rgba(74,108,247,.2) !important; border-radius: 10px !important; overflow: hidden; }
+    .leaflet-control-zoom a { background: #fff !important; color: #4a6cf7 !important; border-color: rgba(74,108,247,.15) !important; font-size: 16px !important; line-height: 28px !important; }
+    .leaflet-control-zoom a:hover { background: #eef1fe !important; color: #3253dc !important; }
+    .leaflet-control-attribution { background: rgba(255,255,255,.85) !important; color: rgba(0,0,0,.35) !important; font-size: 10px; backdrop-filter: blur(4px); }
+    .leaflet-control-attribution a { color: rgba(74,108,247,.7) !important; }
+    /* Zoom controls — night */
+    body.dark .leaflet-control-zoom a { background: #0f1535 !important; color: #7c8fff !important; }
+    body.dark .leaflet-control-zoom a:hover { background: #1a2456 !important; color: #fff !important; }
+    body.dark .leaflet-control-attribution { background: rgba(6,9,30,.85) !important; color: rgba(124,143,255,.35) !important; }
+    body.dark .leaflet-control-attribution a { color: rgba(124,143,255,.5) !important; }
+    /* Popup — day */
+    .leaflet-popup-content-wrapper { background: #fff !important; border: 1px solid rgba(74,108,247,.15) !important; border-radius: 12px !important; box-shadow: 0 8px 32px rgba(74,108,247,.15) !important; padding: 0 !important; }
+    .leaflet-popup-content { margin: 0 !important; padding: 14px 18px !important; color: #111827 !important; min-width: 160px; }
+    .leaflet-popup-tip { background: #fff !important; }
+    .popup-city { color: #111827 !important; }
+    .popup-role { color: #4a6cf7 !important; }
+    .popup-detail { color: #6b7280 !important; }
+    /* Popup — night */
+    body.dark .leaflet-popup-content-wrapper { background: #0f1535 !important; border-color: rgba(74,108,247,.25) !important; box-shadow: 0 8px 32px rgba(0,0,0,.5) !important; }
+    body.dark .leaflet-popup-content { color: #fff !important; }
+    body.dark .leaflet-popup-tip { background: #0f1535 !important; }
+    body.dark .popup-city { color: #fff !important; }
+    body.dark .popup-role { color: rgba(124,143,255,.9) !important; }
+    body.dark .popup-detail { color: rgba(255,255,255,.45) !important; }
+    /* Custom map markers */
+    .map-pin { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+    .map-pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 3px rgba(74,108,247,.5); position: relative; z-index: 2; }
+    .map-pin-ring { position: absolute; top: 50%; left: 50%; width: 32px; height: 32px; margin: -16px 0 0 -16px; border-radius: 50%; border: 1.5px solid rgba(74,108,247,.5); animation: pinRing 2s ease-out infinite; }
+    .map-pin-ring2 { animation-delay: .8s; opacity: .5; }
+    @keyframes pinRing { 0%{transform:scale(.4);opacity:.9} 100%{transform:scale(1.8);opacity:0} }
+    .map-popup { font-family: 'Inter', sans-serif; }
+    .leaflet-popup-close-button { top: 8px !important; right: 10px !important; color: var(--gray-400) !important; }
+    body.dark .leaflet-popup-close-button { color: rgba(255,255,255,.4) !important; }
+    .popup-city { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .popup-role { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+    .popup-detail { font-size: 11px; line-height: 1.5; }
+    .story-badge { position: absolute; bottom: -16px; right: -16px; background: var(--white); border: 2px solid var(--gray-100); border-radius: 14px; padding: 14px 20px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; }
+    body.dark .story-badge { background: var(--dark-card); border-color: rgba(255,255,255,.1); }
+    .story-badge-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; color: var(--blue); }
+    body.dark .story-badge-icon { background: rgba(74,108,247,.2); color: var(--blue-light); }
+    .story-badge strong { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 900; color: var(--gray-900); display: block; }
+    body.dark .story-badge strong { color: #fff; }
+    .story-badge span { font-size: 12px; color: var(--gray-500); }
+    body.dark .story-badge span { color: rgba(255,255,255,.4); }
+    .story-text h2 { font-family: 'Manrope', sans-serif; font-size: clamp(26px, 3vw, 36px); font-weight: 800; color: var(--gray-900); letter-spacing: -.02em; margin-bottom: 16px; line-height: 1.2; }
+    body.dark .story-text h2 { color: #fff; }
+    .story-text p { font-size: 15px; color: var(--gray-500); line-height: 1.8; margin-bottom: 16px; }
+    body.dark .story-text p { color: rgba(255,255,255,.5); }
+    .story-highlights { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+    .story-hl { display: flex; align-items: flex-start; gap: 12px; }
+    .story-hl-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 7px; }
+    .story-hl p { font-size: 14px; color: var(--gray-600, #4B5563); line-height: 1.65; margin: 0; }
+    body.dark .story-hl p { color: rgba(255,255,255,.55); }
+
+    /* ── VALUES ── */
+    .values-section { padding: 96px 0; background: var(--gray-50); }
+    body.dark .values-section { background: #080c22; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+    .value-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius-lg); padding: 32px; transition: all .25s; position: relative; overflow: hidden; }
+    body.dark .value-card { background: var(--dark-card); border-color: rgba(255,255,255,.08); }
+    .value-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient); opacity: 0; transition: opacity .25s; }
+    .value-card:hover { border-color: var(--blue); box-shadow: var(--shadow); transform: translateY(-4px); }
+    .value-card:hover::before { opacity: 1; }
+    .value-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--blue); }
+    body.dark .value-icon { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    .value-icon svg { width: 24px; height: 24px; }
+    .value-card h3 { font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; letter-spacing: -.01em; }
+    body.dark .value-card h3 { color: #fff; }
+    .value-card p { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+    body.dark .value-card p { color: rgba(255,255,255,.45); }
+
+    /* ── TEAM ── */
+    .team-section { padding: 96px 0; }
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+    .team-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius-lg); overflow: hidden; transition: all .25s; }
+    body.dark .team-card { background: var(--dark-card); border-color: rgba(255,255,255,.08); }
+    .team-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--blue); }
+    .team-avatar { width: 100%; aspect-ratio: 1; background: var(--gradient-dark); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .team-avatar-initials { font-family: 'Manrope', sans-serif; font-size: 32px; font-weight: 900; color: rgba(255,255,255,.7); }
+    .team-avatar-bg { position: absolute; inset: 0; opacity: .3; }
+    .team-card-body { padding: 20px; }
+    .team-card h3 { font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 800; color: var(--gray-900); margin-bottom: 3px; }
+    body.dark .team-card h3 { color: #fff; }
+    .team-card .role { font-size: 12px; font-weight: 600; color: var(--blue); margin-bottom: 8px; }
+    body.dark .team-card .role { color: var(--blue-light); }
+    .team-card .bio { font-size: 12px; color: var(--gray-500); line-height: 1.6; margin-bottom: 14px; }
+    body.dark .team-card .bio { color: rgba(255,255,255,.4); }
+    .team-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .team-location { font-size: 11px; color: var(--gray-400); display: flex; align-items: center; gap: 4px; }
+    body.dark .team-location { color: rgba(255,255,255,.3); }
+    .team-linkedin { width: 28px; height: 28px; border-radius: 7px; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; color: var(--blue); text-decoration: none; transition: all .15s; }
+    body.dark .team-linkedin { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    .team-linkedin:hover { background: var(--blue); color: #fff; }
+
+    /* ── TIMELINE ── */
+    .timeline-section { padding: 96px 0; background: var(--gradient-dark); position: relative; overflow: hidden; }
+    .timeline-section .section-header { text-align: center; margin-bottom: 64px; }
+    .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+    .timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.1); transform: translateX(-50%); }
+    .timeline-item { display: grid; grid-template-columns: 1fr 48px 1fr; gap: 0; align-items: start; margin-bottom: 48px; }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-content { padding: 24px 28px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius-lg); backdrop-filter: blur(8px); transition: all .25s; }
+    .timeline-content:hover { background: rgba(74,108,247,.15); border-color: rgba(74,108,247,.35); }
+    .timeline-item:nth-child(odd) .timeline-content { margin-right: 24px; }
+    .timeline-item:nth-child(even) .timeline-content { margin-left: 24px; grid-column: 3; }
+    .timeline-item:nth-child(even) .timeline-center { grid-column: 2; grid-row: 1; }
+    .timeline-item:nth-child(even) .timeline-empty { display: none; }
+    .timeline-center { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 20px; }
+    .timeline-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--blue); border: 3px solid #0a0e2a; box-shadow: 0 0 0 3px rgba(74,108,247,.4); z-index: 1; flex-shrink: 0; }
+    .timeline-year { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 800; color: var(--blue-light); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+    .timeline-content h3 { font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .timeline-content p { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.65; }
+    .timeline-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 100px; margin-bottom: 8px; }
+    .timeline-badge.blue { background: rgba(74,108,247,.2); color: var(--blue-light); }
+    .timeline-badge.green { background: rgba(74,222,128,.12); color: var(--green); }
+
+    /* ── OFFICES ── */
+    .offices-section { padding: 96px 0; }
+    .offices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+    .office-card { border-radius: var(--radius-lg); overflow: hidden; border: 1.5px solid var(--gray-200); transition: all .25s; }
+    body.dark .office-card { border-color: rgba(255,255,255,.08); }
+    .office-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--blue); }
+    .office-map { height: 140px; background: var(--gradient-dark); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .office-map-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(74,108,247,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(74,108,247,.08) 1px, transparent 1px); background-size: 24px 24px; }
+    .office-map-pin { width: 36px; height: 36px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 4px 16px rgba(74,108,247,.5); z-index: 1; }
+    .office-map-ring { position: absolute; width: 80px; height: 80px; border-radius: 50%; border: 2px solid rgba(74,108,247,.3); animation: officeRing 2s ease-out infinite; }
+    .office-map-ring:nth-child(2) { animation-delay: .6s; opacity: .6; }
+    @keyframes officeRing { 0%{transform:scale(.5);opacity:.8} 100%{transform:scale(1.8);opacity:0} }
+    .office-body { padding: 22px 24px; background: var(--white); }
+    body.dark .office-body { background: var(--dark-card); }
+    .office-flag { font-size: 20px; margin-bottom: 8px; display: block; }
+    .office-body h3 { font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; }
+    body.dark .office-body h3 { color: #fff; }
+    .office-body .address { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin-bottom: 12px; }
+    body.dark .office-body .address { color: rgba(255,255,255,.4); }
+    .office-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .office-tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 100px; background: var(--blue-pale); color: var(--blue-dark); }
+    body.dark .office-tag { background: rgba(74,108,247,.15); color: var(--blue-light); }
+
+    /* ── CTA ── */
+    .about-cta { padding: 96px 0; background: var(--gradient-dark); position: relative; overflow: hidden; text-align: center; }
+    .about-cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .about-cta h2 { font-family: 'Manrope', sans-serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 900; color: #fff; letter-spacing: -.03em; margin-bottom: 16px; line-height: 1.1; }
+    .about-cta p { font-size: 17px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 36px; }
+    .about-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark-card, #0f1535); color: rgba(255,255,255,.5); padding: 72px 0 36px; }
+    .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+    .footer-logos { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .footer-logo { display: block; }
+    .footer-logo img { height: 32px; width: auto; display: block; filter: brightness(0) invert(1); }
+    .footer-logo-sep { width: 1px; height: 36px; background: rgba(255,255,255,.12); flex-shrink: 0; }
+    .odoo-partner-logo img { height: 44px; width: auto; display: block; }
+    .footer-desc { font-size: 14px; line-height: 1.75; margin-bottom: 22px; max-width: 280px; }
+    .footer-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(74,108,247,.15); border: 1px solid rgba(74,108,247,.25); border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); }
+    .footer-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .footer-col h5 { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.85); margin-bottom: 18px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul li a { font-size: 14px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .15s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-col ul li a.hl { color: var(--blue-light); font-weight: 600; }
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,.07); margin-bottom: 28px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 13px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn { width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background .15s; color: rgba(255,255,255,.6); }
+    .social-btn:hover { background: var(--blue); color: #fff; }
+    .footer-offices { margin-top: 28px; }
+    .footer-offices p { font-size: 12px; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 8px; }
+    .footer-offices .office { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
+    .office-dot-sm { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-light); flex-shrink: 0; }
+
+    /* DARK MODE */
+    body.dark {
+      background: var(--dark);
+      --gray-50: #0f1535; --gray-100: #131b3d; --gray-200: #1e2a4a;
+      --gray-300: #2a3a5c; --gray-400: #4a5f80; --gray-500: #8899b8;
+      --gray-700: #c8d6f0; --gray-900: #eef2ff; --white: #0a0e2a;
+    }
+    body.dark .nav { background: rgba(10,14,42,.96); border-bottom-color: rgba(255,255,255,.08); }
+    body.dark .logo img { filter: brightness(0) invert(1); }
+    body.dark .nav-links li a { color: rgba(255,255,255,.7); }
+    body.dark .nav-links li a:hover { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    body.dark .nav-links .nav-erp a { color: var(--blue-light); }
+    body.dark .nav-links .nav-active a { color: var(--blue-light); background: rgba(74,108,247,.15); }
+    body.dark footer { background: #060919; }
+
+    /* PAGE TRANSITION */
+    @keyframes pageFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    body { animation: pageFadeIn .32s ease both; }
+    body.dark .values-section { background: #080c22; }
+    body.dark .story-section { background: var(--dark); }
+    body.dark .team-section { background: var(--dark); }
+    body.dark .offices-section { background: var(--dark); }
+
+    @media (max-width: 960px) {
+      .about-hero-inner { grid-template-columns: 1fr; }
+      .story-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .offices-grid { grid-template-columns: 1fr 1fr; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .timeline::before { left: 24px; }
+      .timeline-item { grid-template-columns: 48px 1fr; }
+      .timeline-item:nth-child(even) .timeline-content { grid-column: 2; margin-left: 0; }
+      .timeline-item:nth-child(odd) .timeline-content { grid-column: 2; margin-right: 0; }
+      .timeline-empty { display: none !important; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .nav-links { display: none; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .offices-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stat-row { grid-template-columns: 1fr; }
+    }
+
+    /* MOBILE NAV */
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 38px; height: 38px; background: transparent; border: 1.5px solid var(--gray-200); border-radius: 9px; cursor: pointer; padding: 8px; margin-left: 8px; flex-shrink: 0; transition: all .2s; }
+    .nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gray-500); border-radius: 2px; transition: all .25s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    body.dark .nav-hamburger { border-color: rgba(255,255,255,.15); }
+    body.dark .nav-hamburger span { background: rgba(255,255,255,.7); }
+    .mobile-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 99; background: var(--white); border-bottom: 1px solid var(--gray-200); box-shadow: 0 8px 32px rgba(0,0,0,.1); padding: 16px 20px 24px; }
+    body.dark .mobile-menu { background: #0a0e2a; border-color: rgba(255,255,255,.08); }
+    .mobile-menu.open { display: block; animation: menuSlide .2s ease; }
+    @keyframes menuSlide { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+    .mobile-links { list-style: none; display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; }
+    .mobile-links li a { display: block; font-size: 15px; font-weight: 600; color: var(--gray-700); padding: 10px 12px; border-radius: 8px; text-decoration: none; transition: all .15s; }
+    .mobile-links li a:hover, .mobile-links li a:active { background: var(--blue-pale); color: var(--blue); }
+    .mobile-links .nav-erp a { color: var(--blue); }
+    .mobile-links .nav-active a { color: var(--blue); background: var(--blue-pale); }
+    body.dark .mobile-links li a { color: rgba(255,255,255,.75); }
+    body.dark .mobile-links li a:hover { background: rgba(74,108,247,.15); color: var(--blue-light); }
+    body.dark .mobile-links .nav-erp a { color: var(--blue-light); }
+    body.dark .mobile-links .nav-active a { color: var(--blue-light); background: rgba(74,108,247,.15); }
+    .mobile-cta { width: 100%; text-align: center; justify-content: center; }
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none !important; }
+      .nav-cta { display: none; }
+      .logo { flex: 1; }
+      .logo img { height: 36px; max-width: 150px; object-fit: contain; }
+    }
+
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 16px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About TechNext",
+    "url": "https://technext.asia/about",
+    "description": "TechNext is a certified Odoo Ready Partner helping businesses across Southeast Asia modernise their operations with ERP and AI automation.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "TechNext",
+      "url": "https://technext.asia"
+    }
+  }
+  </script>
+</head>
+<body>
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="ann-bar">
+  TechNext is a certified <strong>Odoo Ready Partner</strong> — claim your free ERP consultation this month. <a href="contact.html">Book now →</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo"><img src="../TechNext Branding/Logo/TechNext Logo.png" alt="TechNext"/></a>
+    <ul class="nav-links">
+      <li class="nav-erp"><a href="index.html#services">Odoo ERP</a></li>
+      <li><a href="index.html#modules">Modules</a></li>
+      <li class="nav-active"><a href="about.html">About</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="dark-toggle" id="darkToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a href="contact.html" class="btn btn-primary nav-cta">Get Free Consultation</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-links">
+    <li class="nav-erp"><a href="index.html#services">Odoo ERP</a></li>
+    <li><a href="index.html#modules">Modules</a></li>
+    <li class="nav-active"><a href="about.html">About</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="btn btn-primary mobile-cta">Get Free Consultation</a>
+</div>
+
+<!-- HERO -->
+<section class="about-hero">
+  <canvas id="heroCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+  <div class="container about-hero-inner">
+    <div>
+      <div class="tag light">
+        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Our Story
+      </div>
+      <h1>We Help Businesses<br/><em>Run Smarter</em><br/>with Odoo ERP</h1>
+      <p>Founded in Singapore, TechNext is a certified Odoo Ready Partner with a mission to make enterprise-grade ERP accessible to growing businesses across Southeast Asia.</p>
+      <div class="about-hero-ctas">
+        <a href="contact.html" class="btn btn-primary">Book a Free Consultation</a>
+        <a href="#our-story" class="btn btn-ghost-white">Our Story →</a>
+      </div>
+    </div>
+    <div class="about-hero-visual">
+      <div class="hero-stat-row">
+        <div class="hero-stat-card">
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div><strong>50+</strong><span>Clients Served</span></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><strong>8 Yrs</strong><span>Since 2018</span></div>
+        </div>
+      </div>
+      <div class="hero-stat-row">
+        <div class="hero-stat-card">
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+          <div><strong>3</strong><span>Countries</span></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div><strong>4.9/5</strong><span>Client Rating</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUR STORY -->
+<section class="story-section" id="our-story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img">
+        <div class="story-img-main">
+          <div id="storyMap"></div>
+        </div>
+        <div class="story-badge">
+          <div class="story-badge-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div>
+            <strong>Odoo Ready Partner</strong>
+            <span>Certified since 2018</span>
+          </div>
+        </div>
+      </div>
+      <div class="story-text">
+        <div class="tag">Our Story</div>
+        <h2>Built for Businesses That Are Ready to Grow</h2>
+        <p>TechNext was founded in 2018 by a team of enterprise software veterans who saw a gap in the market — growing businesses in Southeast Asia deserved the same powerful tools as large corporations, without the complexity or the price tag.</p>
+        <p>We chose Odoo as our platform of choice because it uniquely combines deep functionality with flexibility. Today, we are a certified Odoo Ready Partner with implementations spanning manufacturing, retail, F&B, logistics, and professional services.</p>
+        <div class="story-highlights">
+          <div class="story-hl">
+            <div class="story-hl-dot"></div>
+            <p>Headquartered in Singapore with on-the-ground teams in Vietnam and the Philippines</p>
+          </div>
+          <div class="story-hl">
+            <div class="story-hl-dot"></div>
+            <p>Deep expertise across Odoo Accounting, Inventory, Manufacturing, HR, and AI automation modules</p>
+          </div>
+          <div class="story-hl">
+            <div class="story-hl-dot"></div>
+            <p>Average go-live time of 8–12 weeks with dedicated post-implementation support</p>
+          </div>
+          <div class="story-hl">
+            <div class="story-hl-dot"></div>
+            <p>4.9/5 client satisfaction rating across 50+ completed projects</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="tag">What We Stand For</div>
+      <h2 class="section-title">Our Core Values</h2>
+      <p class="section-sub" style="margin: 0 auto;">Everything we do is guided by these principles — from how we build ERP systems to how we treat our clients.</p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+        <h3>Client-First Always</h3>
+        <p>We succeed only when our clients succeed. Every decision — from scoping to go-live — is made with your business outcomes in mind, not just billable hours.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <h3>Speed Without Compromise</h3>
+        <p>We move fast. Our 8–12 week implementation framework is built on years of refined methodology that gets your team productive quickly without cutting corners.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3>Deep Expertise</h3>
+        <p>Our consultants are certified Odoo specialists with real industry experience in manufacturing, retail, logistics, F&B, and professional services.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h3>Long-Term Partnership</h3>
+        <p>We don't disappear after go-live. Most of our clients have worked with us for 3+ years. We're your ERP partner for the long haul — not just the project.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h3>Transparency</h3>
+        <p>Fixed-price quotes. Clear scope. No hidden fees. We communicate openly about timelines, budgets, and any issues that arise — because trust is built through honesty.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Innovation-Driven</h3>
+        <p>We stay ahead of the curve — integrating AI automation, WhatsApp workflows, and the latest Odoo features so your business benefits from cutting-edge technology.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="tag">The People Behind the Work</div>
+      <h2 class="section-title">Meet Our Team</h2>
+      <p class="section-sub" style="margin:0 auto;">Certified Odoo consultants and engineers based across Southeast Asia, committed to delivering ERP that actually works for your business.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">
+          <div class="team-avatar-bg" style="background:linear-gradient(135deg,#4a6cf7,#7c8fff);"></div>
+          <span class="team-avatar-initials">KW</span>
+        </div>
+        <div class="team-card-body">
+          <h3>Kevin Wong</h3>
+          <div class="role">CEO & Co-Founder</div>
+          <p class="bio">10+ years in enterprise software. Leads strategy, partnerships, and key client relationships across SEA.</p>
+          <div class="team-card-footer">
+            <span class="team-location"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Singapore</span>
+            <a href="#" class="team-linkedin"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">
+          <div class="team-avatar-bg" style="background:linear-gradient(135deg,#6366f1,#4a6cf7);"></div>
+          <span class="team-avatar-initials">ST</span>
+        </div>
+        <div class="team-card-body">
+          <h3>Sarah Tan</h3>
+          <div class="role">Head of Delivery</div>
+          <p class="bio">Certified Odoo consultant. Leads implementation methodology and ensures every project ships on time.</p>
+          <div class="team-card-footer">
+            <span class="team-location"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Singapore</span>
+            <a href="#" class="team-linkedin"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">
+          <div class="team-avatar-bg" style="background:linear-gradient(135deg,#0ea5e9,#4a6cf7);"></div>
+          <span class="team-avatar-initials">NM</span>
+        </div>
+        <div class="team-card-body">
+          <h3>Nguyen Van Minh</h3>
+          <div class="role">Senior ERP Consultant</div>
+          <p class="bio">Specialises in Odoo Manufacturing and Inventory. Leads our Vietnam office and regional delivery team.</p>
+          <div class="team-card-footer">
+            <span class="team-location"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Ho Chi Minh City</span>
+            <a href="#" class="team-linkedin"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">
+          <div class="team-avatar-bg" style="background:linear-gradient(135deg,#4ade80,#0ea5e9);"></div>
+          <span class="team-avatar-initials">MS</span>
+        </div>
+        <div class="team-card-body">
+          <h3>Maria Santos</h3>
+          <div class="role">Project Manager</div>
+          <p class="bio">PMP-certified project manager overseeing Philippine operations and multi-country implementations.</p>
+          <div class="team-card-footer">
+            <span class="team-location"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> BGC, Manila</span>
+            <a href="#" class="team-linkedin"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <canvas id="timelineCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+  <div class="container">
+    <div class="section-header" style="position:relative;z-index:1;">
+      <div class="tag light">Our Journey</div>
+      <h2 class="section-title white">How We Got Here</h2>
+      <p class="section-sub white" style="margin:0 auto;">From a two-person startup to a multi-country Odoo partner — here are the milestones that shaped us.</p>
+    </div>
+    <div class="timeline" style="position:relative;z-index:1;">
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <span class="timeline-badge blue">Founding</span>
+          <h3>TechNext Founded</h3>
+          <p>Incorporated in Singapore with a focus on ERP consulting for SMEs in Southeast Asia.</p>
+        </div>
+        <div class="timeline-center"><div class="timeline-dot"></div><span class="timeline-year">2018</span></div>
+        <div class="timeline-empty"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-empty"></div>
+        <div class="timeline-center"><div class="timeline-dot"></div><span class="timeline-year">2019</span></div>
+        <div class="timeline-content">
+          <span class="timeline-badge green">Partnership</span>
+          <h3>Odoo Ready Partner Certified</h3>
+          <p>Achieved official Odoo Ready Partner status after completing 10 successful implementations.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <span class="timeline-badge blue">Expansion</span>
+          <h3>Vietnam Office Opens</h3>
+          <p>Established a delivery team in Ho Chi Minh City to serve the growing Vietnamese market.</p>
+        </div>
+        <div class="timeline-center"><div class="timeline-dot"></div><span class="timeline-year">2020</span></div>
+        <div class="timeline-empty"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-empty"></div>
+        <div class="timeline-center"><div class="timeline-dot"></div><span class="timeline-year">2022</span></div>
+        <div class="timeline-content">
+          <span class="timeline-badge blue">Expansion</span>
+          <h3>Philippines Office Opens</h3>
+          <p>Launched our BGC, Taguig office to support clients across the Philippine archipelago.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <span class="timeline-badge green">Milestone</span>
+          <h3>50+ Clients Served</h3>
+          <p>Crossed the 50-client milestone with a 4.9/5 satisfaction rating across all completed projects.</p>
+        </div>
+        <div class="timeline-center"><div class="timeline-dot"></div><span class="timeline-year">2023</span></div>
+        <div class="timeline-empty"></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-empty"></div>
+        <div class="timeline-center"><div class="timeline-dot"></div><span class="timeline-year">2024</span></div>
+        <div class="timeline-content">
+          <span class="timeline-badge green">Innovation</span>
+          <h3>AI Automation Practice Launched</h3>
+          <p>Introduced AI-powered automation services including WhatsApp workflows, document AI, and predictive analytics on Odoo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICES -->
+<section class="offices-section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="tag">Where We Are</div>
+      <h2 class="section-title">Our Offices</h2>
+      <p class="section-sub" style="margin:0 auto;">Local presence, regional expertise. Our teams are embedded in the markets they serve.</p>
+    </div>
+    <div class="offices-grid">
+      <div class="office-card">
+        <div class="office-map">
+          <div class="office-map-grid"></div>
+          <div class="office-map-ring"></div>
+          <div class="office-map-ring"></div>
+          <div class="office-map-pin"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        </div>
+        <div class="office-body">
+          <span class="office-flag">🇸🇬</span>
+          <h3>Singapore HQ</h3>
+          <p class="address">261 Waterloo Street #03-32<br/>Singapore 180261</p>
+          <div class="office-tags">
+            <span class="office-tag">Headquarters</span>
+            <span class="office-tag">Sales</span>
+            <span class="office-tag">Consulting</span>
+          </div>
+        </div>
+      </div>
+      <div class="office-card">
+        <div class="office-map">
+          <div class="office-map-grid"></div>
+          <div class="office-map-ring"></div>
+          <div class="office-map-ring"></div>
+          <div class="office-map-pin"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        </div>
+        <div class="office-body">
+          <span class="office-flag">🇻🇳</span>
+          <h3>Vietnam Office</h3>
+          <p class="address">District 1, Ho Chi Minh City<br/>Vietnam</p>
+          <div class="office-tags">
+            <span class="office-tag">Delivery</span>
+            <span class="office-tag">Development</span>
+            <span class="office-tag">Support</span>
+          </div>
+        </div>
+      </div>
+      <div class="office-card">
+        <div class="office-map">
+          <div class="office-map-grid"></div>
+          <div class="office-map-ring"></div>
+          <div class="office-map-ring"></div>
+          <div class="office-map-pin"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        </div>
+        <div class="office-body">
+          <span class="office-flag">🇵🇭</span>
+          <h3>Philippines Office</h3>
+          <p class="address">BGC, Taguig City<br/>Metro Manila, Philippines</p>
+          <div class="office-tags">
+            <span class="office-tag">Delivery</span>
+            <span class="office-tag">Consulting</span>
+            <span class="office-tag">Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="about-cta">
+  <canvas id="ctaCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+  <div class="container about-cta-inner">
+    <div class="tag light" style="margin-bottom:20px;">Work With Us</div>
+    <h2>Ready to Transform Your Business with Odoo ERP?</h2>
+    <p>Join 50+ businesses across Southeast Asia who trust TechNext to run their operations on Odoo. Book a free 30-minute strategy session today.</p>
+    <div class="about-cta-btns">
+      <a href="contact.html" class="btn btn-primary">Book Free Consultation</a>
+      <a href="index.html#services" class="btn btn-ghost-white">Explore Our Services →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logos">
+          <div class="footer-logo"><img src="../TechNext Branding/Logo/TechNext Logo.png" alt="TechNext"/></div>
+          <div class="footer-logo-sep"></div>
+          <div class="odoo-partner-logo"><img src="../TechNext Branding/Logo/Odoo Ready Partner Logo.png" alt="Odoo Ready Partner"/></div>
+        </div>
+        <p class="footer-desc">Certified Odoo Ready Partner specialising in ERP implementation, customisation, and support across Southeast Asia since 2018.</p>
+        <div class="footer-badge"><span class="dot"></span> Odoo Ready Partner</div>
+        <div class="footer-offices">
+          <p>Our Offices</p>
+          <div class="office" style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:4px;display:flex;align-items:center;gap:7px;"><span class="office-dot-sm"></span> Singapore — 261 Waterloo Street #03-32</div>
+          <div class="office" style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:4px;display:flex;align-items:center;gap:7px;"><span class="office-dot-sm"></span> Ho Chi Minh City, Vietnam</div>
+          <div class="office" style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:4px;display:flex;align-items:center;gap:7px;"><span class="office-dot-sm"></span> BGC, Taguig, Philippines</div>
+          <div style="margin-top:10px;font-size:13px;color:rgba(255,255,255,.55);">+65 8427 2549 &nbsp;·&nbsp; sales@technext.asia</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>ERP Solutions</h5>
+        <ul>
+          <li><a href="#" class="hl">Odoo Implementation</a></li>
+          <li><a href="#">Odoo Customisation</a></li>
+          <li><a href="#">System Integration</a></li>
+          <li><a href="#">Data Migration</a></li>
+          <li><a href="#">Odoo Hosting</a></li>
+          <li><a href="#">Odoo Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html" style="color:rgba(255,255,255,.7);font-weight:600;">About Us</a></li>
+          <li><a href="about.html#team">Our Team</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="#">Odoo ERP Guide</a></li>
+          <li><a href="#">Implementation FAQ</a></li>
+          <li><a href="#">Odoo Modules</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+        <div style="margin-top:28px;">
+          <h5>Follow Us</h5>
+          <div class="footer-socials" style="margin-top:10px;flex-wrap:wrap;gap:8px;">
+            <a class="social-btn" href="#" title="LinkedIn"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+            <a class="social-btn" href="#" title="Facebook"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+            <a class="social-btn" href="#" title="Instagram"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+            <a class="social-btn" href="#" title="TikTok"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.54V6.79a4.85 4.85 0 01-1.02-.1z"/></svg></a>
+            <a class="social-btn" href="#" title="YouTube"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider"/>
+    <div class="footer-bottom">
+      <p>© 2026 TechNext — All rights reserved.</p>
+      <p style="font-size:12px;color:rgba(255,255,255,.25);">Registered in Singapore · UEN: XXXXXXXX</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* DARK MODE */
+  document.getElementById('darkToggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  /* NAV SHADOW */
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  /* INTERACTIVE BRANCH MAP */
+  (function() {
+    const map = L.map('storyMap', {
+      center: [8, 112],
+      zoom: 4,
+      zoomControl: true,
+      scrollWheelZoom: false,
+      attributionControl: true,
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19,
+    }).addTo(map);
+
+    const branches = [
+      {
+        latlng: [1.3521, 103.8198],
+        city: 'Singapore',
+        role: 'Headquarters',
+        detail: 'Regional HQ & operations centre',
+        color: '#4a6cf7',
+      },
+      {
+        latlng: [10.8231, 106.6297],
+        city: 'Ho Chi Minh City',
+        role: 'Vietnam Office',
+        detail: 'Implementation & support team',
+        color: '#7c8fff',
+      },
+      {
+        latlng: [14.5995, 120.9842],
+        city: 'Manila',
+        role: 'Philippines Office',
+        detail: 'ERP consulting & delivery',
+        color: '#4ade80',
+      },
+    ];
+
+    branches.forEach(b => {
+      const icon = L.divIcon({
+        className: '',
+        html: `<div style="position:relative;width:56px;height:56px;display:flex;align-items:center;justify-content:center;">
+          <div style="position:absolute;width:56px;height:56px;border-radius:50%;border:1px solid ${b.color};opacity:.25;animation:pinRing 2.4s ease-out infinite;"></div>
+          <div style="position:absolute;width:40px;height:40px;border-radius:50%;border:1.5px solid ${b.color};opacity:.45;animation:pinRing 2.4s ease-out infinite;animation-delay:.6s;"></div>
+          <div style="position:absolute;width:28px;height:28px;border-radius:50%;background:${b.color};opacity:.12;filter:blur(4px);"></div>
+          <div style="width:14px;height:14px;border-radius:50%;background:${b.color};border:2px solid rgba(255,255,255,.9);box-shadow:0 0 8px 2px ${b.color},0 0 20px 4px ${b.color}55;position:relative;z-index:2;"></div>
+        </div>`,
+        iconSize: [56, 56],
+        iconAnchor: [28, 28],
+        popupAnchor: [0, -30],
+      });
+
+      const popup = L.popup({ className: 'map-popup' }).setContent(`
+        <div class="popup-city">${b.city}</div>
+        <div class="popup-role">${b.role}</div>
+        <div class="popup-detail">${b.detail}</div>
+      `);
+
+      L.marker(b.latlng, { icon }).addTo(map).bindPopup(popup);
+    });
+
+    // Disable drag on mobile to avoid scroll interference
+    map.on('touchstart', () => map.dragging.enable());
+  })();
+
+  /* FLOATING LIGHTS — reusable function */
+  function initLights(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const COLORS = [[74,108,247],[124,143,255],[99,102,241],[139,92,246],[14,165,233]];
+    let W, H, lights = [];
+    function mkLight() {
+      return { x: Math.random()*W, y: Math.random()*H, vx:(Math.random()-.5)*2, vy:(Math.random()-.5)*1.6, r:Math.random()*130+60, baseAlpha:Math.random()*.1+.03, color:COLORS[Math.floor(Math.random()*COLORS.length)], phase:Math.random()*Math.PI*2, phaseSpeed:Math.random()*.004+.001 };
+    }
+    function resize() { W=canvas.width=canvas.parentElement.offsetWidth; H=canvas.height=canvas.parentElement.offsetHeight; }
+    function draw() {
+      ctx.clearRect(0,0,W,H);
+      lights.forEach(l => {
+        l.x+=l.vx; l.y+=l.vy; l.phase+=l.phaseSpeed;
+        if(l.x<-l.r)l.x=W+l.r; if(l.x>W+l.r)l.x=-l.r;
+        if(l.y<-l.r)l.y=H+l.r; if(l.y>H+l.r)l.y=-l.r;
+        const a=l.baseAlpha+Math.sin(l.phase)*.025;
+        const [r,g,b]=l.color;
+        const grd=ctx.createRadialGradient(l.x,l.y,0,l.x,l.y,l.r);
+        grd.addColorStop(0,`rgba(${r},${g},${b},${a})`);
+        grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+        ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(l.x,l.y,l.r,0,Math.PI*2); ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    resize(); window.addEventListener('resize', resize);
+    lights = Array.from({length:6}, mkLight);
+    draw();
+  }
+
+  initLights('heroCanvas');
+  initLights('timelineCanvas');
+  initLights('ctaCanvas');
+
+  /* PAGE EXIT TRANSITION */
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto') && href.includes('.html')) {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.style.transition = 'opacity .22s ease, transform .22s ease';
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(-6px)';
+        setTimeout(() => { window.location.href = href; }, 230);
+      });
+    }
+  });
+
+  /* MOBILE MENU TOGGLE */
+  (function() {
+    const hamburger = document.getElementById('navHamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (!hamburger || !mobileMenu) return;
+    hamburger.addEventListener('click', e => {
+      e.stopPropagation();
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      }
+    });
+  })();
+</script>
+</body>
+</html>
