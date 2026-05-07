@@ -1971,6 +1971,16 @@
       document.getElementById('fsDone').style.display = 'block';
       const slotEl = document.getElementById('fsDoneSlot');
       if (slotEl) slotEl.textContent = slot;
+      // Send confirmation email (fire-and-forget — don't block UI)
+      const email = (document.getElementById('f-email') || {}).value || '';
+      const name  = (document.getElementById('f-fname') || {}).value || '';
+      if (email) {
+        fetch('/api/send-confirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, slot })
+        }).catch(err => console.warn('Confirmation email:', err));
+      }
     }
 
     /* ── Sticker toggle ── */
