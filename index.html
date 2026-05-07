@@ -710,18 +710,6 @@
         ✦ Go live in 4–8 weeks
       </div>
     </div>
-    <div class="deco-sticky deco-s2">
-      <div class="deco-note p" style="transform:rotate(2.5deg);">
-        <div class="deco-tape"></div>
-        AI chatbots included
-      </div>
-    </div>
-    <div class="deco-sticky" style="bottom:140px;right:20px;animation:float-c 8s ease-in-out 2s infinite;">
-      <div class="deco-note b" style="transform:rotate(1.5deg);">
-        <div class="deco-tape"></div>
-        No spreadsheets needed
-      </div>
-    </div>
 
     <div class="container">
       <div class="hero-inner">
@@ -792,26 +780,24 @@
           <!-- Step 2: contact details -->
           <div class="fstep" id="fstep2">
             <button class="btn-back" onclick="goStep1()">← Back</button>
-            <div class="ff-row">
-              <div class="ff">
-                <label for="f-fname">First Name</label>
-                <input type="text" id="f-fname" placeholder="John" required/>
-              </div>
-              <div class="ff">
-                <label for="f-lname">Last Name</label>
-                <input type="text" id="f-lname" placeholder="Tan" required/>
-              </div>
+            <div class="ff">
+              <label for="f-fname">Name</label>
+              <input type="text" id="f-fname" placeholder="Your full name" required/>
             </div>
             <div class="ff">
-              <label for="f-email">Work Email</label>
-              <input type="email" id="f-email" placeholder="john@company.com" required/>
+              <label for="f-phone">Contact Number</label>
+              <input type="tel" id="f-phone" placeholder="+65 9123 4567"/>
             </div>
             <div class="ff">
-              <label for="f-company">Company Name</label>
+              <label for="f-email">Work Email <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+              <input type="email" id="f-email" placeholder="john@company.com"/>
+            </div>
+            <div class="ff">
+              <label for="f-company">Company Name <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
               <input type="text" id="f-company" placeholder="Your Company Pte. Ltd."/>
             </div>
             <div class="ff">
-              <label for="f-msg">Your biggest challenge right now? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+              <label for="f-msg">Biggest challenge right now? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
               <textarea id="f-msg" placeholder="e.g. Too many spreadsheets, manual invoicing takes hours…"></textarea>
             </div>
             <button class="btn-primary btn-block" onclick="submitForm()">
@@ -820,11 +806,21 @@
             </button>
           </div>
 
-          <!-- Success state -->
+          <!-- Success + Booking state -->
           <div class="form-success" id="fSuccess">
             <div class="fs-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
-            <div class="fs-title">You're all set!</div>
-            <p class="fs-sub">We'll reach out within 24 hours to schedule your free demo. Check your inbox!</p>
+            <div class="fs-title">Request sent!</div>
+            <p class="fs-sub" style="margin-bottom:18px;">Pick a time below and we'll confirm your free demo slot instantly.</p>
+            <div style="border-radius:12px;overflow:hidden;border:1.5px solid var(--border);box-shadow:0 4px 20px rgba(37,99,235,.1);">
+              <iframe
+                src="https://technext.odoo.com/odoo/appointments"
+                width="100%" height="480"
+                frameborder="0"
+                allow="camera; microphone; geolocation"
+                style="display:block;border:none;"
+                title="Book your TechNext demo">
+              </iframe>
+            </div>
           </div>
         </div>
       </div>
@@ -956,7 +952,19 @@
   </section>
 
   <!-- ── BEFORE / AFTER ─────────────────────────────────────────── -->
-  <section id="before-after">
+  <section id="before-after" style="position:relative;">
+    <div class="sdeco" style="top:38px;left:28px;animation:float-b 9s ease-in-out 1s infinite;">
+      <div class="deco-note p" style="transform:rotate(2.5deg);">
+        <div class="deco-tape"></div>
+        AI chatbots included
+      </div>
+    </div>
+    <div class="sdeco" style="bottom:38px;right:28px;animation:float-c 8s ease-in-out 2s infinite;">
+      <div class="deco-note b" style="transform:rotate(1.5deg);">
+        <div class="deco-tape"></div>
+        No spreadsheets needed
+      </div>
+    </div>
     <div class="container">
       <div class="sec-head reveal" style="margin-bottom:48px;">
         <div class="section-label center">See It In Action</div>
@@ -1587,37 +1595,16 @@
       document.querySelector('.form-subhead').textContent = '30 minutes. No commitment. We show you exactly how it works.';
     }
 
-    async function submitForm() {
-      const btn = document.querySelector('#fstep2 .btn-primary.btn-block');
-      const email = document.getElementById('f-email').value.trim();
+    function submitForm() {
       const fname = document.getElementById('f-fname').value.trim();
-      const lname = document.getElementById('f-lname').value.trim();
-      const company = document.getElementById('f-company').value.trim();
-      const message = document.getElementById('f-msg').value.trim();
-      if (!fname || !email) {
-        alert('Please fill in your name and email.');
-        return;
-      }
-      const originalLabel = btn ? btn.innerHTML : '';
-      if (btn) { btn.disabled = true; btn.innerHTML = 'Sending…'; }
-      try {
-        const r = await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fname, lname, email, company, message, service: selectedService }),
-        });
-        const data = await r.json().catch(() => ({}));
-        if (!r.ok) throw new Error(data.error || 'Request failed');
-      } catch (err) {
-        if (btn) { btn.disabled = false; btn.innerHTML = originalLabel; }
-        alert("Sorry — we couldn't submit your request. Please email us at sky@technext.asia or try again.");
-        console.error(err);
+      if (!fname) {
+        alert('Please enter your name.');
         return;
       }
       document.getElementById('fstep2').classList.remove('active');
       document.querySelector('.form-progress').style.display = 'none';
-      document.querySelector('.form-heading').textContent = '';
-      document.querySelector('.form-subhead').textContent = '';
+      document.querySelector('.form-heading').textContent = 'Pick a Demo Slot';
+      document.querySelector('.form-subhead').textContent = '30 minutes. Free. No commitment.';
       document.getElementById('fSuccess').style.display = 'block';
       document.getElementById('dot2').classList.remove('active');
       document.getElementById('dot2').classList.add('done');
