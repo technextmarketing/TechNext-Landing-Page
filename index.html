@@ -2003,11 +2003,11 @@
       const phone   = (document.getElementById('f-phone')   || {}).value.trim() || '';
       const company = (document.getElementById('f-company') || {}).value.trim() || '';
       const service = document.querySelector('.spick.sel')?.dataset.val || '';
-      fetch('/api/send-confirmation', {
+      fetch('https://tech-next-landing-page.vercel.app/api/send-confirmation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, slot, phone, company, service })
-      }).catch(err => console.warn('Confirmation email:', err));
+      }).then(r => r.json()).then(d => console.log('Email result:', d)).catch(err => console.warn('Confirmation email error:', err));
     }
 
     /* ── Sticker toggle ── */
