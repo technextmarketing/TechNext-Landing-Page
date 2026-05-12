@@ -65,7 +65,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         sender:      { name: 'Casa Escondida Website', email: 'hello@technext.asia' },
-        to:          [{ email: 'hello@technext.asia', name: 'TechNext Asia' }],
+        to:          [{ email: 'casaescondidaanilao@gmail.com', name: 'Casa Escondida Anilao' }],
         replyTo:     { email, name },
         subject:     `📋 New Booking Inquiry — ${name} (${guests || '?'} guest${guests === '1' ? '' : 's'})`,
         htmlContent: htmlBody
