@@ -2032,13 +2032,6 @@
     /* Disable Next button until a service is picked */
     document.getElementById('btnNext').style.opacity = '0.5';
 
-    /* ── Mobile booking modal: move footer after time slots ── */
-    (function(){
-      if (window.innerWidth > 860) return;
-      const right = document.getElementById('bkRight');
-      const foot  = document.querySelector('.bk-foot');
-      if (right && foot) right.after(foot);
-    })();
 
     /* ── Why tabs ── */
     let _whyCur = 0;
