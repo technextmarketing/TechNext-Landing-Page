@@ -2384,55 +2384,92 @@
       let exitShown = false;
       let userInteracted = false;
 
-      // Track first interaction so beforeunload can fire (browser requirement)
-      document.addEventListener('click',    function(){ userInteracted = true; }, {once:true});
-      document.addEventListener('keydown',  function(){ userInteracted = true; }, {once:true});
-      document.addEventListener('scroll',   function(){ userInteracted = true; }, {once:true, passive:true});
+      // Track interaction (required for beforeunload to fire in browsers)
+      document.addEventListener('click',     function(){ userInteracted = true; }, {once:true});
+      document.addEventListener('keydown',   function(){ userInteracted = true; }, {once:true});
+      document.addEventListener('scroll',    function(){ userInteracted = true; }, {once:true, passive:true});
       document.addEventListener('touchstart',function(){ userInteracted = true; }, {once:true, passive:true});
 
-      function showExitPopup(){
-        if(exitShown || sessionStorage.getItem('exitSeen')) return;
-        exitShown = true;
-        sessionStorage.setItem('exitSeen','1');
+      function isBkOpen(){
+        var o = document.getElementById('bkOverlay');
+        return o && o.classList.contains('open');
+      }
+
+      // stubborn = true → ignore session flags, fire every time (used when calendar is open)
+      function showExitPopup(stubborn){
+        if(!stubborn && (exitShown || sessionStorage.getItem('exitSeen'))) return;
+
+        // Only set session flags in normal (non-stubborn) mode
+        if(!stubborn){
+          exitShown = true;
+          sessionStorage.setItem('exitSeen','1');
+        }
+
+        // Swap messaging based on context
+        if(stubborn){
+          document.querySelector('.exit-emoji').textContent      = '⏰';
+          document.querySelector('.exit-headline').textContent   = "Don't lose your slot!";
+          document.querySelector('.exit-sub').textContent        = "Slots fill up fast. You're seconds away from locking in your free 1-hour demo — don't leave now.";
+          document.querySelector('.exit-cta-btn').textContent    = '✅ Complete My Booking →';
+        } else {
+          document.querySelector('.exit-emoji').textContent      = '🚀';
+          document.querySelector('.exit-headline').textContent   = "Wait — don't go just yet.";
+          document.querySelector('.exit-sub').textContent        = "You're one free demo away from cutting your operational costs by up to 40%.";
+          document.querySelector('.exit-cta-btn').textContent    = '📅 Book My Free Demo Now →';
+        }
+
         document.getElementById('exitOverlay').classList.add('show');
         document.body.style.overflow = 'hidden';
       }
+
       window.closeExitPopup = function(){
         document.getElementById('exitOverlay').classList.remove('show');
-        document.body.style.overflow = '';
+        // Keep scroll locked if booking modal is still behind it
+        if(!isBkOpen()) document.body.style.overflow = '';
+        // Always reset in-memory flag so stubborn fires again next time
+        exitShown = false;
       };
-      // CTA button: mark as converted so beforeunload stops firing, then open booking
+
+      // CTA: if calendar already open just close popup and stay there; else open modal
       window.exitPopupBook = function(){
         sessionStorage.setItem('exitConverted','1');
         closeExitPopup();
-        if(typeof openBkModal === 'function') openBkModal();
+        if(!isBkOpen() && typeof openBkModal === 'function') openBkModal();
       };
 
-      // Mouse leaves top of viewport → show custom popup (desktop)
+      // ── Desktop: mouse leaves top of viewport ──
       document.addEventListener('mouseleave', function(e){
-        if(e.clientY <= 0) showExitPopup();
+        if(e.clientY <= 0){
+          if(isBkOpen()){
+            showExitPopup(true);   // stubborn — always fires while calendar is open
+          } else {
+            showExitPopup(false);  // normal — once per session
+          }
+        }
       });
+
       // Click backdrop to close
       document.addEventListener('click', function(e){
         if(e.target && e.target.id === 'exitOverlay') closeExitPopup();
       });
 
-      // ── beforeunload: fires on EVERY close / refresh / navigate away
-      // Stops only after user books a demo (exitConverted flag set)
+      // ── beforeunload: fires on EVERY close / refresh / navigate away ──
+      // Only stops after user books (exitConverted flag)
       window.addEventListener('beforeunload', function(e){
         if(!sessionStorage.getItem('exitConverted') && userInteracted){
           e.preventDefault();
-          e.returnValue = ''; // triggers native "Leave site?" dialog
+          e.returnValue = '';
         }
       });
 
-      // Mobile: show after 45 s of inactivity (no mouseleave on touch devices)
+      // ── Mobile: show after 30 s of inactivity when calendar is open, 45 s otherwise ──
       let mobileTimer;
       function resetMobileTimer(){
         clearTimeout(mobileTimer);
+        var delay = isBkOpen() ? 30000 : 45000;
         mobileTimer = setTimeout(function(){
-          if(!exitShown && !sessionStorage.getItem('exitSeen')) showExitPopup();
-        }, 45000);
+          showExitPopup(isBkOpen());
+        }, delay);
       }
       if('ontouchstart' in window){
         ['touchstart','scroll'].forEach(function(ev){
