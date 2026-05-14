@@ -2017,10 +2017,35 @@
     document.getElementById('btnNext').style.opacity = '0.5';
 
     /* ── Why tabs ── */
+    let _whyCur = 0;
     function switchWhy(idx) {
+      _whyCur = idx;
       document.querySelectorAll('.why-item').forEach((el, i) => el.classList.toggle('active', i === idx));
       document.querySelectorAll('.why-panel').forEach((el, i) => el.classList.toggle('active', i === idx));
     }
+
+    /* ── Why tabs auto-rotate ── */
+    (function(){
+      const TABS  = 3;
+      const DELAY = 3000;
+      let timer   = null;
+
+      function advance() {
+        _whyCur = (_whyCur + 1) % TABS;
+        switchWhy(_whyCur);
+      }
+      function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(advance, DELAY);
+      }
+
+      const zone = document.querySelector('.why-inner');
+      if (zone) {
+        zone.addEventListener('mouseenter', () => clearInterval(timer));
+        zone.addEventListener('mouseleave', startTimer);
+      }
+      startTimer();
+    })();
 
     /* ── Hero email CTA ── */
     function heroEmailGo(e){
