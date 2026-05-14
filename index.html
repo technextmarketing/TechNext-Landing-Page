@@ -524,10 +524,11 @@
     /* ── BOOKING MODAL ── */
     .bk-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:1001;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s ease;}
     .bk-overlay.open{opacity:1;pointer-events:auto;}
-    .bk-modal{display:flex;flex-direction:row;border-radius:20px;width:min(940px,96vw);overflow:hidden;box-shadow:0 32px 96px rgba(0,0,0,.22);transform:scale(.95) translateY(20px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);background:#fff;}
+    .bk-modal{display:grid;grid-template-columns:230px 1fr;grid-template-rows:1fr auto;grid-template-areas:"left cal" "left foot";position:relative;border-radius:20px;width:min(940px,96vw);overflow:hidden;box-shadow:0 32px 96px rgba(0,0,0,.22);transform:scale(.95) translateY(20px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);background:#fff;}
     .bk-overlay.open .bk-modal{transform:scale(1) translateY(0);}
+    .bk-modal:has(.bk-right.visible){grid-template-columns:230px 1fr 190px;grid-template-areas:"left cal right" "left foot right";}
     /* Left brand panel */
-    .bk-left{background:linear-gradient(160deg,var(--purple) 0%,#4338ca 100%);width:230px;flex-shrink:0;padding:24px 22px;display:flex;flex-direction:column;position:relative;}
+    .bk-left{background:linear-gradient(160deg,var(--purple) 0%,#4338ca 100%);grid-area:left;width:230px;padding:24px 22px;display:flex;flex-direction:column;position:relative;}
     .bk-left-logo{margin-bottom:26px;}
     .bk-left-logo img{height:28px;width:auto;filter:brightness(0) invert(1);}
     .bk-left-tag{font-size:12px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
@@ -539,7 +540,7 @@
     .bk-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75);font-size:15px;line-height:1;transition:background .15s;}
     .bk-close:hover{background:rgba(255,255,255,.2);color:#fff;}
     /* Middle calendar panel */
-    .bk-mid{background:#fff;flex:1;display:flex;flex-direction:column;}
+    .bk-mid{background:#fff;grid-area:cal;display:flex;flex-direction:column;overflow-y:auto;}
     .bk-cal-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;}
     .bk-cal-month{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--text);}
     .bk-cal-month span{color:var(--purple);}
@@ -555,7 +556,7 @@
     .bk-cal-day.bk-sel{background:var(--purple) !important;color:#fff !important;font-weight:700;}
     .bk-cal-day.bk-disabled{color:#e5e7eb;cursor:default;pointer-events:none;}
     /* Footer */
-    .bk-foot{padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;flex-shrink:0;}
+    .bk-foot{grid-area:foot;padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;flex-shrink:0;background:#fff;}
     .bk-foot-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
     .bk-sel-info{font-size:12px;color:var(--muted);line-height:1.4;}
     .bk-sel-info strong{color:var(--text);}
@@ -569,8 +570,8 @@
     .bk-confirm-btn:hover:not(:disabled){background:#1d4ed8;}
     .bk-confirm-btn:disabled{opacity:.3;cursor:not-allowed;}
     /* Booking success panel */
-    .bk-success{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 36px;background:#fff;min-width:0;}
-    .bk-success.show{display:flex;}
+    .bk-success{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 36px;background:#fff;}
+    .bk-success.show{display:flex;position:absolute;inset:0;z-index:2;overflow-y:auto;}
     .bk-success-anim{width:80px;height:80px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:bkSuccessPop .5s cubic-bezier(.34,1.56,.64,1) forwards;}
     @keyframes bkSuccessPop{0%{transform:scale(0);opacity:0;}100%{transform:scale(1);opacity:1;}}
     .bk-success-anim svg{width:40px;height:40px;stroke:#16a34a;}
@@ -583,7 +584,7 @@
     .bk-done-btn{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:14px;padding:12px 32px;border-radius:12px;border:none;cursor:pointer;transition:background .15s;}
     .bk-done-btn:hover{background:#1d4ed8;}
     /* Right time panel */
-    .bk-right{background:#fafafa;width:190px;flex-shrink:0;display:none;flex-direction:column;border-left:1px solid var(--border);}
+    .bk-right{background:#fafafa;grid-area:right;width:190px;display:none;flex-direction:column;border-left:1px solid var(--border);}
     .bk-right.visible{display:flex;}
     .bk-right-head{padding:18px 14px 10px;border-bottom:1px solid var(--border);}
     .bk-right-date{font-family:var(--fb);font-size:17px;font-weight:700;color:var(--text);}
@@ -616,7 +617,7 @@
     .bk-mid-foot-wrap{display:flex;flex-direction:column;}
     @media(max-width:860px){
       .bk-overlay{align-items:flex-end;padding:0;}
-      .bk-modal{flex-direction:column;width:100%;max-width:100%;max-height:90vh;overflow-y:auto;border-radius:20px 20px 0 0;margin:0;}
+      .bk-modal{display:flex;flex-direction:column;width:100%;max-width:100%;max-height:90vh;overflow-y:auto;border-radius:20px 20px 0 0;margin:0;}
       .bk-left{width:100%;padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-shrink:0;}
       .bk-left-desc,.bk-left-meta,.bk-left-tag{display:none;}
       .bk-left-title{font-size:15px;margin:0;}
@@ -630,7 +631,7 @@
       .bk-right-head{padding:12px 8px 8px;}
       .bk-slots-list{display:grid;grid-template-columns:repeat(3,1fr);overflow-x:hidden;overflow-y:visible;padding:12px;gap:8px;max-height:none;}
       .bk-slot{white-space:normal;flex-shrink:1;font-size:13px;padding:10px 4px;}
-      .bk-foot{flex-shrink:0;border-top:1px solid var(--border);}
+      .bk-foot{flex-shrink:0;padding:12px 16px 20px;}
     }
     /* ── WHATSAPP FLOAT ── */
     .wa-float{position:fixed;bottom:84px;right:28px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.45);z-index:98;transition:transform .2s,box-shadow .2s;text-decoration:none;}
@@ -1554,7 +1555,7 @@
       </div>
 
       <!-- MIDDLE: Calendar -->
-      <div class="bk-mid bk-mid-foot-wrap">
+      <div class="bk-mid">
         <div class="bk-cal-nav">
           <span class="bk-cal-month" id="bkMonthLabel"></span>
           <div class="bk-cal-arrows">
@@ -1563,29 +1564,6 @@
           </div>
         </div>
         <div class="bk-cal-grid" id="bkGrid"></div>
-        <div class="bk-foot">
-          <div class="bk-foot-row">
-            <div class="bk-sel-info" id="bkSelInfo">Pick a date and time</div>
-          </div>
-          <div class="bk-fields-row">
-            <div class="bk-email-wrap">
-              <span class="bk-email-label">Name</span>
-              <input class="bk-email-input" id="bkNameInput" type="text" placeholder="John Doe" oninput="bkCheckConfirm()"/>
-            </div>
-            <div class="bk-email-wrap">
-              <span class="bk-email-label">Contact Number</span>
-              <input class="bk-email-input" id="bkPhoneInput" type="tel" placeholder="+65 9123 4567" oninput="bkCheckConfirm()"/>
-            </div>
-          </div>
-          <div class="bk-email-wrap">
-            <span class="bk-email-label">Email — confirmation will be sent here</span>
-            <input class="bk-email-input" id="bkEmailInput" type="email" placeholder="john@company.com" oninput="bkCheckConfirm()"/>
-          </div>
-          <button class="bk-confirm-btn" id="bkConfirmBtn" disabled onclick="bkConfirm()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            Confirm Slot
-          </button>
-        </div>
       </div>
 
       <!-- RIGHT: Time slots (shown after date pick) -->
@@ -1598,6 +1576,31 @@
           </div>
         </div>
         <div class="bk-slots-list" id="bkSlots"></div>
+      </div>
+
+      <!-- FORM: Name, contact, email, confirm (below time slots on mobile) -->
+      <div class="bk-foot">
+        <div class="bk-foot-row">
+          <div class="bk-sel-info" id="bkSelInfo">Pick a date and time</div>
+        </div>
+        <div class="bk-fields-row">
+          <div class="bk-email-wrap">
+            <span class="bk-email-label">Name</span>
+            <input class="bk-email-input" id="bkNameInput" type="text" placeholder="John Doe" oninput="bkCheckConfirm()"/>
+          </div>
+          <div class="bk-email-wrap">
+            <span class="bk-email-label">Contact Number</span>
+            <input class="bk-email-input" id="bkPhoneInput" type="tel" placeholder="+65 9123 4567" oninput="bkCheckConfirm()"/>
+          </div>
+        </div>
+        <div class="bk-email-wrap">
+          <span class="bk-email-label">Email — confirmation will be sent here</span>
+          <input class="bk-email-input" id="bkEmailInput" type="email" placeholder="john@company.com" oninput="bkCheckConfirm()"/>
+        </div>
+        <button class="bk-confirm-btn" id="bkConfirmBtn" disabled onclick="bkConfirm()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          Confirm Slot
+        </button>
       </div>
 
       <!-- SUCCESS: Shown after Confirm Slot -->
@@ -1922,6 +1925,7 @@
       document.getElementById('bkSuccessSlot').textContent = slot;
       document.querySelector('.bk-mid').style.display = 'none';
       document.getElementById('bkRight').style.display = 'none';
+      document.querySelector('.bk-foot').style.display = 'none';
       document.getElementById('bkSuccess').classList.add('show');
       // Mark step 3 done in the form card
       document.getElementById('dot3').classList.remove('active');
