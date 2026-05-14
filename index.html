@@ -2382,6 +2382,14 @@
     /* ── EXIT INTENT POPUP JS ── */
     (function(){
       let exitShown = false;
+      let userInteracted = false;
+
+      // Track first interaction so beforeunload can fire (browser requirement)
+      document.addEventListener('click',    function(){ userInteracted = true; }, {once:true});
+      document.addEventListener('keydown',  function(){ userInteracted = true; }, {once:true});
+      document.addEventListener('scroll',   function(){ userInteracted = true; }, {once:true, passive:true});
+      document.addEventListener('touchstart',function(){ userInteracted = true; }, {once:true, passive:true});
+
       function showExitPopup(){
         if(exitShown || sessionStorage.getItem('exitSeen')) return;
         exitShown = true;
@@ -2393,7 +2401,14 @@
         document.getElementById('exitOverlay').classList.remove('show');
         document.body.style.overflow = '';
       };
-      // Mouse leaves top of viewport (desktop exit intent)
+      // CTA button: mark as converted so beforeunload stops firing, then open booking
+      window.exitPopupBook = function(){
+        sessionStorage.setItem('exitConverted','1');
+        closeExitPopup();
+        if(typeof openBkModal === 'function') openBkModal();
+      };
+
+      // Mouse leaves top of viewport → show custom popup (desktop)
       document.addEventListener('mouseleave', function(e){
         if(e.clientY <= 0) showExitPopup();
       });
@@ -2401,13 +2416,16 @@
       document.addEventListener('click', function(e){
         if(e.target && e.target.id === 'exitOverlay') closeExitPopup();
       });
-      // Beforeunload: fires on refresh AND closing/navigating away
+
+      // ── beforeunload: fires on EVERY close / refresh / navigate away
+      // Stops only after user books a demo (exitConverted flag set)
       window.addEventListener('beforeunload', function(e){
-        if(!sessionStorage.getItem('exitSeen')){
+        if(!sessionStorage.getItem('exitConverted') && userInteracted){
           e.preventDefault();
-          e.returnValue = '';
+          e.returnValue = ''; // triggers native "Leave site?" dialog
         }
       });
+
       // Mobile: show after 45 s of inactivity (no mouseleave on touch devices)
       let mobileTimer;
       function resetMobileTimer(){
@@ -2441,7 +2459,7 @@
           <div class="exit-proof-item"><span class="exit-proof-num">40%</span><span class="exit-proof-lbl">Cost Reduction</span></div>
           <div class="exit-proof-item"><span class="exit-proof-num">Free</span><span class="exit-proof-lbl">1-Hour Demo</span></div>
         </div>
-        <button class="exit-cta-btn" onclick="closeExitPopup();openBkModal();">📅 Book My Free Demo Now →</button>
+        <button class="exit-cta-btn" onclick="exitPopupBook()">📅 Book My Free Demo Now →</button>
         <button class="exit-dismiss" onclick="closeExitPopup()">No thanks, I'll figure it out myself</button>
       </div>
     </div>
