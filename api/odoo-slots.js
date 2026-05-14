@@ -10,8 +10,8 @@
  */
 
 // Must match BK_TIMES_24 in index.html
-// Odoo availability: 09:00–12:00 and 14:00–17:00, 1-hr duration, 30-min step
-const BK_TIMES_24 = ['09:00','09:30','10:00','10:30','11:00','14:00','14:30','15:00','15:30','16:00'];
+// Odoo availability: 09:00–12:00 and 14:00–17:00, 1-hr duration, 1-hr step
+const BK_TIMES_24 = ['09:00','10:00','11:00','14:00','15:00','16:00'];
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -119,11 +119,11 @@ export default async function handler(req, res) {
       const evtStartMin = startSGT.getUTCHours() * 60 + startSGT.getUTCMinutes();
       const evtStopMin  = stopSGT.getUTCHours()  * 60 + stopSGT.getUTCMinutes();
 
-      // Block every 30-min slot that overlaps with the event
+      // Block every 1-hr slot that overlaps with the event
       for (const t of BK_TIMES_24) {
         const [hh, mm] = t.split(':').map(Number);
         const slotStartMin = hh * 60 + mm;
-        const slotStopMin  = slotStartMin + 30;
+        const slotStopMin  = slotStartMin + 60;
         // Overlap: slot_start < evt_stop AND slot_stop > evt_start
         if (slotStartMin < evtStopMin && slotStopMin > evtStartMin) {
           bookedSet.add(`${dateStr}_${t}`);
