@@ -2406,10 +2406,73 @@
 
         // Swap messaging based on context
         if(stubborn){
-          document.querySelector('.exit-emoji').textContent      = '⏰';
-          document.querySelector('.exit-headline').textContent   = "Don't lose your slot!";
-          document.querySelector('.exit-sub').textContent        = "Slots fill up fast. You're seconds away from locking in your free 1-hour demo — don't leave now.";
-          document.querySelector('.exit-cta-btn').textContent    = '✅ Complete My Booking →';
+          var msgs = [
+            {
+              emoji: '⏰',
+              headline: "Don't lose your slot!",
+              sub: "Slots fill up fast. You're seconds away from locking in your free 1-hour demo — don't leave now.",
+              cta: '✅ Complete My Booking →'
+            },
+            {
+              emoji: '🔥',
+              headline: "Someone else might grab this slot!",
+              sub: "Our calendar fills up every week. The slot you just viewed could be gone in minutes — lock it in now.",
+              cta: '🔒 Lock In My Slot →'
+            },
+            {
+              emoji: '🎯',
+              headline: "You're this close — don't quit now.",
+              sub: "You've already done the hard part. Just finish booking and we'll take care of everything else.",
+              cta: '✅ Finish My Booking →'
+            },
+            {
+              emoji: '🚨',
+              headline: "Your slot isn't saved yet!",
+              sub: "You haven't confirmed your booking. Leave now and you'll have to start over — and the slot may be gone.",
+              cta: '📅 Go Back & Confirm →'
+            },
+            {
+              emoji: '💰',
+              headline: "Every day without ERP costs you money.",
+              sub: "Businesses using Odoo ERP cut operational costs by up to 40%. Your free 1-hour demo is one click away.",
+              cta: '💡 Claim My Free Demo →'
+            },
+            {
+              emoji: '⚡',
+              headline: "It only takes 1 hour to change everything.",
+              sub: "We'll show you exactly how Odoo + AI works for your business — no fluff, no guessing, no commitment.",
+              cta: '✅ Complete My Booking →'
+            },
+            {
+              emoji: '🛡️',
+              headline: "No pressure. No sales pitch. Just results.",
+              sub: "Our demos are 100% free, zero-commitment, and built around your actual business challenges. Don't miss it.",
+              cta: '📅 Secure My Free Demo →'
+            },
+            {
+              emoji: '📉',
+              headline: "Still managing things manually?",
+              sub: "Every manual process you run today is costing time and money. One 1-hour session could fix that — for free.",
+              cta: '🚀 Book & Fix This Now →'
+            },
+            {
+              emoji: '🤝',
+              headline: "We've helped businesses just like yours.",
+              sub: "From SMEs to mid-market companies — we've helped dozens go live in 4–8 weeks. You're next. Don't leave.",
+              cta: '✅ Complete My Booking →'
+            },
+            {
+              emoji: '💡',
+              headline: "Most businesses discover savings they didn't expect.",
+              sub: "After just one demo, our clients find workflow gaps they never knew existed. Yours are probably worth fixing.",
+              cta: '📅 Find Out What I'm Missing →'
+            }
+          ];
+          var pick = msgs[Math.floor(Math.random() * msgs.length)];
+          document.querySelector('.exit-emoji').textContent    = pick.emoji;
+          document.querySelector('.exit-headline').textContent = pick.headline;
+          document.querySelector('.exit-sub').textContent      = pick.sub;
+          document.querySelector('.exit-cta-btn').textContent  = pick.cta;
         } else {
           document.querySelector('.exit-emoji').textContent      = '🚀';
           document.querySelector('.exit-headline').textContent   = "Wait — don't go just yet.";
