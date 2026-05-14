@@ -395,6 +395,34 @@
     .scroll-top{position:fixed;bottom:28px;right:33px;width:42px;height:42px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:99;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;box-shadow:0 4px 16px rgba(37,99,235,.4);}
     .scroll-top.show{opacity:1;transform:translateY(0);}
 
+    /* ── EXIT INTENT POPUP ── */
+    .exit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s ease;}
+    .exit-overlay.show{opacity:1;pointer-events:auto;}
+    .exit-box{background:#fff;border-radius:24px;max-width:520px;width:100%;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.3);transform:scale(.9) translateY(30px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);position:relative;}
+    .exit-overlay.show .exit-box{transform:scale(1) translateY(0);}
+    .exit-top{background:linear-gradient(135deg,var(--purple) 0%,#4338ca 100%);padding:36px 36px 28px;text-align:center;position:relative;}
+    .exit-emoji{font-size:52px;display:block;margin-bottom:14px;line-height:1;}
+    .exit-headline{font-family:var(--fh);font-size:32px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:10px;}
+    .exit-sub{font-size:16px;color:rgba(255,255,255,.82);line-height:1.6;}
+    .exit-close{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px;transition:background .2s;line-height:1;}
+    .exit-close:hover{background:rgba(255,255,255,.35);}
+    .exit-body{padding:28px 36px 32px;text-align:center;}
+    .exit-proof{display:flex;justify-content:center;gap:24px;margin-bottom:22px;flex-wrap:wrap;}
+    .exit-proof-item{display:flex;flex-direction:column;align-items:center;gap:3px;}
+    .exit-proof-num{font-family:var(--fh);font-size:28px;font-weight:800;color:var(--purple);}
+    .exit-proof-lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+    .exit-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--cta);color:#fff;font-family:var(--fb);font-weight:700;font-size:17px;padding:16px 36px;border-radius:12px;border:none;cursor:pointer;width:100%;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 20px rgba(135,90,123,.35);margin-bottom:12px;}
+    .exit-cta-btn:hover{background:var(--cta-hover);transform:translateY(-2px);box-shadow:0 8px 28px rgba(135,90,123,.45);}
+    .exit-dismiss{background:none;border:none;font-size:14px;color:var(--muted);cursor:pointer;padding:4px 8px;transition:color .2s;font-family:var(--fb);}
+    .exit-dismiss:hover{color:var(--text);}
+    @media(max-width:600px){
+      .exit-top{padding:28px 20px 22px;}
+      .exit-headline{font-size:26px;}
+      .exit-body{padding:22px 20px 26px;}
+      .exit-proof{gap:16px;}
+      .exit-proof-num{font-size:22px;}
+    }
+
     /* ── HAMBURGER + MOBILE NAV ── */
     .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:6px;width:36px;height:36px;}
     .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s,opacity .3s;}
@@ -2351,6 +2379,73 @@
       });
     })();
 
+    /* ── EXIT INTENT POPUP JS ── */
+    (function(){
+      let exitShown = false;
+      function showExitPopup(){
+        if(exitShown || sessionStorage.getItem('exitSeen')) return;
+        exitShown = true;
+        sessionStorage.setItem('exitSeen','1');
+        document.getElementById('exitOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      window.closeExitPopup = function(){
+        document.getElementById('exitOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+      };
+      // Mouse leaves top of viewport (desktop exit intent)
+      document.addEventListener('mouseleave', function(e){
+        if(e.clientY <= 0) showExitPopup();
+      });
+      // Click backdrop to close
+      document.addEventListener('click', function(e){
+        if(e.target && e.target.id === 'exitOverlay') closeExitPopup();
+      });
+      // Beforeunload: fires on refresh AND closing/navigating away
+      window.addEventListener('beforeunload', function(e){
+        if(!sessionStorage.getItem('exitSeen')){
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+      // Mobile: show after 45 s of inactivity (no mouseleave on touch devices)
+      let mobileTimer;
+      function resetMobileTimer(){
+        clearTimeout(mobileTimer);
+        mobileTimer = setTimeout(function(){
+          if(!exitShown && !sessionStorage.getItem('exitSeen')) showExitPopup();
+        }, 45000);
+      }
+      if('ontouchstart' in window){
+        ['touchstart','scroll'].forEach(function(ev){
+          document.addEventListener(ev, resetMobileTimer, {passive:true});
+        });
+        resetMobileTimer();
+      }
+    })();
+
   </script>
+
+  <!-- EXIT INTENT POPUP -->
+  <div class="exit-overlay" id="exitOverlay">
+    <div class="exit-box">
+      <div class="exit-top">
+        <button class="exit-close" onclick="closeExitPopup()" aria-label="Close">&#x2715;</button>
+        <span class="exit-emoji">🚀</span>
+        <div class="exit-headline">Wait — don't go just yet.</div>
+        <div class="exit-sub">You're one free demo away from cutting your operational costs by up to 40%.</div>
+      </div>
+      <div class="exit-body">
+        <div class="exit-proof">
+          <div class="exit-proof-item"><span class="exit-proof-num">4–8</span><span class="exit-proof-lbl">Weeks to Go-Live</span></div>
+          <div class="exit-proof-item"><span class="exit-proof-num">40%</span><span class="exit-proof-lbl">Cost Reduction</span></div>
+          <div class="exit-proof-item"><span class="exit-proof-num">Free</span><span class="exit-proof-lbl">30-Min Demo</span></div>
+        </div>
+        <button class="exit-cta-btn" onclick="closeExitPopup();openBkModal();">📅 Book My Free Demo Now →</button>
+        <button class="exit-dismiss" onclick="closeExitPopup()">No thanks, I'll figure it out myself</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
