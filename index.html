@@ -559,9 +559,10 @@
     .bk-foot-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
     .bk-sel-info{font-size:12px;color:var(--muted);line-height:1.4;}
     .bk-sel-info strong{color:var(--text);}
+    .bk-fields-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
     .bk-email-wrap{display:flex;flex-direction:column;gap:3px;}
     .bk-email-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
-    .bk-email-input{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--fb);font-size:12px;color:var(--text);background:#fff;outline:none;transition:border-color .15s;}
+    .bk-email-input{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--fb);font-size:12px;color:var(--text);background:#fff;outline:none;transition:border-color .15s;box-sizing:border-box;}
     .bk-email-input:focus{border-color:var(--purple);}
     .bk-email-input::placeholder{color:var(--muted);}
     .bk-confirm-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--purple);color:#fff;font-family:var(--fb);font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
@@ -1566,8 +1567,18 @@
           <div class="bk-foot-row">
             <div class="bk-sel-info" id="bkSelInfo">Pick a date and time</div>
           </div>
+          <div class="bk-fields-row">
+            <div class="bk-email-wrap">
+              <span class="bk-email-label">Name</span>
+              <input class="bk-email-input" id="bkNameInput" type="text" placeholder="John Doe" oninput="bkCheckConfirm()"/>
+            </div>
+            <div class="bk-email-wrap">
+              <span class="bk-email-label">Contact Number</span>
+              <input class="bk-email-input" id="bkPhoneInput" type="tel" placeholder="+65 9123 4567" oninput="bkCheckConfirm()"/>
+            </div>
+          </div>
           <div class="bk-email-wrap">
-            <span class="bk-email-label">Your email — confirmation will be sent here</span>
+            <span class="bk-email-label">Email — confirmation will be sent here</span>
             <input class="bk-email-input" id="bkEmailInput" type="email" placeholder="john@company.com" oninput="bkCheckConfirm()"/>
           </div>
           <button class="bk-confirm-btn" id="bkConfirmBtn" disabled onclick="bkConfirm()">
@@ -1640,8 +1651,12 @@
       document.getElementById('bkConfirmBtn').disabled = true;
       document.getElementById('bkFmt12').classList.add('active');
       document.getElementById('bkFmt24').classList.remove('active');
-      // Pre-fill email from form if available
+      // Pre-fill from main form if available
+      const formName  = (document.getElementById('f-fname') || {}).value || '';
+      const formPhone = (document.getElementById('f-phone') || {}).value || '';
       const formEmail = (document.getElementById('f-email') || {}).value || '';
+      document.getElementById('bkNameInput').value  = formName;
+      document.getElementById('bkPhoneInput').value = formPhone;
       document.getElementById('bkEmailInput').value = formEmail;
       bkRenderSlots();
       bkRenderCal();
@@ -1649,10 +1664,12 @@
 
     function bkCheckConfirm() {
       const hasSlot  = bkSelDate && bkSelTime;
+      const hasName  = document.getElementById('bkNameInput').value.trim().length > 0;
+      const hasPhone = document.getElementById('bkPhoneInput').value.trim().length > 0;
       const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
         document.getElementById('bkEmailInput').value.trim()
       );
-      document.getElementById('bkConfirmBtn').disabled = !(hasSlot && hasEmail);
+      document.getElementById('bkConfirmBtn').disabled = !(hasSlot && hasName && hasPhone && hasEmail);
     }
 
     function closeBkModal() {
@@ -1882,8 +1899,8 @@
       if (slotEl) slotEl.textContent = slot;
       // Send confirmation + internal notification (fire-and-forget)
       const email   = document.getElementById('bkEmailInput').value.trim();
-      const name    = (document.getElementById('f-fname')   || {}).value.trim() || '';
-      const phone   = (document.getElementById('f-phone')   || {}).value.trim() || '';
+      const name    = document.getElementById('bkNameInput').value.trim()  || (document.getElementById('f-fname')  || {}).value.trim() || '';
+      const phone   = document.getElementById('bkPhoneInput').value.trim() || (document.getElementById('f-phone')  || {}).value.trim() || '';
       const company = (document.getElementById('f-company') || {}).value.trim() || '';
       const service    = document.querySelector('.spick.sel')?.dataset.val || '';
       const timeIdx    = (bkFmt === 12 ? BK_TIMES_12 : BK_TIMES_24).indexOf(bkSelTime);
