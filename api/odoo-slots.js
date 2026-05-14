@@ -58,7 +58,13 @@ export default async function handler(req, res) {
     });
     const authData = await authResp.json();
     if (!authData.result || authData.result.uid === false) {
-      return res.status(401).json({ error: 'Odoo authentication failed' });
+      return res.status(401).json({
+        error: 'Odoo authentication failed',
+        odoo_url: ODOO_URL,
+        odoo_db: ODOO_DB,
+        odoo_user: ODOO_USER,
+        odoo_error: authData.error?.data?.message || authData.result?.uid,
+      });
     }
     const setCookie    = authResp.headers.get('set-cookie') || '';
     const sessionMatch = setCookie.match(/session_id=([^;,\s]+)/);
