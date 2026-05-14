@@ -615,14 +615,18 @@
     .bk-mid-foot-wrap{display:flex;flex-direction:column;}
     @media(max-width:860px){
       .bk-overlay{align-items:flex-end;padding:0;}
-      .bk-modal{flex-direction:column;width:100%;max-height:90vh;overflow-y:auto;border-radius:20px 20px 0 0;}
-      .bk-left{width:100%;padding:12px 18px;flex-direction:row;align-items:center;gap:12px;flex-shrink:0;}
-      .bk-left-desc,.bk-left-meta{display:none;}
+      .bk-modal{flex-direction:column;width:100%;max-height:90vh;overflow-y:auto;border-radius:20px 20px 0 0;margin:0 8px;}
+      .bk-left{width:100%;padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-shrink:0;}
+      .bk-left-desc,.bk-left-meta,.bk-left-tag{display:none;}
       .bk-left-title{font-size:15px;margin:0;}
-      .bk-mid{flex-shrink:0;}
-      .bk-right{width:100%;border-left:none;border-top:1px solid var(--border);}
+      .bk-mid{flex-shrink:0;padding:0 8px;}
+      .bk-cal-nav{padding:14px 8px 8px;}
+      .bk-cal-grid{padding:0 4px 8px;gap:2px;}
+      .bk-cal-day{height:36px;font-size:12px;}
+      .bk-cal-dow{font-size:9px;padding-bottom:5px;}
+      .bk-right{width:100%;border-left:none;border-top:1px solid var(--border);padding:0 8px;}
       .bk-right.visible{display:flex;flex-direction:column;}
-      .bk-right-head{padding:14px 16px 10px;}
+      .bk-right-head{padding:12px 8px 8px;}
       .bk-slots-list{display:grid;grid-template-columns:repeat(3,1fr);overflow-x:hidden;overflow-y:visible;padding:12px;gap:8px;max-height:none;}
       .bk-slot{white-space:normal;flex-shrink:1;font-size:13px;padding:10px 4px;}
       .bk-foot{flex-shrink:0;border-top:1px solid var(--border);}
@@ -1530,7 +1534,6 @@
         <div class="bk-left-logo">
           <img src="images/TechNext-Logo.png" alt="TechNext Asia"/>
         </div>
-        <div class="bk-left-tag">Book a Demo</div>
         <div class="bk-left-title">Talk to a TechNext Expert</div>
         <div class="bk-left-desc">We'll show you exactly how Odoo ERP + AI automations would work for your business. No sales pressure.</div>
         <div class="bk-left-meta">
