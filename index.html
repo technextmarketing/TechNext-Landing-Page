@@ -1826,7 +1826,7 @@
           el.innerHTML = '<span style="text-decoration:line-through;font-size:12px">' + t + '</span>';
         } else if (isRec) {
           el.className = 'bk-slot bk-recommended';
-          el.innerHTML = '<span class="bk-day-num">' + t + '</span><span class="bk-rec-badge">★ Recommended</span>';
+          el.innerHTML = '<span class="bk-day-num">' + t + '</span>';
           el.addEventListener('click', () => bkPickTime(t, el));
         } else {
           el.className = 'bk-slot';
