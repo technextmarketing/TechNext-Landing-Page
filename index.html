@@ -111,8 +111,6 @@
     /* Animations */
     @keyframes fade-up{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
     @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
-    @keyframes float-a{0%,100%{transform:rotate(-2deg) translateY(0);}50%{transform:rotate(-2deg) translateY(-10px);}}
-    @keyframes float-b{0%,100%{transform:rotate(2.5deg) translateY(0);}50%{transform:rotate(2.5deg) translateY(-8px);}}
 
     .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
     .reveal.visible{opacity:1;transform:translateY(0);}
@@ -155,49 +153,11 @@
     .htrust-sep-line{width:1px;height:22px;background:var(--border-2);flex-shrink:0;}
     .htrust-tagline{font-size:14px;font-weight:500;color:var(--muted);font-style:italic;letter-spacing:.01em;}
 
-    /* Floating sticky decorations */
-    .deco-sticky,.sdeco{position:absolute;pointer-events:auto;z-index:3;cursor:default;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:scale(0.85);}
-    body.stickers-on .deco-sticky,body.stickers-on .sdeco{opacity:1;pointer-events:auto;transform:scale(1);}
-    body.stickers-on .cta-float{opacity:1;pointer-events:auto;}
-    .cta-float{opacity:0;pointer-events:none;transition:opacity .4s ease;}
 
-    /* ── Sticker toggle button ── */
-    .sticker-toggle{position:fixed;bottom:84px;left:28px;width:52px;height:52px;background:var(--sticky-y);border:2px solid rgba(0,0,0,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:97;box-shadow:3px 5px 16px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;font-size:22px;user-select:none;}
-    .sticker-toggle:hover{transform:scale(1.15) rotate(-8deg);box-shadow:4px 8px 24px rgba(0,0,0,.18);}
-    .sticker-toggle.active{background:var(--purple);border-color:var(--purple);box-shadow:0 4px 20px rgba(37,99,235,.4);}
-    .sticker-toggle .st-icon svg{width:24px;height:24px;display:block;}
-    .sticker-toggle.active .st-icon svg{filter:brightness(0) invert(1);}
-    .sticker-toggle-tip{position:absolute;left:60px;background:var(--text);color:#fff;font-family:var(--fb);font-size:12px;font-weight:600;padding:5px 10px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;top:50%;transform:translateY(-50%);}
-    .sticker-toggle:hover .sticker-toggle-tip{opacity:1;}
-    .deco-s1{top:90px;right:28px;animation:float-a 7s ease-in-out infinite;}
-    .deco-s2{bottom:64px;left:28px;animation:float-b 9s ease-in-out 1s infinite;}
-    .deco-note{font-family:var(--fh);font-size:19px;font-weight:600;padding:16px 22px;border-radius:3px;box-shadow:3px 5px 14px var(--shadow-md),inset 0 -3px 0 rgba(0,0,0,.08);line-height:1.3;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,filter .2s;}
-    .deco-sticky:hover,.sdeco:hover{animation-play-state:paused;}
-    .deco-sticky:hover .deco-note,.sdeco:hover .deco-note{transform:rotate(0deg) scale(1.22) translateY(-10px) !important;box-shadow:8px 16px 36px rgba(0,0,0,.18),inset 0 -3px 0 rgba(0,0,0,.08);filter:brightness(1.04);}
-    .deco-sticky,.sdeco,.cta-float{cursor:default;}
-    .deco-note{cursor:grab;}
-    .deco-sticky.is-dragging,.sdeco.is-dragging,.cta-float.is-dragging{z-index:9998!important;}
-    .deco-sticky.is-dragging .deco-note,.sdeco.is-dragging .deco-note,.cta-float.is-dragging .deco-note{cursor:grabbing!important;filter:brightness(1.05);}
-    /* Pin drop zones */
-    .pin-zone{position:fixed;width:104px;height:88px;border:2px dashed rgba(37,99,235,.22);border-radius:10px;z-index:9990;display:none;pointer-events:none;transition:background .15s,border-color .15s,transform .2s,box-shadow .2s;background:transparent;box-sizing:border-box;}
-    .pin-zone::before{content:'📌';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:16px;opacity:.35;transition:opacity .2s,transform .2s;}
-    .pin-zone::after{content:'Drop here';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-family:var(--fb);font-size:10px;font-weight:600;color:rgba(37,99,235,.5);white-space:nowrap;opacity:0;transition:opacity .2s;letter-spacing:.02em;}
-    .pin-zone.active{display:block;}
-    .pin-zone.near{background:rgba(37,99,235,.09);border-color:rgba(37,99,235,.65);border-style:solid;transform:scale(1.06);box-shadow:0 0 0 5px rgba(37,99,235,.09);}
-    .pin-zone.near::before{opacity:1;transform:translateX(-50%) scale(1.2);}
-    .pin-zone.near::after{opacity:1;}
-    .deco-note.proximity{transform:scale(1.1) translateY(-5px) !important;box-shadow:6px 10px 24px rgba(0,0,0,.14),inset 0 -3px 0 rgba(0,0,0,.08);}
     .deco-note.y{background:var(--sticky-y);color:#78350F;}
     .deco-note.p{background:var(--sticky-p);color:#9D174D;}
     .deco-note.g{background:var(--sticky-g);color:#065F46;}
     .deco-note.b{background:var(--sticky-b);color:#1E40AF;}
-    .deco-tape{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:54px;height:20px;background:rgba(253,224,71,.68);border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.1);}
-    .deco-note.p .deco-tape{background:rgba(249,168,212,.68);}
-    .deco-note.g .deco-tape{background:rgba(167,243,208,.75);}
-    .deco-note.b .deco-tape{background:rgba(147,197,253,.7);}
-    @keyframes float-c{0%,100%{transform:rotate(2.5deg) translateY(0);}50%{transform:rotate(2.5deg) translateY(-11px);}}
-    @keyframes float-d{0%,100%{transform:rotate(-3.5deg) translateY(0);}50%{transform:rotate(-3.5deg) translateY(-9px);}}
-    @keyframes float-e{0%,100%{transform:rotate(1.5deg) translateY(0);}50%{transform:rotate(1.5deg) translateY(-13px);}}
 
     /* ── HERO FORM ──────────────────────────────────────── */
     @keyframes card-breathe{0%,100%{box-shadow:0 8px 40px rgba(0,0,0,.11),0 2px 8px rgba(0,0,0,.05),0 0 0 0 rgba(37,99,235,.0);}50%{box-shadow:0 12px 52px rgba(37,99,235,.13),0 2px 8px rgba(0,0,0,.05),0 0 0 6px rgba(37,99,235,.04);}}
@@ -678,9 +638,6 @@
       .start-here{display:none;}
       .logo img{height:52px;}
 
-      /* Hide ALL sticky notes, floating decorations, drag UI and toggle — desktop only */
-      .deco-sticky,.sdeco,.cta-float,.pin-zone{display:none!important;}
-      .sticker-toggle{display:none!important;}
 
       /* Section padding */
       #hero{padding:96px 0 56px;min-height:auto;}
@@ -821,14 +778,6 @@
 
   <!-- ── HERO ───────────────────────────────────────────────── -->
   <section id="hero">
-    <!-- floating sticky decorations -->
-    <div class="deco-sticky deco-s1">
-      <div class="deco-note y" style="transform:rotate(-2deg);">
-        <div class="deco-tape"></div>
-        ✦ Go live in 4–8 weeks
-      </div>
-    </div>
-
     <div class="container">
       <div class="hero-inner">
         <!-- Left: copy -->
@@ -1013,18 +962,6 @@
 
   <!-- ── SERVICES ────────────────────────────────────────────── -->
   <section id="services">
-    <div class="sdeco" style="top:44px;right:28px;animation:float-c 8s ease-in-out infinite;">
-      <div class="deco-note p" style="transform:rotate(3deg);">
-        <div class="deco-tape"></div>
-        Includes staff training!
-      </div>
-    </div>
-    <div class="sdeco" style="bottom:60px;left:28px;animation:float-d 9s ease-in-out 2s infinite;">
-      <div class="deco-note g" style="transform:rotate(-2.5deg);">
-        <div class="deco-tape"></div>
-        Automates repetitive tasks
-      </div>
-    </div>
     <div class="container">
       <div class="sec-head reveal">
         <div class="section-label center">What We Do</div>
@@ -1087,18 +1024,6 @@
 
   <!-- ── BEFORE / AFTER ─────────────────────────────────────────── -->
   <section id="before-after" style="position:relative;">
-    <div class="sdeco" style="top:38px;left:28px;animation:float-b 9s ease-in-out 1s infinite;">
-      <div class="deco-note p" style="transform:rotate(2.5deg);">
-        <div class="deco-tape"></div>
-        AI chatbots included
-      </div>
-    </div>
-    <div class="sdeco" style="bottom:38px;right:28px;animation:float-c 8s ease-in-out 2s infinite;">
-      <div class="deco-note b" style="transform:rotate(1.5deg);">
-        <div class="deco-tape"></div>
-        No spreadsheets needed
-      </div>
-    </div>
     <div class="container">
       <div class="sec-head reveal" style="margin-bottom:48px;">
         <div class="section-label center">See It In Action</div>
@@ -1153,12 +1078,6 @@
 
   <!-- ── WHY TECHNEXT ────────────────────────────────────────── -->
   <section id="why">
-    <div class="sdeco" style="top:52px;right:28px;animation:float-e 7s ease-in-out 1s infinite;">
-      <div class="deco-note b" style="transform:rotate(2deg);">
-        <div class="deco-tape"></div>
-        ⭐ Top-rated Globally
-      </div>
-    </div>
     <div class="container">
       <div class="sec-head reveal" style="margin-bottom:48px;">
         <div class="section-label center">Why TechNext</div>
@@ -1309,18 +1228,6 @@
 
   <!-- ── PROCESS ─────────────────────────────────────────────── -->
   <section id="process">
-    <div class="sdeco" style="top:36px;right:28px;animation:float-d 8s ease-in-out infinite;">
-      <div class="deco-note y" style="transform:rotate(-3deg);">
-        <div class="deco-tape"></div>
-        Dedicated onboarding team
-      </div>
-    </div>
-    <div class="sdeco" style="bottom:40px;left:28px;animation:float-c 10s ease-in-out 1.5s infinite;">
-      <div class="deco-note g" style="transform:rotate(2deg);">
-        <div class="deco-tape"></div>
-        Zero disruption<br/>to your team
-      </div>
-    </div>
     <div class="container">
       <div class="proc-head reveal" style="text-align:center;margin-bottom:52px;">
         <div class="section-label center">How We Work</div>
@@ -1455,18 +1362,6 @@
 
   <!-- ── TESTIMONIALS ────────────────────────────────────────── -->
   <section id="testimonials">
-    <div class="sdeco" style="top:40px;left:28px;animation:float-b 7s ease-in-out infinite;">
-      <div class="deco-note p" style="transform:rotate(-2.5deg);">
-        <div class="deco-tape"></div>
-        30+ businesses scaled
-      </div>
-    </div>
-    <div class="sdeco" style="top:50px;right:28px;animation:float-e 9s ease-in-out 1s infinite;">
-      <div class="deco-note b" style="transform:rotate(2deg);">
-        <div class="deco-tape"></div>
-        All 5-star reviews ⭐
-      </div>
-    </div>
     <div class="container">
       <div class="testi-head reveal">
         <div class="section-label center">Client Results</div>
@@ -1578,24 +1473,7 @@
 
   <!-- ── CTA ─────────────────────────────────────────────────── -->
   <section id="cta">
-    <div class="cta-float cta-f1" style="animation:float-d 7s ease-in-out infinite;">
-      <div class="deco-note y" style="transform:rotate(-6deg);">
-        <div class="deco-tape"></div>
-        Free 30-min demo
-      </div>
-    </div>
-    <div class="cta-float cta-f2" style="animation:float-c 8s ease-in-out 2s infinite;">
-      <div class="deco-note g" style="transform:rotate(4deg);">
-        <div class="deco-tape"></div>
-        No long-term contracts
-      </div>
-    </div>
-    <div class="sdeco" style="bottom:10%;left:8%;animation:float-e 9s ease-in-out 1s infinite;">
-      <div class="deco-note b" style="transform:rotate(-3deg);">
-        <div class="deco-tape"></div>
-        Reply within 24 hours
-      </div>
-    </div>
+
     <div class="container">
       <div class="cta-inner reveal">
 <div class="section-label center">Get Started</div>
@@ -1628,11 +1506,6 @@
     </div>
   </footer>
 
-  <!-- Sticker Toggle -->
-  <button class="sticker-toggle" id="stickerToggle" aria-label="Toggle sticky notes" onclick="toggleStickers()">
-    <span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z"/><polyline points="15 3 15 9 21 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></span>
-    <span class="sticker-toggle-tip">Show sticky notes</span>
-  </button>
 
   <!-- Booking Modal -->
   <div class="bk-overlay" id="bkOverlay" onclick="bkOverlayClick(event)">
@@ -2007,13 +1880,6 @@
       }).then(r => r.json()).then(d => console.log('Email result:', d)).catch(err => console.warn('Confirmation email error:', err));
     }
 
-    /* ── Sticker toggle ── */
-    function toggleStickers(){
-      const btn = document.getElementById('stickerToggle');
-      const on  = document.body.classList.toggle('stickers-on');
-      btn.classList.toggle('active', on);
-      btn.querySelector('.sticker-toggle-tip').textContent = on ? 'Hide sticky notes' : 'Show sticky notes';
-    }
 
     /* ── Smooth anchor scrolling ── */
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -2350,299 +2216,7 @@
         .catch(()=>{});
     })();
 
-    /* ── Floating sticky proximity effect ── */
-    (function(){
-      const notes = document.querySelectorAll('.deco-note');
-      const RADIUS = 180;
-      document.addEventListener('mousemove', e=>{
-        notes.forEach(note=>{
-          const rect = note.getBoundingClientRect();
-          const cx = rect.left + rect.width/2;
-          const cy = rect.top  + rect.height/2;
-          const dx = e.clientX - cx;
-          const dy = e.clientY - cy;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if(dist < RADIUS){
-            const t = 1 - dist/RADIUS;
-            const scale = 1 + t*0.18;
-            const lift  = -t*10;
-            note.style.transform = `scale(${scale}) translateY(${lift}px)`;
-            note.style.boxShadow = `${4+t*8}px ${8+t*16}px ${20+t*28}px rgba(0,0,0,${.08+t*.12}),inset 0 -3px 0 rgba(0,0,0,.08)`;
-          } else {
-            note.style.transform = '';
-            note.style.boxShadow = '';
-          }
-        });
-      });
-    })();
 
-    /* ── Draggable sticky notes — 10 pin zones (desktop only) ── */
-    (function(){
-      /* Skip entirely on touch/mobile devices */
-      if(window.matchMedia('(max-width:900px)').matches || window.matchMedia('(pointer:coarse)').matches) return;
-
-      /* ── Config ── */
-      const ZONE_W=104, ZONE_H=88, EDGE=14, SNAP_R=130;
-      const VT=[10,26,42,58,74]; // zone-centre vh% (vertical)
-
-      /* ── Build 10 zones (5 left, 5 right) ── */
-      const zones=[];
-      ['left','right'].forEach(side=>{
-        VT.forEach(tv=>{
-          const z=document.createElement('div');
-          z.className='pin-zone';
-          /* Size in px only — no vw/vh for dimensions so zoom doesn't distort them */
-          z.style.cssText=`${side}:${EDGE}px;top:calc(${tv}vh - ${ZONE_H/2}px);width:${ZONE_W}px;height:${ZONE_H}px;`;
-          document.body.appendChild(z);
-          zones.push(z);
-        });
-      });
-
-      /* ── Zone centre: computed mathematically, never getBoundingClientRect
-         so display:none and zoom/resize never break it ── */
-      function zoneCtr(z){
-        const idx=zones.indexOf(z);
-        const isRight=idx>=5;
-        const tv=VT[idx%5];
-        return {
-          x: isRight ? window.innerWidth  - EDGE - ZONE_W/2
-                     : EDGE + ZONE_W/2,
-          y: window.innerHeight * tv/100
-        };
-      }
-
-      /* ── Storage ── */
-      const homeMap  =new WeakMap(); // original parent/style/pos per element
-      const pinnedMap=new Map();     // el → {zone, w, h}  (for resize sync)
-
-      /* ── Drag state ── */
-      let drag=null, ox=0, oy=0, dragW=0, dragH=0;
-
-      /* ── startDrag ── */
-      function startDrag(el,cx,cy){
-        if(drag) return;
-        drag=el;
-
-        const r=el.getBoundingClientRect();
-        dragW=r.width;
-        dragH=r.height||el.querySelector('.deco-note')?.offsetHeight||60;
-
-        /* Save home only when dragging from original position (not pinned) */
-        if(!el.classList.contains('pinned')){
-          homeMap.set(el,{
-            parent:el.parentElement,
-            next:el.nextSibling,
-            style:el.getAttribute('style')||'',
-            x:r.left, y:r.top, w:dragW, h:dragH
-          });
-        }
-
-        ox=cx-r.left;
-        oy=cy-r.top;
-
-        pinnedMap.delete(el);
-        document.body.appendChild(el);
-        /* right/bottom MUST be forced auto — if the element had bottom:60px or
-           right:28px (inline or class), they stay active and fight with our
-           top/left, causing the element to be crushed/stretched and drift upward
-           as top updates each frame while bottom stays fixed. */
-        Object.assign(el.style,{
-          position:'fixed',
-          left:r.left+'px', top:r.top+'px',
-          right:'auto',     bottom:'auto',
-          width:r.width+'px', height:'auto',
-          margin:'0', zIndex:'9998',
-          transition:'none', animation:'none'
-        });
-        el.classList.add('is-dragging');
-        el.classList.remove('pinned');
-        zones.forEach(z=>z.classList.add('active'));
-
-        const note=el.querySelector('.deco-note');
-        if(note){
-          note.style.setProperty('transform','rotate(2deg) scale(1.12) translateY(-8px)','important');
-          note.style.boxShadow='10px 24px 56px rgba(0,0,0,.22),inset 0 -3px 0 rgba(0,0,0,.1)';
-          note.style.transition='none';
-        }
-      }
-
-      /* ── onMove: highlight ONLY the single nearest zone ── */
-      function onMove(cx,cy){
-        if(!drag) return;
-        drag.style.left=(cx-ox)+'px';
-        drag.style.top =(cy-oy)+'px';
-
-        let nearZ=null, nearD=SNAP_R;
-        zones.forEach(z=>{
-          const c=zoneCtr(z);
-          const d=Math.hypot(cx-c.x,cy-c.y);
-          if(d<nearD){nearD=d;nearZ=z;}
-        });
-        /* Only one zone is 'near' at a time */
-        zones.forEach(z=>z.classList.toggle('near',z===nearZ));
-      }
-
-      /* ── onDrop ── */
-      function onDrop(cx,cy){
-        if(!drag) return;
-        const el=drag; drag=null;
-        el.classList.remove('is-dragging');
-
-        /* Find best zone with mathematical centres — no display:none pitfall */
-        let best=null, bestD=SNAP_R;
-        zones.forEach(z=>{
-          const c=zoneCtr(z);
-          const d=Math.hypot(cx-c.x,cy-c.y);
-          if(d<bestD){bestD=d;best={z,c};}
-        });
-        zones.forEach(z=>z.classList.remove('active','near'));
-
-        const note=el.querySelector('.deco-note');
-
-        if(best){
-          /* Evict any note already pinned to this zone before placing the new one */
-          pinnedMap.forEach(({zone},occupant)=>{
-            if(zone===best.z && occupant!==el) returnHome(occupant);
-          });
-
-          /* Clamp so note never clips viewport edge, even if note is wider than zone */
-          const PAD=10;
-          const snapL=Math.max(PAD, Math.min(window.innerWidth  - dragW - PAD, best.c.x - dragW/2));
-          const snapT=Math.max(PAD, Math.min(window.innerHeight - dragH - PAD, best.c.y - dragH/2));
-          el.style.transition='left .38s cubic-bezier(.34,1.56,.64,1),top .38s cubic-bezier(.34,1.56,.64,1)';
-          el.style.left=snapL+'px';
-          el.style.top =snapT+'px';
-          el.classList.add('pinned');
-          pinnedMap.set(el,{zone:best.z, w:dragW, h:dragH});
-
-          const tilt=(Math.random()*8-4).toFixed(1);
-          if(note){
-            note.style.transition='transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .3s';
-            note.style.setProperty('transform',`rotate(${tilt}deg)`,'important');
-            note.style.boxShadow='';
-          }
-        } else {
-          returnHome(el);
-        }
-      }
-
-      /* ── returnHome: exit animation then restore to original DOM position ── */
-      function returnHome(el){
-        const home=homeMap.get(el);
-        const note=el.querySelector('.deco-note');
-        pinnedMap.delete(el);
-        el.classList.remove('pinned');
-
-        /* If no home data, just animate out and remove */
-        if(!home){
-          if(note){
-            note.style.transition='transform .32s cubic-bezier(.4,0,.6,1),opacity .32s ease,box-shadow .2s';
-            note.style.setProperty('transform','scale(0.55) rotate(8deg)','important');
-            note.style.opacity='0';
-            note.style.boxShadow='none';
-          }
-          setTimeout(()=>{ if(el.parentElement) el.parentElement.removeChild(el); },360);
-          return;
-        }
-
-        /* Ensure el is in body as position:fixed for the animation */
-        if(el.parentElement!==document.body){
-          const r=el.getBoundingClientRect();
-          document.body.appendChild(el);
-          Object.assign(el.style,{
-            position:'fixed',
-            left:r.left+'px', top:r.top+'px',
-            right:'auto', bottom:'auto',
-            width:home.w+'px', height:'auto',
-            margin:'0', zIndex:'9998', transition:'none', animation:'none'
-          });
-          void el.offsetWidth;
-        }
-
-        /* Phase 1: scale + fade exit on the note card */
-        if(note){
-          note.style.transition='transform .28s cubic-bezier(.4,0,.6,1),opacity .28s ease,box-shadow .2s';
-          note.style.setProperty('transform','scale(0.6) rotate(6deg)','important');
-          note.style.opacity='0';
-          note.style.boxShadow='none';
-        }
-
-        /* Phase 2: after exit anim, restore quietly to original DOM position */
-        setTimeout(()=>{
-          /* Safe insertion: verify home.next is still inside home.parent */
-          try {
-            if(home.next && home.next.parentElement===home.parent){
-              home.parent.insertBefore(el,home.next);
-            } else {
-              home.parent.appendChild(el);
-            }
-          } catch(e){
-            home.parent.appendChild(el);
-          }
-          el.setAttribute('style',home.style);
-          /* Reset note styles so float animation resumes properly */
-          if(note){
-            note.style.transition='';
-            note.style.removeProperty('transform');
-            note.style.opacity='';
-            note.style.boxShadow='';
-          }
-        },320);
-      }
-
-      /* ── Resize/zoom: keep pinned notes aligned with their zones ──
-         When browser zoom changes, vh recomputes → zone centres shift →
-         we reposition every pinned note instantly so it stays inside its zone */
-      window.addEventListener('resize',()=>{
-        const PAD=10;
-        pinnedMap.forEach(({zone,w,h},el)=>{
-          if(!el.classList.contains('pinned')) return;
-          const c=zoneCtr(zone);
-          el.style.transition='none';
-          el.style.left=Math.max(PAD,Math.min(window.innerWidth -w-PAD,c.x-w/2))+'px';
-          el.style.top =Math.max(PAD,Math.min(window.innerHeight-h-PAD,c.y-h/2))+'px';
-        });
-      });
-
-      /* ── Global pointer events ── */
-      document.addEventListener('mousemove',e=>onMove(e.clientX,e.clientY));
-      document.addEventListener('mouseup',  e=>onDrop(e.clientX,e.clientY));
-      document.addEventListener('touchmove',e=>{
-        if(!drag) return;
-        onMove(e.touches[0].clientX,e.touches[0].clientY);
-        e.preventDefault();
-      },{passive:false});
-      document.addEventListener('touchend',e=>{
-        if(!drag) return;
-        onDrop(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
-      });
-
-      /* ── Attach drag to .deco-note handle only (not shadow/overflow) ── */
-      function attach(el){
-        const handle=el.querySelector('.deco-note')||el;
-        handle.style.pointerEvents='auto';
-
-        let lastDown=0;
-        handle.addEventListener('mousedown',e=>{
-          if(e.button!==0) return;
-          e.preventDefault(); e.stopPropagation();
-          const now=Date.now();
-          if(now-lastDown<300 && el.classList.contains('pinned')){
-            lastDown=0;
-            returnHome(el);
-            return;
-          }
-          lastDown=now;
-          startDrag(el,e.clientX,e.clientY);
-        });
-        handle.addEventListener('touchstart',e=>{
-          e.preventDefault();
-          startDrag(el,e.touches[0].clientX,e.touches[0].clientY);
-        },{passive:false});
-      }
-
-      document.querySelectorAll('.deco-sticky,.sdeco,.cta-float').forEach(attach);
-    })();
 
     /* ── Odoo logo proximity pop ── */
     (function(){
