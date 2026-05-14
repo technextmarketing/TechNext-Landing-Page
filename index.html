@@ -1638,6 +1638,31 @@
     const BK_TIMES_24    = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'];
     let bkViewYear, bkViewMonth, bkSelDate = null, bkSelTime = null, bkFmt = 12;
 
+    /* ── Booked slots from Odoo ── */
+    const BK_BOOKED_MAP  = {};  // 'YYYY-MM-DD_HH:MM' → true
+    const BK_SLOTS_DONE  = {};  // 'YYYY-M' → true (fetched)
+    const BK_SLOTS_BUSY  = {};  // 'YYYY-M' → true (in-flight)
+    const BK_API = 'https://tech-next-landing-page.vercel.app';
+
+    async function bkLoadSlots(year, month) {
+      const key = year + '-' + month;
+      if (BK_SLOTS_DONE[key] || BK_SLOTS_BUSY[key]) return;
+      BK_SLOTS_BUSY[key] = true;
+      try {
+        const r = await fetch(`${BK_API}/api/odoo-slots?year=${year}&month=${month + 1}`);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        (d.booked || []).forEach(s => { BK_BOOKED_MAP[s] = true; });
+        BK_SLOTS_DONE[key] = true;
+        bkRenderCal();
+        if (bkSelDate) bkRenderSlots();
+      } catch (e) {
+        console.warn('bkLoadSlots:', e.message);
+      } finally {
+        BK_SLOTS_BUSY[key] = false;
+      }
+    }
+
     function openBkModal() {
       document.getElementById('bkOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -1658,6 +1683,7 @@
       document.getElementById('bkNameInput').value  = formName;
       document.getElementById('bkPhoneInput').value = formPhone;
       document.getElementById('bkEmailInput').value = formEmail;
+      bkLoadSlots(bkViewYear, bkViewMonth);
       bkRenderSlots();
       bkRenderCal();
     }
@@ -1690,6 +1716,7 @@
       bkViewMonth += dir;
       if (bkViewMonth > 11) { bkViewMonth = 0; bkViewYear++; }
       if (bkViewMonth < 0)  { bkViewMonth = 11; bkViewYear--; }
+      bkLoadSlots(bkViewYear, bkViewMonth);
       bkRenderCal();
     }
 
@@ -1739,7 +1766,14 @@
       }
     }
 
-    function bkIsBooked(date, idx) { return false; }
+    function bkIsBooked(date, idx) {
+      const t = BK_TIMES_24[idx];
+      if (!t) return false;
+      const yyyy = date.getFullYear();
+      const mm   = String(date.getMonth() + 1).padStart(2, '0');
+      const dd   = String(date.getDate()).padStart(2, '0');
+      return !!BK_BOOKED_MAP[`${yyyy}-${mm}-${dd}_${t}`];
+    }
     function bkGetAvailCount(date) {
       return BK_TIMES_12.filter((_, i) => !bkIsBooked(date, i)).length;
     }

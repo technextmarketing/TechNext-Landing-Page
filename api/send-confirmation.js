@@ -1,3 +1,80 @@
+/* ── Odoo: find-or-create partner, then create calendar.event ── */
+async function createOdooAppointment({ name, email, phone, slotISO, slotTime24, serviceLabel }) {
+  const ODOO_URL     = process.env.ODOO_URL;
+  const ODOO_DB      = process.env.ODOO_DB;
+  const ODOO_USER    = process.env.ODOO_USER;
+  const ODOO_API_KEY = process.env.ODOO_API_KEY;
+  const APPT_TYPE_ID = parseInt(process.env.ODOO_APPT_TYPE_ID || '2', 10);
+
+  if (!ODOO_URL || !ODOO_DB || !ODOO_USER || !ODOO_API_KEY) return null;
+  if (!slotISO || !slotTime24) return null;
+
+  /* Authenticate */
+  const authResp = await fetch(`${ODOO_URL}/web/session/authenticate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0', method: 'call', id: 1,
+      params: { db: ODOO_DB, login: ODOO_USER, password: ODOO_API_KEY }
+    })
+  });
+  const authData = await authResp.json();
+  if (!authData.result || authData.result.uid === false) throw new Error('Odoo auth failed');
+
+  const setCookie    = authResp.headers.get('set-cookie') || '';
+  const sessionMatch = setCookie.match(/session_id=([^;,\s]+)/);
+  const sessionId    = sessionMatch?.[1] || authData.result?.session_id || '';
+
+  const rpc = (id, model, method, args, kwargs = {}) =>
+    fetch(`${ODOO_URL}/web/dataset/call_kw`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': `session_id=${sessionId}` },
+      body: JSON.stringify({ jsonrpc: '2.0', method: 'call', id,
+        params: { model, method, args, kwargs } })
+    }).then(r => r.json());
+
+  /* Find or create res.partner */
+  const searchRes = await rpc(2, 'res.partner', 'search_read',
+    [[['email', '=', email]]], { fields: ['id', 'name'], limit: 1 });
+  let partnerId;
+  if (searchRes.result?.length > 0) {
+    partnerId = searchRes.result[0].id;
+  } else {
+    const createPartner = await rpc(3, 'res.partner', 'create', [{
+      name: name || email,
+      email: email,
+      phone: phone || '',
+      type: 'contact'
+    }]);
+    if (createPartner.error) throw new Error(createPartner.error.data?.message || 'Partner creation failed');
+    partnerId = createPartner.result;
+  }
+
+  /* Build UTC start/stop (SGT = UTC+8, appointment = 1 hour) */
+  const [yr, mo, dy] = slotISO.split('-').map(Number);
+  const [hh, mm]     = slotTime24.split(':').map(Number);
+  const startUTC = new Date(Date.UTC(yr, mo - 1, dy, hh - 8, mm));
+  const stopUTC  = new Date(startUTC.getTime() + 60 * 60 * 1000);
+  const pad = n => String(n).padStart(2, '0');
+  const fmtUTC = d =>
+    `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ` +
+    `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:00`;
+
+  /* Create calendar.event */
+  const evtRes = await rpc(4, 'calendar.event', 'create', [{
+    name:                 `Demo — ${name || email} × TechNext`,
+    start:                fmtUTC(startUTC),
+    stop:                 fmtUTC(stopUTC),
+    appointment_type_id:  APPT_TYPE_ID,
+    partner_ids:          [[4, partnerId]],
+    description:          `Service: ${serviceLabel}\nPhone: ${phone || '—'}\nEmail: ${email}`,
+    user_id:              2
+  }]);
+
+  if (evtRes.error) throw new Error(evtRes.error.data?.message || 'Calendar event creation failed');
+  return evtRes.result;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -378,6 +455,11 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: d1.message || 'Confirmation email failed' });
     }
     if (!r2.ok) console.error('Notify email failed:', d2);
+
+    /* ── Create Odoo appointment (fire-and-forget, non-blocking) ── */
+    createOdooAppointment({ name, email, phone, slotISO, slotTime24, serviceLabel })
+      .then(id => console.log('Odoo appointment created:', id))
+      .catch(err => console.error('Odoo appointment error (non-fatal):', err.message));
 
     return res.status(200).json({ success: true });
   } catch (err) {
